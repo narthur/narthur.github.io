@@ -9,7 +9,7 @@
 title: Nathan Arthur
 email: narthur@tutanota.com
 description: > # this means to ignore newlines until "baseurl:"
-  A person website for notes, etc.
+  A personal website for notes, etc.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://www.NathanArthur.com" # the base hostname & protocol for your site
 # twitter_username: jekyllrb
