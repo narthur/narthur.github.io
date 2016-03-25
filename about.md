@@ -2,16 +2,21 @@
 layout: page
 title: About
 permalink: /about/
+hero: /images/IMG_8124.jpg
+hero-position: 18%
 ---
 
-<img src='/images/IMG_8227.jpg' width='300' alt='Nathan Arthur' class='left' />
+Hello.
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+My name is Nathan, and following is a little about myself:
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
+I love learning. Over time my interests have converged within the intersection of technology, influence, and social
+change. I feel the most fulfilled when I'm able to dedicate myself to developing technical systems that benefit society
+while enabling individuals to learn, grow, and develop personally.
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+I believe passionately in the power of a living faith and personal connection with Christ to fulfill humanity's
+fundamental needs. I know from personal experience what a profound impact the meeting of these needs can have on a
+person's life. I feel strongly that it must be my mission to be a channel of this healing power to those who aren't in
+a place to receive it from the Source, as many special people were to me when I felt shut off from God.
+
+You may call me a minimalist, a programmer, or an introvert. But, mostly, I'd just like to be your friend.

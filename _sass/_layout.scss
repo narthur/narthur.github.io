@@ -93,7 +93,11 @@
     }
 }
 
-
+.hero {
+    height:25vw;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
 
 /**
  * Site footer
@@ -245,4 +249,9 @@
 img.left {
     float:left;
     margin:0 $spacing-unit $spacing-unit 0;
+}
+
+img.right {
+    float:right;
+    margin:0 0 $spacing-unit $spacing-unit;
 }
