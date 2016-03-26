@@ -6,7 +6,7 @@ hero-position: 18%
 
 # Hello.
 
-My interests are varied, and mostly in three areas:
+My interests are varied, but tend to these:
 
 - Technology.
 - Influence.
