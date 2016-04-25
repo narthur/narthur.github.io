@@ -31,21 +31,21 @@ course on personal finance and debt freedom that is very popular.
 
 [Here's an overview of the steps he recommends in one's financial development.](http://www.daveramsey.com/baby-steps/)
 
-Two books I've enjoyed on personal finance are "Rich Dad Poor Dad" and "A Random Walk Down 
-Wall Street." "Rich Dad Poor Dad" really helps clarify the general strategy that is 
+Two books I've enjoyed on personal finance are *Rich Dad Poor Dad* and *A Random Walk Down 
+Wall Street.* *Rich Dad Poor Dad* really helps clarify the general strategy that is 
 effective in personal finance. It's very accessible and entertaining.
 
-"A Random Walk Down Wall Street" dives deep into investment theory and provides a lot of 
+*A Random Walk Down Wall Street* dives deep into investment theory and provides a lot of 
 practical advice for investing. It teaches you exactly why the set-it-and-forget-it 
 approach to investing is the best for most small-time investors. Most of the book is 
 relatively accessible, and he warns you when he has to get a bit technical.
 
-Rich Dad, Poor Dad:
+*Rich Dad, Poor Dad:*
 
 - [Amazon](http://www.amazon.com/Rich-Dad-Poor-Teach-Middle/dp/1612680011)
 - [Trent Ham's review](http://www.thesimpledollar.com/review-rich-dad-poor-dad/)
 
-A Random Walk Down Wall Street:
+*A Random Walk Down Wall Street:*
 
 - [Amazon](http://www.amazon.com/Random-Walk-Down-Wall-Street/dp/0393246116)
 - [Trent Ham's review](http://www.thesimpledollar.com/review-a-random-walk-down-wall-street/)
