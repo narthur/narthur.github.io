@@ -7,6 +7,8 @@ I've been doing research in my spare time on personal finance and investing, and
 some of you have been asking me about what I've discovered, I thought I'd point everyone 
 to the best stuff I've found on the topic so far.
 
+# People
+
 Here are the people I've been following on the topic:
 
 - Alistair Huong (OHC graduate) at [Saving the Crumbs](http://www.savingthecrumbs.com/)
@@ -31,6 +33,8 @@ course on personal finance and debt freedom that is very popular.
 
 [Here's an overview of the steps he recommends in one's financial development.](http://www.daveramsey.com/baby-steps/)
 
+# Books
+
 Two books I've enjoyed on personal finance are *Rich Dad Poor Dad* and *A Random Walk Down 
 Wall Street.* *Rich Dad Poor Dad* really helps clarify the general strategy that is 
 effective in personal finance. It's very accessible and entertaining.
@@ -52,6 +56,8 @@ relatively accessible, and he warns you when he has to get a bit technical.
 
 Trent Ham has reviewed a lot of other personal finance books, too. [You can find many of 
 them here.](http://www.thesimpledollar.com/52-personal-finance-books-in-52-weeks/)
+
+# Services
 
 [Vanguard](https://investor.vanguard.com/home/) is generally held to be the best 
 investment agency for personal investors. However, most Vanguard funds have a minimum of 
