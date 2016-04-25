@@ -40,7 +40,7 @@ practical advice for investing. It teaches you exactly why the set-it-and-forget
 approach to investing is the best for most small-time investors. Most of the book is 
 relatively accessible, and he warns you when he has to get a bit technical.
 
-*Rich Dad, Poor Dad:*
+*Rich Dad Poor Dad:*
 
 - [Amazon](http://www.amazon.com/Rich-Dad-Poor-Teach-Middle/dp/1612680011)
 - [Trent Ham's review](http://www.thesimpledollar.com/review-rich-dad-poor-dad/)
