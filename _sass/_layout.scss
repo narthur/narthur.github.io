@@ -268,3 +268,11 @@ img.right {
     float:right;
     margin:0 0 $spacing-unit $spacing-unit;
 }
+
+
+/**
+ * Sharing Buttons
+ */
+@media screen and (max-width: $on-laptop + 50) {
+    .a2a_floating_style.a2a_vertical_style { display: none; }
+}
