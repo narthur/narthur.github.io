@@ -276,3 +276,7 @@ img.right {
 @media screen and (max-width: $on-laptop + 50) {
     .a2a_floating_style.a2a_vertical_style { display: none; }
 }
+
+.a2a_default_style {
+	margin:$spacing-unit 0;
+}
