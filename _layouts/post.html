@@ -6,11 +6,15 @@ layout: default
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
     <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">Published {{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
+    <div id="toc">
+      <h4>Contents</h4>
+      <ul id="toc-list" data-toc="div.post-content"></ul>
+    </div>
   </header>
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
-    
+
     <!-- AddToAny Mobile BEGIN -->
 	<div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 		<a class="a2a_dd" href="https://www.addtoany.com/share?linkurl=http%3A%2F%2Fwww.nathanarthur.com%2F&amp;linkname=Page%20Title"></a>
@@ -30,7 +34,7 @@ layout: default
 	</script>
 	<script async src="https://static.addtoany.com/menu/page.js"></script>
 	<!-- AddToAny END -->
-    
+
     <div id="disqus_thread"></div>
 		<script>
 			var disqus_config = function () {
@@ -39,9 +43,9 @@ layout: default
 			};
 			(function() {  // DON'T EDIT BELOW THIS LINE
 				var d = document, s = d.createElement('script');
-		
+
 				s.src = '//narthur.disqus.com/embed.js';
-		
+
 				s.setAttribute('data-timestamp', +new Date());
 				(d.head || d.body).appendChild(s);
 			})();
@@ -49,9 +53,9 @@ layout: default
 		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
   </div>
 
-	
+
 	<!-- AddToAny Desktop BEGIN -->
-	<div class="a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style" style="left:0px; top:90px;">
+	<div class="a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style" style="right:0px; top:90px;">
 		<a class="a2a_dd" href="https://www.addtoany.com/share?linkurl=http%3A%2F%2Fwww.nathanarthur.com%2F&amp;linkname=Page%20Title"></a>
 		<a class="a2a_button_facebook"></a>
 		<a class="a2a_button_twitter"></a>

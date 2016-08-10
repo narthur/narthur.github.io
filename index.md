@@ -1,6 +1,6 @@
 ---
 layout: page
-hero: /images/IMG_8124.jpg
+title: Home
 hero-position: 18%
 ---
 
@@ -16,7 +16,7 @@ I feel fulfilled developing technical systems that benefit society
 and enable individuals to learn and grow personally.
 
 I believe a living faith and a personal connection with Christ have power to fulfill humanity's
-fundamental needs. I know personally how profound the resulting life change is. I feel called to channel this 
+fundamental needs. I know personally how profound the resulting life change is. I feel called to channel this
 healing power to those cut off from the Source, as friends did for me.
 
 They call me a minimalist, a programmer, and an introvert.

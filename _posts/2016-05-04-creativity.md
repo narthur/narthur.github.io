@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Theory of Creativity"
-hero: http://dev2.opte.org/wp-content/uploads/2014/04/home-page-pic.png
 ---
 
 *Hero image: A visualization of the Internet as it appeared in 2010, credit to
