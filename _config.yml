@@ -17,6 +17,7 @@ url: "http://www.NathanArthur.com" # the base hostname & protocol for your site
 
 # Build settings
 markdown: kramdown
+exclude: [vendor]
 sass:
   sass_dir: _sass
   style: compressed
