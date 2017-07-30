@@ -7,10 +7,6 @@
     @include adaptive-bg('home-page-pic.png', 932, 0);
   }
 
-  &.Home {
-    @include adaptive-bg('library-portrait.jpg', 5184, 0);
-  }
-
   &.Motivation-for-Righteous-Living {
     @include adaptive-bg('church.jpeg', 5891, 0);
   }

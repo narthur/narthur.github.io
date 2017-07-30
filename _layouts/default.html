@@ -15,9 +15,12 @@ layout: compress
       {% capture extra-css %}style="background-position:0 {{ page.hero-position }};"{% endcapture %}
     {% endif %}
 
-    <div class="hero {{ page.title | replace: ' ', '-' }}" {{ extra-css }}></div>
+
 
     <div class="page-content">
+
+      <div class="hero {{ page.title | replace: ' ', '-' }}" {{ extra-css }}></div>
+
       <div class="wrapper">
         {{ content }}
       </div>
