@@ -1,5 +1,6 @@
 @mixin adaptive-bg($img-handle, $original-width, $darkness) {
-  height:25vw;
+  height: 0;
+  padding-bottom: 50%;
   background-size:cover;
   background-repeat:no-repeat;
   background-position:center;
