@@ -14,4 +14,8 @@
   &.Truth {
     @include adaptive-bg('boy-and-bible.jpeg', 5891, 0);
   }
+
+  &.Personal-Finance-Revisited {
+    @include adaptive-bg('cash-register.jpg', 2255, 0);
+  }
 }
