@@ -22,20 +22,6 @@ iframe, img {
   max-width: 100%;
 }
 
-.site-header {
-  text-align: center;
-}
-
-.logo {
-  max-width: 7rem;
-  margin: 0 auto;
-  img {
-    border-radius: 100%;
-  }
-  @media screen and (min-width: 370px) {
-  }
-}
-
 .site-nav, .contact-list {
   padding-left: 0;
   li {
@@ -77,3 +63,5 @@ iframe, img {
 
 @import "_mixins";
 @import "_hero";
+
+@import "_organism_header"

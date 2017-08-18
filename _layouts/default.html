@@ -9,13 +9,11 @@ layout: compress
 
   <body>
 
-    {% include header.html %}
+    {% include organism_header.html %}
 
     {% if page.hero-position != nil %}
       {% capture extra-css %}style="background-position:0 {{ page.hero-position }};"{% endcapture %}
     {% endif %}
-
-
 
     <div class="page-content">
 
@@ -26,7 +24,7 @@ layout: compress
       </div>
     </div>
 
-    {% include footer.html %}
+    {% include organism_footer.html %}
 
   </body>
 

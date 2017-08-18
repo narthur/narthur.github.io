@@ -1,0 +1,12 @@
+<header class="organism_header">
+  {% include atom_logo.html %}
+  {% include atom_siteTitle.html %}
+  <ul class="site-nav">
+    <li><a class="page-link" href="{{ site.baseurl }}/">Home</a></li>
+    {% for my_page in site.pages %}
+      {% if my_page.title and my_page.include-in-nav != false %}
+      <li><a class="page-link" href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</header>
