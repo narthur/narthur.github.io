@@ -95,7 +95,7 @@ make sure you stay on track to meeting your target on time.
 
 Having read *A Random Walk Down Wall Street* before graduating, as well as
 researching the investment strategies of people like [Trent Hamm](http://www.thesimpledollar.com/)
-and [Alistair Huong](http://www.savingthecrumbs.com/), I was already quite
+and [Alistair Huong](https://www.savingthecrumbs.com/), I was already quite
 opinionated about the investing strategy I wanted to use. I was looking to
 follow a passive buy-and-hold strategy with a highly diversified portfolio while
 minimizing expenses. This is exactly the strategy that Betterment encourages.
