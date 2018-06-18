@@ -3,7 +3,7 @@ layout: post
 title:  "Book Review: How to Lead When You're Not in Charge"
 ---
 
-{% responsive_image path: images/adaptive/how-to-lead.png %}
+<img src="/images/resized/800/how-to-lead.png">
 
 I completed [How to Lead When You’re Not in Charge](https://www.goodreads.com/book/show/33098700-how-to-lead-when-you-re-not-in-charge?from_search=true) 
 by Clay Scroggins on June 18, 2018. The author shares biblical principles for how to lead even when no one’s given you 
