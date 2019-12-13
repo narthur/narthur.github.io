@@ -1,7 +1,9 @@
 <h1 class="atom_postTitle">
+  {% if page.show-title != false %}
   {% if page.display-title %}
   {{ page.display-title }}
   {% else %}
   {{ page.title }}
+  {% endif %}
   {% endif %}
 </h1>
