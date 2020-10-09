@@ -10,6 +10,7 @@ include-in-nav: false
 
 - [Email](nathan@nathanarthur.com)
 - [LinkedIn](https://www.linkedin.com/in/nathanarthur)
+- [Sourcerer](https://sourcerer.io/narthur)
 - [StackOverflow](https://stackoverflow.com/users/937377/nathan-arthur)
 - [GitHub](https://github.com/narthur)
 
