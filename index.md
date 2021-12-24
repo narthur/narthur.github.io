@@ -16,12 +16,17 @@ include-in-nav: false
 
 ## Projects
 
-- [Beeminder Autodialer](https://autodial.taskratchet.com/)
 - [TaskRatchet](http://taskratchet.com/)
+- [Beeminder Autodialer](https://autodial.taskratchet.com/)
 
 ## Experiments
 
 - [CashClock](http://www.nathanarthur.com/CashClock/)
 - [Memory Flipper](http://www.nathanarthur.com/memory-flipper/index.html)
 - [Tempo](http://www.nathanarthur.com/Tempo/)
+
+## Contributor To
+
+- [GoogleChromeLabs/pwa-wp](https://github.com/GoogleChromeLabs/pwa-wp)
+- [WillSullivan/idownvotedbecause](https://github.com/WillSullivan/idownvotedbecause)
 
