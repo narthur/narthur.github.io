@@ -6,6 +6,8 @@ hero-position: 18%
 include-in-nav: false
 ---
 
+[![wakatime](https://wakatime.com/badge/user/a89706df-d11e-4f78-9454-c57c2e0f2f21.svg)](https://wakatime.com/@a89706df-d11e-4f78-9454-c57c2e0f2f21)
+
 ## Around the Web
 
 - [Email](nathan@nathanarthur.com)
