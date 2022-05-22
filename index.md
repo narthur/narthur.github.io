@@ -6,8 +6,6 @@ hero-position: 18%
 include-in-nav: false
 ---
 
-[![wakatime](https://wakatime.com/badge/user/a89706df-d11e-4f78-9454-c57c2e0f2f21.svg)](https://wakatime.com/@a89706df-d11e-4f78-9454-c57c2e0f2f21)
-
 ## Around the Web
 
 - [Email](nathan@nathanarthur.com)
@@ -33,4 +31,6 @@ include-in-nav: false
 - [GoogleChromeLabs/pwa-wp](https://github.com/GoogleChromeLabs/pwa-wp)
 - [toolkit-for-ynab/toolkit-for-ynab](https://github.com/toolkit-for-ynab/toolkit-for-ynab)
 - [WillSullivan/idownvotedbecause](https://github.com/WillSullivan/idownvotedbecause)
+
+[![wakatime](https://wakatime.com/badge/user/a89706df-d11e-4f78-9454-c57c2e0f2f21.svg)](https://wakatime.com/@a89706df-d11e-4f78-9454-c57c2e0f2f21)
 
