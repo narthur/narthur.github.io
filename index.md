@@ -11,8 +11,9 @@ include-in-nav: false
 - [Email](nathan@nathanarthur.com)
 - [LinkedIn](https://www.linkedin.com/in/nathanarthur)
 - [StackOverflow](https://stackoverflow.com/users/937377/nathan-arthur)
-- [CodersRank](https://profile.codersrank.io/user/narthur)
+- [WakaTime](https://wakatime.com/@narthur)
 - [GitHub](https://github.com/narthur)
+- [Beeminder](https://www.beeminder.com/narthur)
 
 ## Projects
 
@@ -28,5 +29,6 @@ include-in-nav: false
 ## Contributor To
 
 - [GoogleChromeLabs/pwa-wp](https://github.com/GoogleChromeLabs/pwa-wp)
+- [toolkit-for-ynab/toolkit-for-ynab](https://github.com/toolkit-for-ynab/toolkit-for-ynab)
 - [WillSullivan/idownvotedbecause](https://github.com/WillSullivan/idownvotedbecause)
 
