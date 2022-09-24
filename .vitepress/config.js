@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Nathan Arthur",
   themeConfig: {
-    logo: "/images/avatar_crop.jpg",
+    logo: "/public/avatar_crop.jpg",
     socialLinks: [
       {
         icon: {
