@@ -1,24 +1,11 @@
 ---
-layout: page
 title: Home
-show-title: false
-hero-position: 18%
-include-in-nav: false
 ---
 
-## Around the Web
+## Articles
 
-- [Email](nathan@nathanarthur.com)
-- [LinkedIn](https://www.linkedin.com/in/nathanarthur)
-- [StackOverflow](https://stackoverflow.com/users/937377/nathan-arthur)
-- [WakaTime](https://wakatime.com/@narthur)
-- [GitHub](https://github.com/narthur)
-- [Beeminder](https://www.beeminder.com/narthur)
-
-## Projects
-
-- [TaskRatchet](http://taskratchet.com/)
-- [Beeminder Autodialer](https://autodial.taskratchet.com/)
+- [Announcing TaskRatchet: Like Beeminder for Your Todo List](https://blog.beeminder.com/taskratchet/)
+- [Beeminder vs CBT](https://blog.beeminder.com/cbt/)
 
 ## Experiments
 
@@ -37,4 +24,3 @@ include-in-nav: false
 <a href="https://stackexchange.com/users/901283"><img src="https://stackexchange.com/users/flair/901283.png" width="208" height="58" alt="profile for Nathan Arthur on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for Nathan Arthur on Stack Exchange, a network of free, community-driven Q&amp;A sites"></a>
 
 [![wakatime](https://wakatime.com/badge/user/a89706df-d11e-4f78-9454-c57c2e0f2f21.svg)](https://wakatime.com/@a89706df-d11e-4f78-9454-c57c2e0f2f21)
-
