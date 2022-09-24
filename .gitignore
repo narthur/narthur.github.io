@@ -4,3 +4,4 @@ _site
 .idea/**/*
 /vendor
 .DS_Store
+.vitepress/dist
