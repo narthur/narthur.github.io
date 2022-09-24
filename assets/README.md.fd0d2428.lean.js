@@ -1,0 +1,1 @@
+import{_ as a,c as t,o as e,a as n}from"./app.49729f8b.js";const b=JSON.parse('{"title":"narthur.github.io","description":"","frontmatter":{},"headers":[],"relativePath":"README.md"}'),s={name:"README.md"},r=n("",2),o=[r];function c(i,p,l,_,h,d){return e(),t("div",null,o)}const f=a(s,[["render",c]]);export{b as __pageData,f as default};
