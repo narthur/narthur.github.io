@@ -4,8 +4,8 @@ title: Home
 
 ## Articles
 
-- [Announcing TaskRatchet: Like Beeminder for Your Todo List](https://blog.beeminder.com/taskratchet/)
-- [Beeminder vs CBT](https://blog.beeminder.com/cbt/)
+- 2022-09-15: [Beeminder vs CBT](https://blog.beeminder.com/cbt/)
+- 2020-06-22: [Announcing TaskRatchet: Like Beeminder for Your Todo List](https://blog.beeminder.com/taskratchet/)
 
 ## Experiments
 
