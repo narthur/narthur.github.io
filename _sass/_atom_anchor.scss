@@ -1,0 +1,24 @@
+a, a:visited {
+  color: #3c8c3a;
+  text-decoration: none;
+  transition: color 50ms;
+  position: relative;
+  &:before {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    top: -3px;
+    bottom: -3px;
+    right: -5px;
+    left: -5px;
+    background-color: #3c8c3a;
+    opacity: 0;
+    transition: opacity 50ms;
+  }
+  &:hover {
+    color: white;
+    &:before {
+      opacity: 1;
+    }
+  }
+}

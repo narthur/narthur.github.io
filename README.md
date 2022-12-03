@@ -13,6 +13,7 @@ Command                                                     | Notes
 `docker-compose run site jekyll build --watch --baseurl /`  | Watch for changes
 `docker logs container_name`                                | View logs
 `docker-compose run site bundle update`                     | Update dependencies
+`docker-compose build --nocache`                                    | Rebuild image from scratch
 
 - https://github.com/wildlyinaccurate/jekyll-responsive-image
 - https://www.shopify.com/partners/shopify-cheat-sheet

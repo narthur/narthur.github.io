@@ -1,4 +1,4 @@
-FROM jekyll/jekyll:latest
+FROM jekyll/jekyll:3
 
 ENV MAGICK_HOME=/usr
 

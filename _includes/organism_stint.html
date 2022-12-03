@@ -1,0 +1,5 @@
+<div class="organism_stint">
+    <h2>{{ include.title }} <span>@{{ include.organization }}</span></h2>
+    <p class="organism_stint__dates">{{ include.start }}—{{ include.end | default: "Present" }}</p>
+    <p>{{ include.summary }}</p>
+</div>
