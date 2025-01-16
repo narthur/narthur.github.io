@@ -9,7 +9,7 @@
 	];
 
 	const projectLinks = [
-		{ name: 'TaskRatchet', url: 'http://taskratchet.com/' },
+		{ name: 'TaskRatchet', url: 'https://taskratchet.com/' },
 		{ name: 'Autodialer', url: 'https://autodial.taskratchet.com/' },
 		{ name: 'Beeminder Dashboard', url: 'https://bm.taskratchet.com/' },
 		{ name: 'Life', url: 'https://life.nathanarthur.com/' },
