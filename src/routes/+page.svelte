@@ -18,10 +18,20 @@
 	];
 </script>
 
+<div class="digital-rain pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+	{#each Array(100) as _, i}
+		<div
+			class="rain-line"
+			style="--delay: {Math.random() * 4}s; --duration: {2 +
+				Math.random() * 2}s; --position: {Math.random() * 300}%;"
+		></div>
+	{/each}
+</div>
+
 <div
-	class="min-h-screen bg-[#0a0a16] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxMTExMjIiLz48L3N2Zz4=')] px-4 py-16 selection:bg-cyan-500 selection:text-black sm:px-6 lg:px-8"
+	class="relative min-h-screen bg-[#0a0a16] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxMTExMjIiLz48L3N2Zz4=')] px-4 py-16 selection:bg-cyan-500 selection:text-black sm:px-6 lg:px-8"
 >
-	<div class="mx-auto max-w-4xl">
+	<div class="relative z-10 mx-auto max-w-4xl">
 		<div
 			class="mb-16 animate-[pulse_4s_ease-in-out_infinite] rounded-none border-2 border-cyan-500/50 bg-black/60 p-8 shadow-[0_0_30px_rgba(6,182,212,0.15)] backdrop-blur-sm transition-shadow duration-500 hover:shadow-[0_0_50px_rgba(6,182,212,0.25)]"
 		>
@@ -134,6 +144,42 @@
 		50% {
 			opacity: 0;
 		}
+	}
+
+	@keyframes rain {
+		0% {
+			transform: translateY(-100vh) translateX(0) rotate(25deg) scale(2);
+			opacity: 0;
+		}
+		5% {
+			opacity: 0.2;
+		}
+		90% {
+			opacity: 0.2;
+		}
+		100% {
+			transform: translateY(200vh) translateX(-140vh) rotate(25deg) scale(2);
+			opacity: 0;
+		}
+	}
+
+	.digital-rain {
+		z-index: 1;
+		mix-blend-mode: screen;
+	}
+
+	.rain-line {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: var(--position);
+		animation: rain var(--duration) linear infinite;
+		animation-delay: var(--delay);
+		width: 1px;
+		height: 400px;
+		background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+		transform-origin: 0 0;
+		box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
 	}
 
 	.typewriter-text {
