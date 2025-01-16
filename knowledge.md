@@ -18,3 +18,8 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Highlight key projects and professional profiles
 - Keep descriptions concise and focused
 - Maintain up-to-date links to active projects
+
+## Build Configuration
+- Site uses @sveltejs/adapter-static for static deployment
+- Requires `export const prerender = true` in root +layout.ts for successful static build
+- Run `pnpm build` to build the site
