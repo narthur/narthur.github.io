@@ -15,24 +15,28 @@
 	];
 </script>
 
-<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-	<div class="max-w-3xl mx-auto">
-		<div class="text-center">
-			<h1 class="text-4xl font-bold text-gray-900 sm:text-5xl mb-4">Nathan Arthur</h1>
-			<p class="text-xl text-gray-600 mb-12">
-				Full-stack web developer building tools for productivity
-			</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 py-16 px-4 sm:px-6 lg:px-8">
+	<div class="max-w-4xl mx-auto">
+		<div class="bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-12 border border-gray-700">
+			<div class="text-center">
+				<h1 class="text-5xl font-bold text-white mb-4 tracking-tight">Nathan Arthur</h1>
+				<p class="text-xl text-gray-300 font-light">
+					Full-stack web developer building tools for productivity
+				</p>
+			</div>
 		</div>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 			{#each links as link}
 				<a
 					href={link.url}
-					class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 text-center"
+					class="group block p-6 bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 text-center border border-gray-700"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<span class="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors duration-200">
+					<span
+						class="text-lg font-medium text-gray-200 group-hover:text-blue-400 transition-colors duration-200"
+					>
 						{link.name}
 					</span>
 				</a>
