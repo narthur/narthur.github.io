@@ -13,6 +13,10 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Focus on usability and quick access to projects
 - Maintain professional appearance
 - Ensure responsive design for all screen sizes
+- Use sophisticated, understated color palette based on stone/slate
+- Prefer subtle animations and transitions
+- Use transparency and backdrop blur for depth
+- Maintain high contrast for accessibility while keeping muted tones
 
 ## Content Guidelines
 - Highlight key projects and professional profiles
