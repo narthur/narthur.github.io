@@ -3,7 +3,7 @@
 	import { darkMode } from './+layout.svelte';
 
 	const toggleDarkMode = () => {
-		darkMode.update(d => !d);
+		darkMode.update((d) => !d);
 		document.body.classList.toggle('dark', $darkMode);
 	};
 
@@ -87,11 +87,14 @@
 							href={link.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
+							style="display: block; padding: 1.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
 							class="project-card"
 						>
 							<div style="margin-bottom: 0.75rem; text-align: center;">
-								<Icon icon={link.icon} style="color: #666; font-size: 2rem; margin-bottom: 0.5rem;" />
+								<Icon
+									icon={link.icon}
+									style="color: #666; font-size: 2rem; margin-bottom: 0.5rem;"
+								/>
 								<div style="font-weight: 500; color: #333; font-size: 1.1rem;">
 									{link.name}
 								</div>
@@ -105,7 +108,9 @@
 			</ul>
 		</section>
 
-		<section style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem;">
+		<section
+			style="margin-top: 2rem; border-top: 1px solid var(--separator-color, #eee); padding-top: 2rem;"
+		>
 			<h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #666;">Find Me Around the Web</h2>
 			<ul
 				style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; list-style: none; padding: 0;"
@@ -140,17 +145,8 @@
 		color: #999 !important;
 	}
 
-	:global(.dark) .profile-link {
-		color: #999 !important;
-	}
-
 	:global(.dark) .project-card {
 		background: #2a2a2a;
-		border-color: #444;
-	}
-
-	:global(.dark) .project-card:hover {
-		border-color: #666;
 	}
 
 	:global(.dark) .project-card div {
@@ -167,14 +163,14 @@
 
 	.project-card {
 		text-decoration: none;
-		border: 1px solid #ddd;
+		border: 1px solid var(--border-color);
 		background: white;
 	}
 
 	.project-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		border-color: #bbb;
+		border-color: var(--border-hover-color);
 	}
 
 	.project-card:hover :global(svg) {

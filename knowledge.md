@@ -25,7 +25,8 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - White for main text
   - Light gray (#999) for secondary text
   - Light blue (#66b3ff) for links
-  - Dark gray (#444) for borders
+  - Subtle dark gray (#333) for borders and separators
+  - Slightly lighter gray (#444) for hover states
   - Defaults to system preference
   - Syncs with system preference changes
 - Prefer subtle transitions for interactions
