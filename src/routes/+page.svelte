@@ -109,8 +109,23 @@
 </div>
 
 <style>
+	.project-card {
+		text-decoration: none;
+		border: 1px solid #ddd;
+		background: white;
+	}
+
 	.project-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		border-color: #bbb;
+	}
+
+	.project-card:hover :global(svg) {
+		color: #0066cc !important;
+	}
+
+	.project-card:hover div:first-child {
+		color: #0066cc;
 	}
 </style>
