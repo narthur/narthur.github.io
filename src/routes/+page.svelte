@@ -58,16 +58,16 @@
 
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12 text-center">
-		<div class="mb-4 flex justify-end">
+		<div class="fixed right-4 top-4 z-10">
 			<button
 				on:click={toggleDarkMode}
-				class="cursor-pointer border-none bg-transparent p-2"
+				class="rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
 				aria-label="Toggle dark mode"
 			>
 				{#if $darkMode}
-					<Icon icon="mdi:weather-sunny" class="h-6 w-6 text-white" />
+					<Icon icon="mdi:weather-sunny" class="h-6 w-6" />
 				{:else}
-					<Icon icon="mdi:weather-night" class="h-6 w-6 text-gray-600" />
+					<Icon icon="mdi:weather-night" class="h-6 w-6" />
 				{/if}
 			</button>
 		</div>
