@@ -1,19 +1,33 @@
 <script lang="ts" module>
 	import { writable } from 'svelte/store';
 
-	// Initialize with system preference, defaulting to false if running on server
-	const prefersDark =
-		typeof window !== 'undefined'
-			? window.matchMedia('(prefers-color-scheme: dark)').matches
-			: false;
-
-	export const darkMode = writable(prefersDark);
+	// Initialize with localStorage value, falling back to system preference
+	const getInitialDarkMode = () => {
+		if (typeof window === 'undefined') return false;
+		
+		const stored = localStorage.getItem('darkMode');
+		if (stored !== null) return stored === 'true';
+		
+		return window.matchMedia('(prefers-color-scheme: dark)').matches;
+	};
+	
+	export const darkMode = writable(getInitialDarkMode());
 
 	// Listen for system preference changes if in browser
 	if (typeof window !== 'undefined') {
 		window
 			.matchMedia('(prefers-color-scheme: dark)')
-			.addEventListener('change', (e) => darkMode.set(e.matches));
+			.addEventListener('change', (e) => {
+				darkMode.set(e.matches);
+				localStorage.setItem('darkMode', e.matches.toString());
+			});
+
+		// Subscribe to store changes to update localStorage
+		darkMode.subscribe(value => {
+			if (typeof window !== 'undefined') {
+				localStorage.setItem('darkMode', value.toString());
+			}
+		});
 	}
 </script>
 

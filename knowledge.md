@@ -30,9 +30,11 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Slightly lighter gray (#444) for hover states
   - Defaults to system preference
   - Syncs with system preference changes
-  - Uses inline script in app.html to prevent flash of wrong theme
+  - Uses inline script in app.html to prevent flash of wrong theme and check localStorage
   - Must toggle dark mode class on both html and body elements
   - Requires darkMode: 'class' in Tailwind config
+  - Persists preference in localStorage
+  - Falls back to system preference if no stored value
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 - Always set explicit width and height on icons to prevent layout shift

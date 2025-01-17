@@ -7,8 +7,13 @@
 		<title>Nathan Arthur - Full-stack Web Developer</title>
 		<meta name="description" content="Full-stack web developer building tools for productivity" />
 		<script>
-			// Immediately set dark mode based on system preference
-			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			// Immediately set dark mode based on localStorage or system preference
+			const stored = localStorage.getItem('darkMode');
+			const prefersDark = stored !== null 
+				? stored === 'true'
+				: window.matchMedia('(prefers-color-scheme: dark)').matches;
+				
+			if (prefersDark) {
 				document.documentElement.classList.add('dark');
 				document.body.classList.add('dark');
 			}
