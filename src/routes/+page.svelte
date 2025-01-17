@@ -15,7 +15,10 @@
 
 	function handleKeydown(event: KeyboardEvent) {
 		// Only trigger if not already in an input/textarea
-		if (event.key === '/' && !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+		if (
+			event.key === '/' &&
+			!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)
+		) {
 			event.preventDefault();
 			searchInput?.focus();
 		}
@@ -76,7 +79,7 @@
 			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
 			description:
-				"Interactive implementation of Conway's Game of Life cellular automaton, featuring custom pattern creation and simulation controls",
+				"Interactive implementation of Conway's Game of Life cellular automaton, featuring wrap-around edges and emoji cells",
 			icon: 'mdi:gamepad-variant',
 			tags: ['Game', 'Simulation']
 		},
@@ -84,7 +87,7 @@
 			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
 			description:
-				'Interactive maze generation tool demonstrating various procedural generation algorithms with visual step-by-step creation',
+				'Interactive maze generation tool which generates large mazes and then releases two agents to solve them in real-time',
 			icon: 'mdi:map-marker-path',
 			tags: ['Algorithm', 'Visualization']
 		},
@@ -92,7 +95,7 @@
 			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
 			description:
-				'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff formatting tools',
+				'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff for AI code generation',
 			icon: 'mdi:wizard-hat',
 			tags: ['Tutorial', 'Developer Tool']
 		}
