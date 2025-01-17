@@ -21,42 +21,42 @@
 		{
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
-			description: 'Deadline-driven task management with real money at stake',
+			description: 'Deadline-driven task management platform that charges real money if you miss your deadlines, helping you stay accountable to your goals',
 			icon: 'mdi:checkbox-marked-circle-outline',
 			tags: ['SaaS', 'Productivity']
 		},
 		{
 			name: 'Autodialer',
 			url: 'https://autodial.taskratchet.com/',
-			description: 'Automated Beeminder goal rate dialing based on historical data',
+			description: 'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
 			icon: 'mdi:phone-sync',
 			tags: ['Automation', 'Integration']
 		},
 		{
 			name: 'Beeminder Dashboard',
 			url: 'https://bm.taskratchet.com/',
-			description: 'Custom dashboard for managing Beeminder goals',
+			description: 'Customizable dashboard providing enhanced visualization and management tools for Beeminder goals and data',
 			icon: 'mdi:view-dashboard',
 			tags: ['Dashboard', 'Integration']
 		},
 		{
 			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
-			description: "Conway's Game of Life implementation with custom patterns",
+			description: "Interactive implementation of Conway's Game of Life cellular automaton, featuring custom pattern creation and simulation controls",
 			icon: 'mdi:gamepad-variant',
 			tags: ['Game', 'Simulation']
 		},
 		{
 			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
-			description: 'Procedural maze generator',
+			description: 'Interactive maze generation tool demonstrating various procedural generation algorithms with visual step-by-step creation',
 			icon: 'mdi:map-marker-path',
 			tags: ['Algorithm', 'Visualization']
 		},
 		{
 			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
-			description: 'Interactive web project setup tutorial for use with Codebuff',
+			description: 'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff formatting tools',
 			icon: 'mdi:wizard-hat',
 			tags: ['Tutorial', 'Developer Tool']
 		}
