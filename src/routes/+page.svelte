@@ -11,6 +11,7 @@
 
 	let searchQuery = '';
 	let searchInput: HTMLInputElement;
+	let showBackToTop = false;
 
 	function handleKeydown(event: KeyboardEvent) {
 		// Only trigger if not already in an input/textarea
@@ -18,6 +19,14 @@
 			event.preventDefault();
 			searchInput?.focus();
 		}
+	}
+
+	function handleScroll() {
+		showBackToTop = window.scrollY > 500;
+	}
+
+	function scrollToTop() {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
 	const filterProjects = (project: (typeof projectLinks)[0]) => {
@@ -90,7 +99,7 @@
 	];
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window on:keydown={handleKeydown} on:scroll={handleScroll} />
 
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12 text-center">
@@ -193,3 +202,14 @@
 		</section>
 	</div>
 </div>
+
+{#if showBackToTop}
+	<button
+		on:click={scrollToTop}
+		class="fixed bottom-8 right-8 rounded-full bg-white p-3 text-gray-600 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+		aria-label="Back to top"
+		transition:fade={{ duration: 200 }}
+	>
+		<Icon icon="mdi:arrow-up" class="h-6 w-6" />
+	</button>
+{/if}
