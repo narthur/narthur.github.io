@@ -22,37 +22,43 @@
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
 			description: 'Deadline-driven task management with real money at stake',
-			icon: 'mdi:checkbox-marked-circle-outline'
+			icon: 'mdi:checkbox-marked-circle-outline',
+			tags: ['SaaS', 'Productivity']
 		},
 		{
 			name: 'Autodialer',
 			url: 'https://autodial.taskratchet.com/',
 			description: 'Automated Beeminder goal rate dialing based on historical data',
-			icon: 'mdi:phone-sync'
+			icon: 'mdi:phone-sync',
+			tags: ['Automation', 'Integration']
 		},
 		{
 			name: 'Beeminder Dashboard',
 			url: 'https://bm.taskratchet.com/',
 			description: 'Custom dashboard for managing Beeminder goals',
-			icon: 'mdi:view-dashboard'
+			icon: 'mdi:view-dashboard',
+			tags: ['Dashboard', 'Integration']
 		},
 		{
 			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
 			description: "Conway's Game of Life implementation with custom patterns",
-			icon: 'mdi:gamepad-variant'
+			icon: 'mdi:gamepad-variant',
+			tags: ['Game', 'Simulation']
 		},
 		{
 			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
 			description: 'Procedural maze generator',
-			icon: 'mdi:map-marker-path'
+			icon: 'mdi:map-marker-path',
+			tags: ['Algorithm', 'Visualization']
 		},
 		{
 			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
 			description: 'Interactive web project setup tutorial for use with Codebuff',
-			icon: 'mdi:wizard-hat'
+			icon: 'mdi:wizard-hat',
+			tags: ['Tutorial', 'Developer Tool']
 		}
 	];
 </script>
@@ -94,7 +100,7 @@
 	<div class="space-y-12">
 		<section>
 			<h2 class="mb-6 text-3xl font-light tracking-tight text-gray-800 dark:text-white">Projects I've Built</h2>
-			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			<ul class="grid grid-cols-1 gap-6">
 				{#each projectLinks as link}
 					<li>
 						<a
@@ -103,28 +109,36 @@
 							rel="noopener noreferrer"
 							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
 						>
-							<div class="flex flex-col items-center space-y-3">
+							<div class="flex items-start gap-4">
 								<Icon
 									icon={link.icon}
-									class="h-10 w-10 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
+									class="h-10 w-10 flex-shrink-0 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
 								/>
-								<div
-									class="text-center text-lg font-medium tracking-tight text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
-								>
-									{link.name}
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div
+											class="text-lg font-medium tracking-tight text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
+										>
+											{link.name}
+										</div>
+										<div class="flex gap-2">
+											{#each link.tags as tag}
+												<span class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+													{tag}
+												</span>
+											{/each}
+										</div>
+									</div>
+									<div class="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+										{link.description}
+									</div>
 								</div>
-							</div>
-							<div
-								class="mt-4 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400"
-							>
-								{link.description}
 							</div>
 						</a>
 					</li>
 				{/each}
 			</ul>
 		</section>
-
-
 	</div>
 </div>
+
