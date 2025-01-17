@@ -86,7 +86,7 @@
 							href={link.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
 						>
 							<div class="flex flex-col items-center space-y-3">
 								<Icon
@@ -100,7 +100,7 @@
 								</div>
 							</div>
 							<div
-								class="mt-4 text-center text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+								class="mt-4 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400"
 							>
 								{link.description}
 							</div>

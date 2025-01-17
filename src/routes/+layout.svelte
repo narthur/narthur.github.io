@@ -37,28 +37,16 @@
 </div>
 
 <style>
+	:global(body) {
+		margin: 0;
+		font-family: 'Instrument Sans', sans-serif;
+		background: white;
+		color: rgb(17, 24, 39);
+	}
+
 	:global(html.dark),
 	:global(html.dark body) {
-		@apply bg-gray-900 text-white;
-	}
-
-	:global(body) {
-		@apply m-0 font-sans;
-	}
-
-	:global(a) {
-		@apply text-blue-600 no-underline transition-colors;
-	}
-
-	:global(a:hover) {
-		@apply text-blue-800 underline;
-	}
-
-	:global(.dark a) {
-		@apply text-blue-400;
-	}
-
-	:global(.dark a:hover) {
-		@apply text-blue-300;
+		background: rgb(17, 24, 39);
+		color: white;
 	}
 </style>

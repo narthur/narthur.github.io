@@ -31,6 +31,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Syncs with system preference changes
   - Uses inline script in app.html to prevent flash of wrong theme
   - Must toggle dark mode class on both html and body elements
+  - Requires darkMode: 'class' in Tailwind config
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 - Always set explicit width and height on icons to prevent layout shift
@@ -40,6 +41,14 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Highlight key projects and professional profiles
 - Keep descriptions concise and focused
 - Maintain up-to-date links to active projects
+
+## Technical Stack
+- SvelteKit for frontend framework
+- Static site deployment
+- Tailwind CSS for styling
+  - Don't use @apply in Svelte style blocks
+  - Use Tailwind classes directly in markup
+  - Use regular CSS in style blocks when needed
 
 ## Build Configuration
 - Site uses @sveltejs/adapter-static for static deployment
