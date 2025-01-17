@@ -29,6 +29,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Slightly lighter gray (#444) for hover states
   - Defaults to system preference
   - Syncs with system preference changes
+  - Uses inline script in app.html to prevent flash of wrong theme
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 

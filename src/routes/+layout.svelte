@@ -36,12 +36,18 @@
 </div>
 
 <style>
+	:global(html.dark),
+	:global(html.dark body) {
+		background: #1a1a1a;
+		color: #fff;
+		--separator-color: #333;
+		--border-color: #444;
+		--border-hover-color: #555;
+	}
+
 	:global(body) {
 		margin: 0;
 		font-family: 'Instrument Sans', sans-serif;
-		transition:
-			background-color 0.3s,
-			color 0.3s;
 		--separator-color: #eee;
 		--border-color: #ddd;
 		--border-hover-color: #bbb;
