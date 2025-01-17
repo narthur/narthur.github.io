@@ -71,13 +71,13 @@
 							style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
 							class="project-card"
 						>
-							<div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-								<Icon icon={link.icon} style="color: #666; font-size: 1.25rem;" />
+							<div style="margin-bottom: 0.75rem; text-align: center;">
+								<Icon icon={link.icon} style="color: #666; font-size: 2rem; margin-bottom: 0.5rem;" />
 								<div style="font-weight: 500; color: #333; font-size: 1.1rem;">
 									{link.name}
 								</div>
 							</div>
-							<div style="color: #666; font-size: 0.9rem; line-height: 1.4;">
+							<div style="color: #666; font-size: 0.9rem; line-height: 1.4; text-align: center;">
 								{link.description}
 							</div>
 						</a>
