@@ -13,12 +13,21 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Focus on usability and quick access to projects
 - Maintain professional appearance
 - Ensure responsive design for all screen sizes
-- Use a simple, clean color scheme with:
+- Color schemes:
+  Light mode:
   - White background
   - Dark gray (#333) for main text
   - Light gray (#666) for secondary text
   - Blue (#0066cc) for links
   - Light gray (#ddd) for borders
+  Dark mode:
+  - Dark gray (#1a1a1a) background
+  - White for main text
+  - Light gray (#999) for secondary text
+  - Light blue (#66b3ff) for links
+  - Dark gray (#444) for borders
+  - Defaults to system preference
+  - Syncs with system preference changes
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 

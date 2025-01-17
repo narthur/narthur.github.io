@@ -1,5 +1,11 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import { darkMode } from './+layout.svelte';
+
+	const toggleDarkMode = () => {
+		darkMode.update(d => !d);
+		document.body.classList.toggle('dark', $darkMode);
+	};
 
 	const profileLinks = [
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
@@ -52,6 +58,19 @@
 
 <div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
 	<div style="margin-bottom: 3rem; text-align: center;">
+		<div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+			<button
+				on:click={toggleDarkMode}
+				style="padding: 0.5rem; border: none; background: none; cursor: pointer;"
+				aria-label="Toggle dark mode"
+			>
+				{#if $darkMode}
+					<Icon icon="mdi:weather-sunny" style="font-size: 1.5rem; color: #fff;" />
+				{:else}
+					<Icon icon="mdi:weather-night" style="font-size: 1.5rem; color: #666;" />
+				{/if}
+			</button>
+		</div>
 		<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Nathan Arthur</h1>
 		<p style="font-size: 1.25rem; color: #666;">Full-stack web developer</p>
 	</div>
@@ -109,6 +128,43 @@
 </div>
 
 <style>
+	:global(.dark) h1 {
+		color: #fff;
+	}
+
+	:global(.dark) h2 {
+		color: #fff !important;
+	}
+
+	:global(.dark) p {
+		color: #999 !important;
+	}
+
+	:global(.dark) .profile-link {
+		color: #999 !important;
+	}
+
+	:global(.dark) .project-card {
+		background: #2a2a2a;
+		border-color: #444;
+	}
+
+	:global(.dark) .project-card:hover {
+		border-color: #666;
+	}
+
+	:global(.dark) .project-card div {
+		color: #fff !important;
+	}
+
+	:global(.dark) .project-card :global(svg) {
+		color: #999 !important;
+	}
+
+	:global(.dark) .project-card:hover :global(svg) {
+		color: #66b3ff !important;
+	}
+
 	.project-card {
 		text-decoration: none;
 		border: 1px solid #ddd;

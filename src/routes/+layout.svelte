@@ -1,12 +1,35 @@
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+	
+	// Initialize with system preference, defaulting to false if running on server
+	const prefersDark = typeof window !== 'undefined' 
+		? window.matchMedia('(prefers-color-scheme: dark)').matches 
+		: false;
+	
+	export const darkMode = writable(prefersDark);
+
+	// Listen for system preference changes if in browser
+	if (typeof window !== 'undefined') {
+		window.matchMedia('(prefers-color-scheme: dark)')
+			.addEventListener('change', e => darkMode.set(e.matches));
+	}
+</script>
+
 <script lang="ts">
 	import '../app.css';
 	import '@fontsource/instrument-sans/400.css';  // Regular
 	import '@fontsource/instrument-sans/500.css';  // Medium
 	import '@fontsource/instrument-sans/700.css';  // Bold
+	
 	let { children } = $props();
+
+	// Apply initial dark mode class to body
+	if (typeof window !== 'undefined' && $darkMode) {
+		document.body.classList.add('dark');
+	}
 </script>
 
-<div>
+<div class:dark={$darkMode}>
 	{@render children()}
 </div>
 
@@ -14,8 +37,12 @@
 	:global(body) {
 		margin: 0;
 		font-family: 'Instrument Sans', sans-serif;
-		background: white;
-		color: #333;
+		transition: background-color 0.3s, color 0.3s;
+	}
+
+	:global(body.dark) {
+		background: #1a1a1a;
+		color: #fff;
 	}
 
 	:global(a) {
@@ -27,5 +54,13 @@
 	:global(a:hover) {
 		color: #004999;
 		text-decoration: underline;
+	}
+
+	:global(.dark a) {
+		color: #66b3ff;
+	}
+
+	:global(.dark a:hover) {
+		color: #99ccff;
 	}
 </style>
