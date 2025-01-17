@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from '@iconify/svelte';
+
 	const profileLinks = [
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
 		{ name: 'Pine Peak Digital', url: 'https://pinepeakdigital.com/' },
@@ -12,32 +14,38 @@
 		{
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
-			description: 'Deadline-driven task management with real money at stake'
+			description: 'Deadline-driven task management with real money at stake',
+			icon: 'mdi:checkbox-marked-circle-outline'
 		},
 		{
 			name: 'Autodialer',
 			url: 'https://autodial.taskratchet.com/',
-			description: 'Automated Beeminder goal rate dialing based on historical data'
+			description: 'Automated Beeminder goal rate dialing based on historical data',
+			icon: 'mdi:phone-sync'
 		},
 		{
 			name: 'Beeminder Dashboard',
 			url: 'https://bm.taskratchet.com/',
-			description: 'Custom dashboard for managing Beeminder goals'
+			description: 'Custom dashboard for managing Beeminder goals',
+			icon: 'mdi:view-dashboard'
 		},
 		{
 			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
-			description: "Conway's Game of Life implementation with custom patterns"
+			description: "Conway's Game of Life implementation with custom patterns",
+			icon: 'mdi:gamepad-variant'
 		},
 		{
 			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
-			description: 'Procedural maze generator'
+			description: 'Procedural maze generator',
+			icon: 'mdi:map-marker-path'
 		},
 		{
 			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
-			description: 'Interactive web project setup tutorial for use with Codebuff'
+			description: 'Interactive web project setup tutorial for use with Codebuff',
+			icon: 'mdi:wizard-hat'
 		}
 	];
 </script>
@@ -63,8 +71,11 @@
 							style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
 							class="project-card"
 						>
-							<div style="margin-bottom: 0.5rem; font-weight: 500; color: #333; font-size: 1.1rem;">
-								{link.name}
+							<div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+								<Icon icon={link.icon} style="color: #666; font-size: 1.25rem;" />
+								<div style="font-weight: 500; color: #333; font-size: 1.1rem;">
+									{link.name}
+								</div>
 							</div>
 							<div style="color: #666; font-size: 0.9rem; line-height: 1.4;">
 								{link.description}
