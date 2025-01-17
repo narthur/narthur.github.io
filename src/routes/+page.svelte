@@ -109,7 +109,7 @@
 							rel="noopener noreferrer"
 							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
 						>
-							<div class="flex items-start gap-4">
+							<div class="flex items-center gap-4">
 								<Icon
 									icon={link.icon}
 									class="h-10 w-10 flex-shrink-0 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
