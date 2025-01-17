@@ -21,42 +21,48 @@
 		{
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
-			description: 'Deadline-driven task management platform that charges real money if you miss your deadlines, helping you stay accountable to your goals',
+			description:
+				'Deadline-driven task management platform that charges real money if you miss your deadlines, helping you stay accountable to your goals',
 			icon: 'mdi:checkbox-marked-circle-outline',
 			tags: ['SaaS', 'Productivity']
 		},
 		{
 			name: 'Autodialer',
 			url: 'https://autodial.taskratchet.com/',
-			description: 'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
+			description:
+				'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
 			icon: 'mdi:phone-sync',
 			tags: ['Automation', 'Integration']
 		},
 		{
 			name: 'Beeminder Dashboard',
 			url: 'https://bm.taskratchet.com/',
-			description: 'Customizable dashboard providing enhanced visualization and management tools for Beeminder goals and data',
+			description:
+				'Customizable dashboard providing enhanced visualization and management tools for Beeminder goals and data',
 			icon: 'mdi:view-dashboard',
 			tags: ['Dashboard', 'Integration']
 		},
 		{
 			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
-			description: "Interactive implementation of Conway's Game of Life cellular automaton, featuring custom pattern creation and simulation controls",
+			description:
+				"Interactive implementation of Conway's Game of Life cellular automaton, featuring custom pattern creation and simulation controls",
 			icon: 'mdi:gamepad-variant',
 			tags: ['Game', 'Simulation']
 		},
 		{
 			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
-			description: 'Interactive maze generation tool demonstrating various procedural generation algorithms with visual step-by-step creation',
+			description:
+				'Interactive maze generation tool demonstrating various procedural generation algorithms with visual step-by-step creation',
 			icon: 'mdi:map-marker-path',
 			tags: ['Algorithm', 'Visualization']
 		},
 		{
 			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
-			description: 'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff formatting tools',
+			description:
+				'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff formatting tools',
 			icon: 'mdi:wizard-hat',
 			tags: ['Tutorial', 'Developer Tool']
 		}
@@ -80,7 +86,9 @@
 		</div>
 		<h1 class="mb-2 text-5xl font-extralight tracking-tight">Nathan Arthur</h1>
 		<p class="mb-6 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
-		<div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+		<div
+			class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
+		>
 			{#each profileLinks as link, i}
 				<a
 					href={link.url}
@@ -99,7 +107,9 @@
 
 	<div class="space-y-12">
 		<section>
-			<h2 class="mb-6 text-3xl font-light tracking-tight text-gray-800 dark:text-white">Projects I've Built</h2>
+			<h2 class="mb-6 text-center text-3xl font-light tracking-tight text-gray-800 dark:text-white">
+				Things I've Built
+			</h2>
 			<ul class="grid grid-cols-1 gap-6">
 				{#each projectLinks as link}
 					<li>
@@ -123,7 +133,9 @@
 										</div>
 										<div class="flex gap-2">
 											{#each link.tags as tag}
-												<span class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+												<span
+													class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+												>
 													{tag}
 												</span>
 											{/each}
@@ -141,4 +153,3 @@
 		</section>
 	</div>
 </div>
-
