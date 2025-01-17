@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+import { fade, slide } from 'svelte/transition';
 	import { darkMode } from './+layout.svelte';
 
 	const toggleDarkMode = () => {
@@ -136,8 +137,11 @@
 				</div>
 			</div>
 			<ul class="grid grid-cols-1 gap-6">
-				{#each projectLinks.filter(filterProjects) as link}
-					<li>
+				{#each projectLinks.filter(filterProjects) as link (link.name)}
+					<li
+						in:fade={{ duration: 200 }}
+						out:slide={{ duration: 200 }}
+					>
 						<a
 							href={link.url}
 							target="_blank"
