@@ -9,35 +9,35 @@
 	];
 
 	const projectLinks = [
-		{ 
-			name: 'TaskRatchet', 
+		{
+			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
 			description: 'Deadline-driven task management with real money at stake'
 		},
-		{ 
-			name: 'Autodialer', 
+		{
+			name: 'Autodialer',
 			url: 'https://autodial.taskratchet.com/',
-			description: 'Automated phone call scheduling system for TaskRatchet'
+			description: 'Automated Beeminder goal rate dialing based on historical data'
 		},
-		{ 
-			name: 'Beeminder Dashboard', 
+		{
+			name: 'Beeminder Dashboard',
 			url: 'https://bm.taskratchet.com/',
 			description: 'Custom dashboard for managing Beeminder goals'
 		},
-		{ 
-			name: 'Life', 
+		{
+			name: 'Life',
 			url: 'https://life.nathanarthur.com/',
-			description: 'Conway\'s Game of Life implementation with custom patterns'
+			description: "Conway's Game of Life implementation with custom patterns"
 		},
-		{ 
-			name: 'Maze Gen', 
+		{
+			name: 'Maze Gen',
 			url: 'https://maze.nathanarthur.com/',
-			description: 'Procedural maze generator with multiple algorithms'
+			description: 'Procedural maze generator'
 		},
-		{ 
-			name: 'Codebuff Wizard', 
+		{
+			name: 'Codebuff Wizard',
 			url: 'https://codebuff.nathanarthur.com/',
-			description: 'Interactive code formatting tool using machine learning'
+			description: 'Interactive web project setup tutorial for use with Codebuff'
 		}
 	];
 </script>
@@ -51,14 +51,17 @@
 	<div style="display: grid; gap: 3rem;">
 		<section>
 			<h2 style="font-size: 2rem; margin-bottom: 1.5rem; color: #333;">Projects I've Built</h2>
-			<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; list-style: none; padding: 0;">
+			<ul
+				style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; list-style: none; padding: 0;"
+			>
 				{#each projectLinks as link}
 					<li>
-						<a href={link.url} 
-						   target="_blank" 
-						   rel="noopener noreferrer"
-						   style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
-						   class="project-card"
+						<a
+							href={link.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
+							class="project-card"
 						>
 							<div style="margin-bottom: 0.5rem; font-weight: 500; color: #333; font-size: 1.1rem;">
 								{link.name}
@@ -74,13 +77,17 @@
 
 		<section style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem;">
 			<h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #666;">Find Me Around the Web</h2>
-			<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; list-style: none; padding: 0;">
+			<ul
+				style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; list-style: none; padding: 0;"
+			>
 				{#each profileLinks as link}
 					<li>
-						<a href={link.url} 
-						   target="_blank" 
-						   rel="noopener noreferrer" 
-						   style="display: block; padding: 0.5rem; color: #666; font-size: 0.9rem;">
+						<a
+							href={link.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							style="display: block; padding: 0.5rem; color: #666; font-size: 0.9rem;"
+						>
 							{link.name}
 						</a>
 					</li>
@@ -93,7 +100,6 @@
 <style>
 	.project-card:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 </style>
-
