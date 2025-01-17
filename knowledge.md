@@ -15,7 +15,8 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Ensure responsive design for all screen sizes
 - Color schemes:
   Light mode:
-  - Subtle gradient background from white to gray-50
+  - Subtle gradient background from gray-50 to gray-100
+  - White cards with layered shadows for depth
   - Dark gray (#333) for main text
   - Light gray (#666) for secondary text
   - Blue (#0066cc) for links

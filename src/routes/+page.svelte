@@ -129,6 +129,7 @@ import { fade, slide } from 'svelte/transition';
 						bind:value={searchQuery}
 						placeholder="Filter projects..."
 						class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 pl-10 text-gray-800 placeholder-gray-500 transition-colors focus:border-gray-300 focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-600"
+						style="box-shadow: 0 1px 2px rgba(0,0,0,0.03);"
 					/>
 					<Icon
 						icon="mdi:magnify"
@@ -147,6 +148,7 @@ import { fade, slide } from 'svelte/transition';
 							target="_blank"
 							rel="noopener noreferrer"
 							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+							style="box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);"
 						>
 							<div class="flex items-center gap-4">
 								<Icon
