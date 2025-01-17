@@ -8,6 +8,17 @@
 		document.body.classList.toggle('dark', $darkMode);
 	};
 
+	let searchQuery = '';
+
+	const filterProjects = (project: typeof projectLinks[0]) => {
+		const searchTerms = searchQuery.toLowerCase();
+		return (
+			project.name.toLowerCase().includes(searchTerms) ||
+			project.description.toLowerCase().includes(searchTerms) ||
+			project.tags.some((tag) => tag.toLowerCase().includes(searchTerms))
+		);
+	};
+
 	const profileLinks = [
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
 		{ name: 'Pine Peak Digital', url: 'https://pinepeakdigital.com/' },
@@ -110,8 +121,22 @@
 			<h2 class="mb-6 text-center text-3xl font-light tracking-tight text-gray-800 dark:text-white">
 				Things I've Built
 			</h2>
+			<div class="mb-8 flex justify-center">
+				<div class="relative w-full max-w-lg">
+					<input
+						type="text"
+						bind:value={searchQuery}
+						placeholder="Filter projects..."
+						class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 pl-10 text-gray-800 placeholder-gray-500 transition-colors focus:border-gray-300 focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-600"
+					/>
+					<Icon
+						icon="mdi:magnify"
+						class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500"
+					/>
+				</div>
+			</div>
 			<ul class="grid grid-cols-1 gap-6">
-				{#each projectLinks as link}
+				{#each projectLinks.filter(filterProjects) as link}
 					<li>
 						<a
 							href={link.url}
