@@ -42,6 +42,11 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Highlight key projects and professional profiles
 - Keep descriptions concise and focused
 - Maintain up-to-date links to active projects
+- Add keyboard shortcuts for common actions (e.g., '/' for search)
+
+- Highlight key projects and professional profiles
+- Keep descriptions concise and focused
+- Maintain up-to-date links to active projects
 
 ## Technical Stack
 - SvelteKit for frontend framework

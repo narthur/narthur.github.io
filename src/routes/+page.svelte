@@ -10,6 +10,15 @@
 	};
 
 	let searchQuery = '';
+	let searchInput: HTMLInputElement;
+
+	function handleKeydown(event: KeyboardEvent) {
+		// Only trigger if not already in an input/textarea
+		if (event.key === '/' && !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+			event.preventDefault();
+			searchInput?.focus();
+		}
+	}
 
 	const filterProjects = (project: (typeof projectLinks)[0]) => {
 		const searchTerms = searchQuery.toLowerCase();
@@ -81,6 +90,8 @@
 	];
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
+
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12 text-center">
 		<div class="fixed right-4 top-4 z-10">
@@ -127,7 +138,8 @@
 					<input
 						type="text"
 						bind:value={searchQuery}
-						placeholder="Filter projects..."
+						bind:this={searchInput}
+						placeholder="Filter projects... (Press '/' to focus)"
 						class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 pl-10 text-gray-800 placeholder-gray-500 transition-colors focus:border-gray-300 focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-600"
 						style="box-shadow: 0 1px 2px rgba(0,0,0,0.03);"
 					/>
