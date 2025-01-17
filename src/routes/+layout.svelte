@@ -25,8 +25,9 @@
 
 	let { children } = $props();
 
-	// Apply initial dark mode class to body
+	// Apply initial dark mode class to html and body
 	if (typeof window !== 'undefined' && $darkMode) {
+		document.documentElement.classList.add('dark');
 		document.body.classList.add('dark');
 	}
 </script>

@@ -4,6 +4,7 @@
 
 	const toggleDarkMode = () => {
 		darkMode.update((d) => !d);
+		document.documentElement.classList.toggle('dark', $darkMode);
 		document.body.classList.toggle('dark', $darkMode);
 	};
 

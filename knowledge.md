@@ -30,6 +30,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Defaults to system preference
   - Syncs with system preference changes
   - Uses inline script in app.html to prevent flash of wrong theme
+  - Must toggle dark mode class on both html and body elements
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 - Always set explicit width and height on icons to prevent layout shift
