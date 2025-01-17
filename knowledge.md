@@ -33,6 +33,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
 - Always set explicit width and height on icons to prevent layout shift
+- Use display: inline-block on icons to ensure width/height are respected
 
 ## Content Guidelines
 - Highlight key projects and professional profiles
