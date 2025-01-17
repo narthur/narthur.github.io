@@ -72,13 +72,28 @@
 				{/if}
 			</button>
 		</div>
-		<h1 class="mb-2 text-5xl font-extralight">Nathan Arthur</h1>
-		<p class="text-xl text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		<h1 class="mb-2 text-5xl font-extralight tracking-tight">Nathan Arthur</h1>
+		<p class="mb-6 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		<div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+			{#each profileLinks as link, i}
+				<a
+					href={link.url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hover:text-blue-600 dark:hover:text-blue-400"
+				>
+					{link.name}
+				</a>
+				{#if i < profileLinks.length - 1}
+					<span class="text-gray-300 dark:text-gray-600">•</span>
+				{/if}
+			{/each}
+		</div>
 	</div>
 
 	<div class="space-y-12">
 		<section>
-			<h2 class="mb-6 text-3xl font-light text-gray-800 dark:text-white">Projects I've Built</h2>
+			<h2 class="mb-6 text-3xl font-light tracking-tight text-gray-800 dark:text-white">Projects I've Built</h2>
 			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{#each projectLinks as link}
 					<li>
@@ -86,7 +101,7 @@
 							href={link.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
 						>
 							<div class="flex flex-col items-center space-y-3">
 								<Icon
@@ -94,7 +109,7 @@
 									class="h-10 w-10 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
 								/>
 								<div
-									class="text-center text-lg font-medium text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
+									class="text-center text-lg font-medium tracking-tight text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
 								>
 									{link.name}
 								</div>
@@ -110,22 +125,6 @@
 			</ul>
 		</section>
 
-		<section class="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700">
-			<h2 class="mb-4 text-xl text-gray-600 dark:text-gray-400">Find Me Around the Web</h2>
-			<ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-				{#each profileLinks as link}
-					<li>
-						<a
-							href={link.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="block p-2 text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-						>
-							{link.name}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</section>
+
 	</div>
 </div>
