@@ -9,85 +9,91 @@
 	];
 
 	const projectLinks = [
-		{ name: 'TaskRatchet', url: 'https://taskratchet.com/' },
-		{ name: 'Autodialer', url: 'https://autodial.taskratchet.com/' },
-		{ name: 'Beeminder Dashboard', url: 'https://bm.taskratchet.com/' },
-		{ name: 'Life', url: 'https://life.nathanarthur.com/' },
-		{ name: 'Maze Gen', url: 'https://maze.nathanarthur.com/' },
-		{ name: 'Codebuff Wizard', url: 'https://codebuff.nathanarthur.com/' }
+		{ 
+			name: 'TaskRatchet', 
+			url: 'https://taskratchet.com/',
+			description: 'Deadline-driven task management with real money at stake'
+		},
+		{ 
+			name: 'Autodialer', 
+			url: 'https://autodial.taskratchet.com/',
+			description: 'Automated phone call scheduling system for TaskRatchet'
+		},
+		{ 
+			name: 'Beeminder Dashboard', 
+			url: 'https://bm.taskratchet.com/',
+			description: 'Custom dashboard for managing Beeminder goals'
+		},
+		{ 
+			name: 'Life', 
+			url: 'https://life.nathanarthur.com/',
+			description: 'Conway\'s Game of Life implementation with custom patterns'
+		},
+		{ 
+			name: 'Maze Gen', 
+			url: 'https://maze.nathanarthur.com/',
+			description: 'Procedural maze generator with multiple algorithms'
+		},
+		{ 
+			name: 'Codebuff Wizard', 
+			url: 'https://codebuff.nathanarthur.com/',
+			description: 'Interactive code formatting tool using machine learning'
+		}
 	];
 </script>
 
-<div
-	class="relative min-h-screen bg-gradient-to-b from-stone-950 to-stone-900 px-4 py-16 selection:bg-stone-800 selection:text-stone-100 sm:px-6 lg:px-8"
->
-	<div class="relative z-10 mx-auto max-w-4xl">
-		<div
-			class="mb-16 rounded-lg border border-stone-800/50 bg-stone-900/40 p-16 shadow-lg backdrop-blur-sm transition-all duration-500 hover:border-stone-700/70 hover:shadow-xl"
-		>
-			<div class="text-center">
-				<h1
-					class="mb-8 bg-gradient-to-r from-stone-100 to-stone-300 bg-clip-text text-8xl font-extralight leading-none tracking-tighter text-transparent"
-				>
-					Nathan Arthur
-				</h1>
-				<p class="font-mono text-2xl tracking-widest text-stone-400/70">
-					&lt;Full-stack web developer /&gt;
-				</p>
-			</div>
-		</div>
+<div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+	<div style="margin-bottom: 3rem; text-align: center;">
+		<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Nathan Arthur</h1>
+		<p style="font-size: 1.25rem; color: #666;">Full-stack web developer</p>
+	</div>
 
-		<div class="space-y-16">
-			<section>
-				<h2 class="mb-12 text-center text-3xl font-extralight tracking-wide text-stone-300/90">
-					[Find Me Around the Web]
-				</h2>
-				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{#each profileLinks as link}
-						<a
-							href={link.url}
-							class="group relative block overflow-hidden rounded-md border border-stone-800 bg-stone-900/80 p-6 text-center shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] hover:border-stone-700 hover:shadow-lg"
-							target="_blank"
-							rel="noopener noreferrer"
+	<div style="display: grid; gap: 3rem;">
+		<section>
+			<h2 style="font-size: 2rem; margin-bottom: 1.5rem; color: #333;">Projects I've Built</h2>
+			<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; list-style: none; padding: 0;">
+				{#each projectLinks as link}
+					<li>
+						<a href={link.url} 
+						   target="_blank" 
+						   rel="noopener noreferrer"
+						   style="display: block; padding: 1.5rem; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
+						   class="project-card"
 						>
-							<div
-								class="absolute inset-0 bg-gradient-to-r from-stone-800/20 to-stone-900/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-							></div>
-							<span
-								class="font-mono text-lg tracking-wide text-stone-400/80 transition-colors duration-300 group-hover:text-stone-200"
-							>
-								&gt; {link.name}
-							</span>
+							<div style="margin-bottom: 0.5rem; font-weight: 500; color: #333; font-size: 1.1rem;">
+								{link.name}
+							</div>
+							<div style="color: #666; font-size: 0.9rem; line-height: 1.4;">
+								{link.description}
+							</div>
 						</a>
-					{/each}
-				</div>
-			</section>
+					</li>
+				{/each}
+			</ul>
+		</section>
 
-			<section>
-				<h2 class="mb-8 text-center text-2xl font-light text-stone-300">[Projects I've Built]</h2>
-				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{#each projectLinks as link}
-						<a
-							href={link.url}
-							class="group relative block overflow-hidden rounded-md border border-stone-800 bg-stone-900/80 p-6 text-center shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] hover:border-stone-700 hover:shadow-lg"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<div
-								class="absolute inset-0 bg-gradient-to-r from-stone-800/50 to-stone-900/50 opacity-0 transition-opacity group-hover:opacity-100"
-							></div>
-							<span
-								class="font-mono text-lg text-stone-400 transition-colors duration-200 group-hover:text-stone-200"
-							>
-								&gt; {link.name}
-							</span>
+		<section style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem;">
+			<h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #666;">Find Me Around the Web</h2>
+			<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; list-style: none; padding: 0;">
+				{#each profileLinks as link}
+					<li>
+						<a href={link.url} 
+						   target="_blank" 
+						   rel="noopener noreferrer" 
+						   style="display: block; padding: 0.5rem; color: #666; font-size: 0.9rem;">
+							{link.name}
 						</a>
-					{/each}
-				</div>
-			</section>
-		</div>
+					</li>
+				{/each}
+			</ul>
+		</section>
 	</div>
 </div>
 
 <style>
+	.project-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+	}
 </style>
+

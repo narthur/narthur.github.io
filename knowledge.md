@@ -5,18 +5,22 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 
 ## Technical Stack
 - SvelteKit for frontend framework
-- Tailwind CSS for styling
 - Static site deployment
 
 ## Design Guidelines
+- Use Instrument Sans for headings (weights: 400, 500, 700)
 - Keep it minimal and clean
 - Focus on usability and quick access to projects
 - Maintain professional appearance
 - Ensure responsive design for all screen sizes
-- Use sophisticated, understated color palette based on stone/slate
-- Prefer subtle animations and transitions
-- Use transparency and backdrop blur for depth
-- Maintain high contrast for accessibility while keeping muted tones
+- Use a simple, clean color scheme with:
+  - White background
+  - Dark gray (#333) for main text
+  - Light gray (#666) for secondary text
+  - Blue (#0066cc) for links
+  - Light gray (#ddd) for borders
+- Prefer subtle transitions for interactions
+- Keep layout spacious and readable
 
 ## Content Guidelines
 - Highlight key projects and professional profiles

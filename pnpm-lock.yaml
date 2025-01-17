@@ -14,6 +14,9 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.18.0
+      '@fontsource/instrument-sans':
+        specifier: ^5.1.1
+        version: 5.1.1
       '@sveltejs/adapter-static':
         specifier: ^3.0.8
         version: 3.0.8(@sveltejs/kit@2.15.3(@sveltejs/vite-plugin-svelte@4.0.4(svelte@5.18.0)(vite@5.4.11))(svelte@5.18.0)(vite@5.4.11))
@@ -268,6 +271,9 @@ packages:
   '@eslint/plugin-kit@0.2.5':
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@fontsource/instrument-sans@5.1.1':
+    resolution: {integrity: sha512-hBus0cnHsLFc+AQ6tsHqK2Iqice5QHTEfLiUQ19dDzpeEBxIyOgQ7vkbO1E9ZNpWtX7KoRzz2Qe2Y/qfxEbSKA==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1761,6 +1767,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.10.0
       levn: 0.4.1
+
+  '@fontsource/instrument-sans@5.1.1': {}
 
   '@humanfs/core@0.19.1': {}
 
