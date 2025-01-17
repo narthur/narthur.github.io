@@ -56,62 +56,51 @@
 	];
 </script>
 
-<div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
-	<div style="margin-bottom: 3rem; text-align: center;">
-		<div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+<div class="mx-auto max-w-3xl px-8 py-16">
+	<div class="mb-12 text-center">
+		<div class="mb-4 flex justify-end">
 			<button
 				on:click={toggleDarkMode}
-				style="padding: 0.5rem; border: none; background: none; cursor: pointer;"
+				class="cursor-pointer border-none bg-transparent p-2"
 				aria-label="Toggle dark mode"
 			>
 				{#if $darkMode}
-					<Icon
-						icon="mdi:weather-sunny"
-						style="font-size: 1.5rem; color: #fff;"
-						width="20"
-						height="20"
-					/>
+					<Icon icon="mdi:weather-sunny" class="h-6 w-6 text-white" />
 				{:else}
-					<Icon
-						icon="mdi:weather-night"
-						style="font-size: 1.5rem; color: #666;"
-						width="20"
-						height="20"
-					/>
+					<Icon icon="mdi:weather-night" class="h-6 w-6 text-gray-600" />
 				{/if}
 			</button>
 		</div>
-		<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Nathan Arthur</h1>
-		<p style="font-size: 1.25rem; color: #666;">Full-stack web developer</p>
+		<h1 class="mb-2 text-5xl font-extralight">Nathan Arthur</h1>
+		<p class="text-xl text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 	</div>
 
-	<div style="display: grid; gap: 3rem;">
+	<div class="space-y-12">
 		<section>
-			<h2 style="font-size: 2rem; margin-bottom: 1.5rem; color: #333;">Projects I've Built</h2>
-			<ul
-				style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; list-style: none; padding: 0;"
-			>
+			<h2 class="mb-6 text-3xl font-light text-gray-800 dark:text-white">Projects I've Built</h2>
+			<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{#each projectLinks as link}
 					<li>
 						<a
 							href={link.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							style="display: block; padding: 1.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out;"
-							class="project-card"
+							class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
 						>
-							<div style="margin-bottom: 0.75rem; text-align: center;">
+							<div class="flex flex-col items-center space-y-3">
 								<Icon
 									icon={link.icon}
-									style="color: #666; font-size: 2rem; margin-bottom: 0.5rem;"
-									width="2rem"
-									height="2rem"
+									class="h-10 w-10 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
 								/>
-								<div style="font-weight: 500; color: #333; font-size: 1.1rem;">
+								<div
+									class="text-center text-lg font-medium text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
+								>
 									{link.name}
 								</div>
 							</div>
-							<div style="color: #666; font-size: 0.9rem; line-height: 1.4; text-align: center;">
+							<div
+								class="mt-4 text-center text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+							>
 								{link.description}
 							</div>
 						</a>
@@ -120,20 +109,16 @@
 			</ul>
 		</section>
 
-		<section
-			style="margin-top: 2rem; border-top: 1px solid var(--separator-color, #eee); padding-top: 2rem;"
-		>
-			<h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #666;">Find Me Around the Web</h2>
-			<ul
-				style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; list-style: none; padding: 0;"
-			>
+		<section class="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700">
+			<h2 class="mb-4 text-xl text-gray-600 dark:text-gray-400">Find Me Around the Web</h2>
+			<ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 				{#each profileLinks as link}
 					<li>
 						<a
 							href={link.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							style="display: block; padding: 0.5rem; color: #666; font-size: 0.9rem;"
+							class="block p-2 text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
 						>
 							{link.name}
 						</a>
@@ -143,53 +128,3 @@
 		</section>
 	</div>
 </div>
-
-<style>
-	:global(.dark) h1 {
-		color: #fff;
-	}
-
-	:global(.dark) h2 {
-		color: #fff !important;
-	}
-
-	:global(.dark) p {
-		color: #999 !important;
-	}
-
-	:global(.dark) .project-card {
-		background: #2a2a2a;
-	}
-
-	:global(.dark) .project-card div {
-		color: #fff !important;
-	}
-
-	:global(.dark) .project-card :global(svg) {
-		color: #999 !important;
-	}
-
-	:global(.dark) .project-card:hover :global(svg) {
-		color: #66b3ff !important;
-	}
-
-	.project-card {
-		text-decoration: none;
-		border: 1px solid var(--border-color);
-		background: white;
-	}
-
-	.project-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		border-color: var(--border-hover-color);
-	}
-
-	.project-card:hover :global(svg) {
-		color: #0066cc !important;
-	}
-
-	.project-card:hover div:first-child {
-		color: #0066cc;
-	}
-</style>

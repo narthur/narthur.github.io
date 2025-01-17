@@ -57,6 +57,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.14.0
+      postcss:
+        specifier: ^8.5.1
+        version: 8.5.1
       prettier:
         specifier: ^3.4.2
         version: 3.4.2

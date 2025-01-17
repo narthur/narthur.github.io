@@ -38,45 +38,26 @@
 <style>
 	:global(html.dark),
 	:global(html.dark body) {
-		background: #1a1a1a;
-		color: #fff;
-		--separator-color: #333;
-		--border-color: #444;
-		--border-hover-color: #555;
+		@apply bg-gray-900 text-white;
 	}
 
 	:global(body) {
-		margin: 0;
-		font-family: 'Instrument Sans', sans-serif;
-		--separator-color: #eee;
-		--border-color: #ddd;
-		--border-hover-color: #bbb;
-	}
-
-	:global(body.dark) {
-		background: #1a1a1a;
-		color: #fff;
-		--separator-color: #333;
-		--border-color: #444;
-		--border-hover-color: #555;
+		@apply m-0 font-sans;
 	}
 
 	:global(a) {
-		color: #0066cc;
-		text-decoration: none;
-		transition: color 0.2s;
+		@apply text-blue-600 no-underline transition-colors;
 	}
 
 	:global(a:hover) {
-		color: #004999;
-		text-decoration: underline;
+		@apply text-blue-800 underline;
 	}
 
 	:global(.dark a) {
-		color: #66b3ff;
+		@apply text-blue-400;
 	}
 
 	:global(.dark a:hover) {
-		color: #99ccff;
+		@apply text-blue-300;
 	}
 </style>
