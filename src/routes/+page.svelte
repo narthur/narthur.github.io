@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-import { fade, slide } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
 	import { darkMode } from './+layout.svelte';
 
 	const toggleDarkMode = () => {
@@ -11,7 +11,7 @@ import { fade, slide } from 'svelte/transition';
 
 	let searchQuery = '';
 
-	const filterProjects = (project: typeof projectLinks[0]) => {
+	const filterProjects = (project: (typeof projectLinks)[0]) => {
 		const searchTerms = searchQuery.toLowerCase();
 		return (
 			project.name.toLowerCase().includes(searchTerms) ||
@@ -96,7 +96,7 @@ import { fade, slide } from 'svelte/transition';
 				{/if}
 			</button>
 		</div>
-		<h1 class="mb-2 text-5xl font-extralight tracking-tight">Nathan Arthur</h1>
+		<h1 class="mb-2 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
 		<p class="mb-6 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 		<div
 			class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
@@ -139,10 +139,7 @@ import { fade, slide } from 'svelte/transition';
 			</div>
 			<ul class="grid grid-cols-1 gap-6">
 				{#each projectLinks.filter(filterProjects) as link (link.name)}
-					<li
-						in:fade={{ duration: 200 }}
-						out:slide={{ duration: 200 }}
-					>
+					<li in:fade={{ duration: 200 }} out:slide={{ duration: 200 }}>
 						<a
 							href={link.url}
 							target="_blank"
