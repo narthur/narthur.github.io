@@ -65,9 +65,15 @@
 				aria-label="Toggle dark mode"
 			>
 				{#if $darkMode}
-					<Icon icon="mdi:weather-sunny" style="font-size: 1.5rem; color: #fff;" />
+					<Icon 
+						icon="mdi:weather-sunny" 
+						style="font-size: 1.5rem; color: #fff; width: 1.5rem; height: 1.5rem;" 
+					/>
 				{:else}
-					<Icon icon="mdi:weather-night" style="font-size: 1.5rem; color: #666;" />
+					<Icon 
+						icon="mdi:weather-night" 
+						style="font-size: 1.5rem; color: #666; width: 1.5rem; height: 1.5rem;" 
+					/>
 				{/if}
 			</button>
 		</div>
@@ -93,7 +99,7 @@
 							<div style="margin-bottom: 0.75rem; text-align: center;">
 								<Icon
 									icon={link.icon}
-									style="color: #666; font-size: 2rem; margin-bottom: 0.5rem;"
+									style="color: #666; font-size: 2rem; margin-bottom: 0.5rem; width: 2rem; height: 2rem;"
 								/>
 								<div style="font-weight: 500; color: #333; font-size: 1.1rem;">
 									{link.name}

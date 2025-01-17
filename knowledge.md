@@ -32,6 +32,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Uses inline script in app.html to prevent flash of wrong theme
 - Prefer subtle transitions for interactions
 - Keep layout spacious and readable
+- Always set explicit width and height on icons to prevent layout shift
 
 ## Content Guidelines
 - Highlight key projects and professional profiles
