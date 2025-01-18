@@ -103,8 +103,8 @@ export async function fetchGithubStats(): Promise<GithubStats | null> {
 	} catch (error: unknown) {
 		if (isRequestError(error) && error.response.status === 403) {
 			const resetTime = error.response.headers?.['x-ratelimit-reset'];
-			if (typeof resetTime === 'number') {
-				const resetDate = new Date(resetTime * 1000);
+			if (resetTime) {
+				const resetDate = new Date(+resetTime * 1000);
 				console.log(`GitHub API rate limit will reset at: ${resetDate.toLocaleString()}`);
 			}
 		}
