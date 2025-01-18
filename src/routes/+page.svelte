@@ -122,29 +122,30 @@
 				{/if}
 			</button>
 		</div>
-		<h1 class="mb-2 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
-		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		<h1 class="mb-3 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
+		<p class="mb-8 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 
-		{#if githubStats}
-			<div class="mb-6 space-y-4">
-				<div class="flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
-					<div class="flex items-center gap-1">
-						<Icon icon="mdi:source-repository" class="h-4 w-4" />
+		<div class="mb-12 space-y-8">
+			<!-- GitHub Stats -->
+			<div class="space-y-6">
+				<div class="flex justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
+					<div class="flex items-center gap-2">
+						<Icon icon="mdi:source-repository" class="h-5 w-5" />
 						<span>{githubStats.publicRepos} repos</span>
 					</div>
-					<div class="flex items-center gap-1">
-						<Icon icon="mdi:star" class="h-4 w-4" />
+					<div class="flex items-center gap-2">
+						<Icon icon="mdi:star" class="h-5 w-5" />
 						<span>{githubStats.totalStars} stars</span>
 					</div>
-					<div class="flex items-center gap-1">
-						<Icon icon="mdi:account-group" class="h-4 w-4" />
+					<div class="flex items-center gap-2">
+						<Icon icon="mdi:account-group" class="h-5 w-5" />
 						<span>{githubStats.followers} followers</span>
 					</div>
 				</div>
 
 				{#if Object.keys(githubStats.languages).length > 0}
 					<div class="flex flex-col items-center">
-						<div class="flex h-2 w-full max-w-xs overflow-hidden rounded-full">
+						<div class="flex h-3 w-full max-w-sm overflow-hidden rounded-full">
 							{#each Object.entries(githubStats.languages) as [lang, percentage]}
 								<div
 									class="h-full"
@@ -154,12 +155,12 @@
 							{/each}
 						</div>
 						<div
-							class="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400"
+							class="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
 						>
 							{#each Object.entries(githubStats.languages) as [lang, percentage]}
-								<div class="flex items-center gap-1">
+								<div class="flex items-center gap-2">
 									<div
-										class="h-2 w-2 rounded-full"
+										class="h-3 w-3 rounded-full"
 										style="background-color: {getLanguageColor(lang)};"
 									></div>
 									<span>{lang} {percentage.toFixed(1)}%</span>
@@ -169,24 +170,25 @@
 					</div>
 				{/if}
 			</div>
-		{/if}
 
-		<div
-			class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
-		>
-			{#each profileLinks as link, i}
-				<a
-					href={link.url}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="hover:text-blue-600 dark:hover:text-blue-400"
-				>
-					{link.name}
-				</a>
-				{#if i < profileLinks.length - 1}
-					<span class="text-gray-300 dark:text-gray-600">•</span>
-				{/if}
-			{/each}
+			<!-- Profile Links -->
+			<div
+				class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
+			>
+				{#each profileLinks as link, i}
+					<a
+						href={link.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="hover:text-blue-600 dark:hover:text-blue-400"
+					>
+						{link.name}
+					</a>
+					{#if i < profileLinks.length - 1}
+						<span class="text-gray-300 dark:text-gray-600">•</span>
+					{/if}
+				{/each}
+			</div>
 		</div>
 	</div>
 
