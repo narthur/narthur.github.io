@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: na.com
+    runtime: static
+    buildCommand: pnpm run build
+    staticPublishPath: ./build
+    pullRequestPreviewsEnabled: true
+    domains:
+      - nathanarthur.com
+      - www.nathanarthur.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
