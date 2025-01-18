@@ -77,7 +77,7 @@
 			url: 'https://autodial.taskratchet.com/',
 			description:
 				'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
-			icon: 'mdi:phone-sync',
+			icon: 'mdi:chart-line',
 			tags: ['Automation', 'Integration']
 		},
 		{
@@ -93,7 +93,7 @@
 			url: 'https://life.nathanarthur.com/',
 			description:
 				"Interactive implementation of Conway's Game of Life cellular automaton, featuring wrap-around edges and emoji cells",
-			icon: 'mdi:gamepad-variant',
+			icon: 'mdi:sprout',
 			tags: ['Game', 'Simulation']
 		},
 		{
