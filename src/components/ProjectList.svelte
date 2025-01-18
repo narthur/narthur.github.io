@@ -26,6 +26,15 @@
 
 	const projectLinks = [
 		{
+			name: "Let's Build Something Together",
+			url: 'https://pinepeakdigital.com/contact',
+			description:
+				'Have an idea for a project? Looking for a developer to help bring your vision to life? Get in touch and let\'s discuss how we can work together.',
+			icon: 'mdi:handshake',
+			tags: ['Available', 'Contact'],
+			highlight: true
+		},
+		{
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
 			description:
@@ -112,33 +121,53 @@
 				<a
 					href={link.url}
 					target="_blank"
-					rel="noopener noreferrer"
-					class="group block rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+					rel="noopener noreferrer"							class={`group block rounded-lg border p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+								link.highlight
+									? 'border-blue-200 bg-blue-50 hover:border-blue-300 dark:border-blue-800 dark:bg-blue-900/30 dark:hover:border-blue-700'
+									: 'border-gray-200 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600'
+							}`}
 					style="box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);"
 				>
 					<div class="flex items-center gap-4">
 						<Icon
-							icon={link.icon}
-							class="h-10 w-10 flex-shrink-0 text-gray-600 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"
+							icon={link.icon}									class={`h-10 w-10 flex-shrink-0 transition-colors ${
+										link.highlight
+											? 'text-blue-600 group-hover:text-blue-700 dark:text-blue-400 dark:group-hover:text-blue-300'
+											: 'text-gray-600 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400'
+									}`}
 						/>
 						<div class="flex-grow">
 							<div class="flex items-center justify-between">
 								<div
-									class="text-lg font-medium tracking-tight text-gray-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
+									class={`text-lg font-medium tracking-tight transition-colors ${
+										link.highlight
+											? 'text-blue-800 group-hover:text-blue-900 dark:text-blue-100 dark:group-hover:text-white'
+											: 'text-gray-800 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400'
+									}`}
 								>
 									{link.name}
 								</div>
 								<div class="flex gap-2">
 									{#each link.tags as tag}
 										<span
-											class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+											class={`rounded px-2 py-1 text-xs ${
+										link.highlight
+											? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
+											: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+									}`}
 										>
 											{tag}
 										</span>
 									{/each}
 								</div>
 							</div>
-							<div class="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+							<div
+								class={`mt-2 text-sm leading-relaxed ${
+									link.highlight
+										? 'text-blue-700 dark:text-blue-300'
+										: 'text-gray-500 dark:text-gray-400'
+								}`}
+							>
 								{link.description}
 							</div>
 						</div>
