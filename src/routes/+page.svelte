@@ -7,15 +7,10 @@
 	import { getLanguageColor } from '../services/github/colors';
 	import type { GithubStats } from '../services/github/types';
 
-	let githubStats: GithubStats = {
-		publicRepos: 0,
-		followers: 0,
-		totalStars: 0,
-		languages: {}
-	};
+	let githubStats: GithubStats | null = null;
 
 	onMount(() => {
-		fetchGithubStats().then(stats => {
+		fetchGithubStats().then((stats) => {
 			if (stats) {
 				githubStats = stats;
 			}
@@ -139,9 +134,9 @@
 		</div>
 		<h1 class="mb-2 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
 		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
-		
-		{#if githubStats.publicRepos > 0}
-			<div class="space-y-4 mb-6">
+
+		{#if githubStats}
+			<div class="mb-6 space-y-4">
 				<div class="flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
 					<div class="flex items-center gap-1">
 						<Icon icon="mdi:source-repository" class="h-4 w-4" />
@@ -159,7 +154,7 @@
 
 				{#if Object.keys(githubStats.languages).length > 0}
 					<div class="flex flex-col items-center">
-						<div class="w-full max-w-xs h-2 flex rounded-full overflow-hidden">
+						<div class="flex h-2 w-full max-w-xs overflow-hidden rounded-full">
 							{#each Object.entries(githubStats.languages) as [lang, percentage]}
 								<div
 									class="h-full"
@@ -168,11 +163,13 @@
 								></div>
 							{/each}
 						</div>
-						<div class="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+						<div
+							class="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400"
+						>
 							{#each Object.entries(githubStats.languages) as [lang, percentage]}
 								<div class="flex items-center gap-1">
 									<div
-										class="w-2 h-2 rounded-full"
+										class="h-2 w-2 rounded-full"
 										style="background-color: {getLanguageColor(lang)};"
 									></div>
 									<span>{lang} {percentage.toFixed(1)}%</span>
@@ -184,7 +181,9 @@
 			</div>
 		{/if}
 
-		<div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+		<div
+			class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
+		>
 			{#each profileLinks as link, i}
 				<a
 					href={link.url}
