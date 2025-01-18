@@ -12,18 +12,33 @@
 	</h2>
 	<div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
 		<div class="flex justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
-			<div class="flex items-center gap-2">
+			<a
+				href="https://github.com/narthur?tab=repositories"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400"
+			>
 				<Icon icon="mdi:source-repository" class="h-5 w-5" />
 				<span>{githubStats.publicRepos} repos</span>
-			</div>
-			<div class="flex items-center gap-2">
+			</a>
+			<a
+				href="https://github.com/narthur?tab=repositories&sort=stargazers"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400"
+			>
 				<Icon icon="mdi:star" class="h-5 w-5" />
 				<span>{githubStats.totalStars} stars</span>
-			</div>
-			<div class="flex items-center gap-2">
+			</a>
+			<a
+				href="https://github.com/narthur?tab=followers"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400"
+			>
 				<Icon icon="mdi:account-group" class="h-5 w-5" />
 				<span>{githubStats.followers} followers</span>
-			</div>
+			</a>
 		</div>
 
 		{#if Object.keys(githubStats.languages).length > 0}
