@@ -2,108 +2,22 @@
 	import Icon from '@iconify/svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { darkMode } from './+layout.svelte';
-	import { Octokit } from '@octokit/rest';
 	import { onMount } from 'svelte';
+	import { fetchGithubStats } from '../services/github/api';
+	import { getLanguageColor } from '../services/github/colors';
+	import type { GithubStats } from '../services/github/types';
 
-	// Common GitHub language colors
-	const languageColors: Record<string, string> = {
-		TypeScript: '#3178c6',
-		JavaScript: '#f1e05a',
-		HTML: '#e34c26',
-		CSS: '#563d7c',
-		Python: '#3572A5',
-		PHP: '#4F5D95',
-		Ruby: '#701516',
-		Java: '#b07219',
-		Swift: '#ffac45',
-		Go: '#00ADD8',
-		Rust: '#dea584',
-		Shell: '#89e051',
-		Vue: '#41b883',
-		'C++': '#f34b7d',
-		C: '#555555'
-	};
-
-	function getLanguageColor(language: string): string {
-		return languageColors[language] || '#8b949e';
-	}
-
-	const octokit = new Octokit();
-	let githubStats = {
+	let githubStats: GithubStats = {
 		publicRepos: 0,
 		followers: 0,
 		totalStars: 0,
-		languages: {} as Record<string, number>
+		languages: {}
 	};
 
-	async function fetchGithubStats() {
-		try {
-			// Check cache first
-			const cached = localStorage.getItem('githubStats');
-			if (cached) {
-				const { data, timestamp } = JSON.parse(cached);
-				// Use cache if less than 1 hour old
-				if (Date.now() - timestamp < 60 * 60 * 1000) {
-					githubStats = data;
-					return;
-				}
-			}
-
-			const [userResponse, reposResponse] = await Promise.all([
-				octokit.rest.users.getByUsername({ username: 'narthur' }),
-				octokit.rest.repos.listForUser({ username: 'narthur', per_page: 100 })
-			]);
-
-			const totalStars = reposResponse.data.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
-
-			// Fetch languages for each repository
-			const languagePromises = reposResponse.data.map(repo =>
-				octokit.rest.repos.listLanguages({
-					owner: 'narthur',
-					repo: repo.name
-				})
-			);
-
-			const languageResponses = await Promise.all(languagePromises);
-			const languages: Record<string, number> = {};
-
-			// Aggregate language bytes across all repos
-			languageResponses.forEach(response => {
-				Object.entries(response.data).forEach(([lang, bytes]) => {
-					languages[lang] = (languages[lang] || 0) + bytes;
-				});
-			});
-
-			// Convert bytes to percentages and sort by usage
-			const totalBytes = Object.values(languages).reduce((a, b) => a + b, 0);
-			const languagePercentages = Object.fromEntries(
-				Object.entries(languages)
-					.map(([lang, bytes]) => [lang, Number((bytes / totalBytes) * 100)])
-					.sort((a, b) => Number(b[1]) - Number(a[1]))
-					.slice(0, 5) // Keep top 5 languages
-			);
-
-			const stats = {
-				publicRepos: userResponse.data.public_repos,
-				followers: userResponse.data.followers,
-				totalStars: totalStars,
-				languages: languagePercentages
-			};
-
-			// Cache the results
-			localStorage.setItem('githubStats', JSON.stringify({
-				data: stats,
-				timestamp: Date.now()
-			}));
-
-			githubStats = stats;
-		} catch (error) {
-			console.error('Error fetching GitHub stats:', error);
-		}
-	}
-
 	onMount(() => {
-		fetchGithubStats();
+		fetchGithubStats().then(stats => {
+			githubStats = stats;
+		});
 	});
 
 	let searchQuery = '';
