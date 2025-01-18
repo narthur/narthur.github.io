@@ -72,6 +72,14 @@
 				'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff for AI code generation',
 			icon: 'mdi:wizard-hat',
 			tags: ['Tutorial', 'Developer Tool']
+		},
+		{
+			name: 'Bayes',
+			url: 'https://bayes.nathanarthur.com/',
+			description:
+				'Journal for tracking hypotheses and observations over time, tracking Bayesian probabilities and updating beliefs',
+			icon: 'mdi:function',
+			tags: ['Tool', 'Education']
 		}
 	];
 </script>
