@@ -6,6 +6,15 @@ const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 const octokit = new Octokit();
 
+type RequestError = Error & {
+	status: number;
+	response: { headers: Record<string, string>; status: number };
+};
+
+function isRequestError(error: unknown): error is RequestError {
+	return Boolean((error as RequestError)?.response?.status);
+}
+
 function getCachedStats(): GithubStats | null {
 	try {
 		const cached = localStorage.getItem(CACHE_KEY);
@@ -35,7 +44,7 @@ function cacheStats(stats: GithubStats): void {
 	}
 }
 
-export async function fetchGithubStats(): Promise<GithubStats> {
+export async function fetchGithubStats(): Promise<GithubStats | null> {
 	// Check cache first
 	const cached = getCachedStats();
 	if (cached) {
@@ -48,7 +57,10 @@ export async function fetchGithubStats(): Promise<GithubStats> {
 			octokit.rest.repos.listForUser({ username: 'narthur', per_page: 100 })
 		]);
 
-		const totalStars = reposResponse.data.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
+		const totalStars = reposResponse.data.reduce(
+			(sum, repo) => sum + (repo.stargazers_count ?? 0),
+			0
+		);
 
 		// Fetch languages for each repository
 		const languagePromises = reposResponse.data.map((repo) =>
@@ -88,8 +100,15 @@ export async function fetchGithubStats(): Promise<GithubStats> {
 		cacheStats(stats);
 
 		return stats;
-	} catch (error) {
+	} catch (error: unknown) {
+		if (isRequestError(error) && error.response.status === 403) {
+			const resetTime = error.response.headers?.['x-ratelimit-reset'];
+			if (typeof resetTime === 'number') {
+				const resetDate = new Date(resetTime * 1000);
+				console.log(`GitHub API rate limit will reset at: ${resetDate.toLocaleString()}`);
+			}
+		}
 		console.error('Error fetching GitHub stats:', error);
-		throw error;
+		return null;
 	}
 }
