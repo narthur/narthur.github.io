@@ -60,7 +60,16 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
     - 60 requests/hour for unauthenticated requests
     - Consider adding token for 5000 requests/hour if needed
   - Cache responses in localStorage to reduce API calls
-  - Add error handling for rate limits
+  - Cache duration: 1 hour
+  - Don't use @apply in Svelte style blocks
+  - Use Tailwind classes directly in markup
+  - Use regular CSS in style blocks when needed
+
+## Services
+- GitHub API in services/github/
+  - api.ts: Core API interaction and caching
+  - types.ts: TypeScript interfaces
+  - colors.ts: Language color utilities
   - Don't use @apply in Svelte style blocks
   - Use Tailwind classes directly in markup
   - Use regular CSS in style blocks when needed
