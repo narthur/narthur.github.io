@@ -1,19 +1,12 @@
-import type { GithubStats, GithubRepo, GithubLanguages } from './types';
-
-// Temporary mock data until we fetch real data
-const githubData = {
-	user: {
-		public_repos: 0,
-		followers: 0
-	},
-	repos: [] as GithubRepo[],
-	languages: {} as GithubLanguages,
-	fetchedAt: new Date().toISOString()
-};
+import type { GithubStats, GithubRepo } from './types';
+import githubData from '../../../data/github-stats.json';
 
 export function fetchGithubStats(): GithubStats {
 	// Calculate stats from static data
-	const totalStars = githubData.repos.reduce((sum: number, repo: GithubRepo) => sum + (repo.stargazers_count ?? 0), 0);
+	const totalStars = githubData.repos.reduce(
+		(sum: number, repo: GithubRepo) => sum + (repo.stargazers_count ?? 0),
+		0
+	);
 
 	// Aggregate language bytes
 	const languages: Record<string, number> = {};

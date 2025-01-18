@@ -55,10 +55,11 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Static site deployment
 - Tailwind CSS for styling  - GitHub API integration:
     - Data fetched at build time via script
-    - Requires GITHUB_TOKEN environment variable
+    - Uses OAuth device flow for authentication
     - Run `pnpm fetch-github` to update stats
     - Stats stored in data/github-stats.json
     - No runtime API calls or caching needed
+    - Run `pnpm prefetch-github` to install dependencies
   - Don't use @apply in Svelte style blocks
   - Use Tailwind classes directly in markup
   - Use regular CSS in style blocks when needed

@@ -1,21 +1,37 @@
 import { Octokit } from '@octokit/rest';
+import { createOAuthDeviceAuth } from '@octokit/auth-oauth-device';
 import fs from 'fs/promises';
 import path from 'path';
 import 'dotenv/config';
+import open from 'open';
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const clientId = process.env.GITHUB_OAUTH_CLIENT_ID as string;
+const scopes = ['public_repo', 'read:user'];
 
-if (!GITHUB_TOKEN) {
-	console.error('Please set GITHUB_TOKEN environment variable');
-	process.exit(1);
+async function getAccessToken() {
+	const auth = createOAuthDeviceAuth({
+		clientType: 'oauth-app',
+		clientId,
+		scopes,
+		onVerification: async (verification) => {
+			await open(verification.verification_uri);
+			console.log('Please enter the following code at %s', verification.verification_uri);
+			console.log('\n%s\n', verification.user_code);
+		}
+	});
+
+	const { token } = await auth({
+		type: 'oauth'
+	});
+
+	return token;
 }
-
-const octokit = new Octokit({
-	auth: GITHUB_TOKEN
-});
 
 async function fetchGithubData() {
 	try {
+		const token = await getAccessToken();
+		const octokit = new Octokit({ auth: token });
+
 		// Fetch user data
 		const userResponse = await octokit.rest.users.getByUsername({ username: 'narthur' });
 		const userData = userResponse.data;

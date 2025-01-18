@@ -2,16 +2,10 @@
 	import Icon from '@iconify/svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { darkMode } from './+layout.svelte';
-	import { onMount } from 'svelte';
 	import { fetchGithubStats } from '../services/github/api';
 	import { getLanguageColor } from '../services/github/colors';
-	import type { GithubStats } from '../services/github/types';
 
-	let githubStats: GithubStats | null = null;
-
-	onMount(() => {
-		githubStats = fetchGithubStats();
-	});
+	const githubStats = fetchGithubStats();
 
 	let searchQuery = '';
 	let searchInput: HTMLInputElement;
