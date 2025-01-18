@@ -54,8 +54,27 @@
 		<p class="mb-8 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 
 		<div class="mb-12 space-y-8">
+			<!-- Profile Links -->
+			<div
+				class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
+			>
+				{#each profileLinks as link, i}
+					<a
+						href={link.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="hover:text-blue-600 dark:hover:text-blue-400"
+					>
+						{link.name}
+					</a>
+					{#if i < profileLinks.length - 1}
+						<span class="text-gray-300 dark:text-gray-600">•</span>
+					{/if}
+				{/each}
+			</div>
+
 			<!-- GitHub Stats -->
-			<div class="space-y-6">
+			<div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
 				<div class="flex justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
 					<div class="flex items-center gap-2">
 						<Icon icon="mdi:source-repository" class="h-5 w-5" />
@@ -72,7 +91,7 @@
 				</div>
 
 				{#if Object.keys(githubStats.languages).length > 0}
-					<div class="flex flex-col items-center">
+					<div class="mt-6 flex flex-col items-center">
 						<div class="flex h-3 w-full max-w-sm overflow-hidden rounded-full">
 							{#each Object.entries(githubStats.languages) as [lang, percentage]}
 								<div
@@ -97,25 +116,6 @@
 						</div>
 					</div>
 				{/if}
-			</div>
-
-			<!-- Profile Links -->
-			<div
-				class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
-			>
-				{#each profileLinks as link, i}
-					<a
-						href={link.url}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						{link.name}
-					</a>
-					{#if i < profileLinks.length - 1}
-						<span class="text-gray-300 dark:text-gray-600">•</span>
-					{/if}
-				{/each}
 			</div>
 		</div>
 	</div>
