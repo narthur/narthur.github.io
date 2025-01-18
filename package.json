@@ -43,6 +43,7 @@
 	},
 	"dependencies": {
 		"@iconify/svelte": "^4.2.0",
+		"@octokit/rest": "^21.1.0",
 		"iconify": "^1.4.0"
 	}
 }

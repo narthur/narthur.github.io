@@ -2,19 +2,44 @@
 	import Icon from '@iconify/svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { darkMode } from './+layout.svelte';
+	import { Octokit } from '@octokit/rest';
+	import { onMount } from 'svelte';
 
-	const toggleDarkMode = () => {
-		darkMode.update((d) => !d);
-		document.documentElement.classList.toggle('dark', $darkMode);
-		document.body.classList.toggle('dark', $darkMode);
+	const octokit = new Octokit();
+	let githubStats = {
+		publicRepos: 0,
+		followers: 0,
+		totalStars: 0
 	};
+
+	async function fetchGithubStats() {
+		try {
+			const [userResponse, reposResponse] = await Promise.all([
+				octokit.rest.users.getByUsername({ username: 'narthur' }),
+				octokit.rest.repos.listForUser({ username: 'narthur', per_page: 100 })
+			]);
+
+			const totalStars = reposResponse.data.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
+
+			githubStats = {
+				publicRepos: userResponse.data.public_repos,
+				followers: userResponse.data.followers,
+				totalStars: totalStars
+			};
+		} catch (error) {
+			console.error('Error fetching GitHub stats:', error);
+		}
+	}
+
+	onMount(() => {
+		fetchGithubStats();
+	});
 
 	let searchQuery = '';
 	let searchInput: HTMLInputElement;
 	let showBackToTop = false;
 
 	function handleKeydown(event: KeyboardEvent) {
-		// Only trigger if not already in an input/textarea
 		if (
 			event.key === '/' &&
 			!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)
@@ -31,6 +56,12 @@
 	function scrollToTop() {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
+
+	const toggleDarkMode = () => {
+		darkMode.update((d) => !d);
+		document.documentElement.classList.toggle('dark', $darkMode);
+		document.body.classList.toggle('dark', $darkMode);
+	};
 
 	const filterProjects = (project: (typeof projectLinks)[0]) => {
 		const searchTerms = searchQuery.toLowerCase();
@@ -120,7 +151,23 @@
 			</button>
 		</div>
 		<h1 class="mb-2 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
-		<p class="mb-6 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		
+		<div class="mb-6 flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+			<div class="flex items-center gap-1">
+				<Icon icon="mdi:source-repository" class="h-4 w-4" />
+				<span>{githubStats.publicRepos} repos</span>
+			</div>
+			<div class="flex items-center gap-1">
+				<Icon icon="mdi:star" class="h-4 w-4" />
+				<span>{githubStats.totalStars} stars</span>
+			</div>
+			<div class="flex items-center gap-1">
+				<Icon icon="mdi:account-group" class="h-4 w-4" />
+				<span>{githubStats.followers} followers</span>
+			</div>
+		</div>
+
 		<div
 			class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400"
 		>
