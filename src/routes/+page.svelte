@@ -10,11 +10,7 @@
 	let githubStats: GithubStats | null = null;
 
 	onMount(() => {
-		fetchGithubStats().then((stats) => {
-			if (stats) {
-				githubStats = stats;
-			}
-		});
+		githubStats = fetchGithubStats();
 	});
 
 	let searchQuery = '';

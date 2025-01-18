@@ -53,14 +53,12 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 ## Technical Stack
 - SvelteKit for frontend framework
 - Static site deployment
-- Tailwind CSS for styling
-- GitHub API integration via @octokit/rest
-  - Fetches profile stats on page load
-  - Rate limits:
-    - 60 requests/hour for unauthenticated requests
-    - Consider adding token for 5000 requests/hour if needed
-  - Cache responses in localStorage to reduce API calls
-  - Cache duration: 1 hour
+- Tailwind CSS for styling  - GitHub API integration:
+    - Data fetched at build time via script
+    - Requires GITHUB_TOKEN environment variable
+    - Run `pnpm fetch-github` to update stats
+    - Stats stored in data/github-stats.json
+    - No runtime API calls or caching needed
   - Don't use @apply in Svelte style blocks
   - Use Tailwind classes directly in markup
   - Use regular CSS in style blocks when needed
