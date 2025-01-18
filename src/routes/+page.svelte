@@ -5,15 +5,50 @@
 	import { Octokit } from '@octokit/rest';
 	import { onMount } from 'svelte';
 
+	// Common GitHub language colors
+	const languageColors: Record<string, string> = {
+		TypeScript: '#3178c6',
+		JavaScript: '#f1e05a',
+		HTML: '#e34c26',
+		CSS: '#563d7c',
+		Python: '#3572A5',
+		PHP: '#4F5D95',
+		Ruby: '#701516',
+		Java: '#b07219',
+		Swift: '#ffac45',
+		Go: '#00ADD8',
+		Rust: '#dea584',
+		Shell: '#89e051',
+		Vue: '#41b883',
+		'C++': '#f34b7d',
+		C: '#555555'
+	};
+
+	function getLanguageColor(language: string): string {
+		return languageColors[language] || '#8b949e';
+	}
+
 	const octokit = new Octokit();
 	let githubStats = {
 		publicRepos: 0,
 		followers: 0,
-		totalStars: 0
+		totalStars: 0,
+		languages: {} as Record<string, number>
 	};
 
 	async function fetchGithubStats() {
 		try {
+			// Check cache first
+			const cached = localStorage.getItem('githubStats');
+			if (cached) {
+				const { data, timestamp } = JSON.parse(cached);
+				// Use cache if less than 1 hour old
+				if (Date.now() - timestamp < 60 * 60 * 1000) {
+					githubStats = data;
+					return;
+				}
+			}
+
 			const [userResponse, reposResponse] = await Promise.all([
 				octokit.rest.users.getByUsername({ username: 'narthur' }),
 				octokit.rest.repos.listForUser({ username: 'narthur', per_page: 100 })
@@ -21,11 +56,47 @@
 
 			const totalStars = reposResponse.data.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
 
-			githubStats = {
+			// Fetch languages for each repository
+			const languagePromises = reposResponse.data.map(repo =>
+				octokit.rest.repos.listLanguages({
+					owner: 'narthur',
+					repo: repo.name
+				})
+			);
+
+			const languageResponses = await Promise.all(languagePromises);
+			const languages: Record<string, number> = {};
+
+			// Aggregate language bytes across all repos
+			languageResponses.forEach(response => {
+				Object.entries(response.data).forEach(([lang, bytes]) => {
+					languages[lang] = (languages[lang] || 0) + bytes;
+				});
+			});
+
+			// Convert bytes to percentages and sort by usage
+			const totalBytes = Object.values(languages).reduce((a, b) => a + b, 0);
+			const languagePercentages = Object.fromEntries(
+				Object.entries(languages)
+					.map(([lang, bytes]) => [lang, Number((bytes / totalBytes) * 100)])
+					.sort((a, b) => Number(b[1]) - Number(a[1]))
+					.slice(0, 5) // Keep top 5 languages
+			);
+
+			const stats = {
 				publicRepos: userResponse.data.public_repos,
 				followers: userResponse.data.followers,
-				totalStars: totalStars
+				totalStars: totalStars,
+				languages: languagePercentages
 			};
+
+			// Cache the results
+			localStorage.setItem('githubStats', JSON.stringify({
+				data: stats,
+				timestamp: Date.now()
+			}));
+
+			githubStats = stats;
 		} catch (error) {
 			console.error('Error fetching GitHub stats:', error);
 		}
@@ -153,19 +224,46 @@
 		<h1 class="mb-2 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
 		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 		
-		<div class="mb-6 flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
-			<div class="flex items-center gap-1">
-				<Icon icon="mdi:source-repository" class="h-4 w-4" />
-				<span>{githubStats.publicRepos} repos</span>
+		<div class="space-y-4 mb-6">
+			<div class="flex justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+				<div class="flex items-center gap-1">
+					<Icon icon="mdi:source-repository" class="h-4 w-4" />
+					<span>{githubStats.publicRepos} repos</span>
+				</div>
+				<div class="flex items-center gap-1">
+					<Icon icon="mdi:star" class="h-4 w-4" />
+					<span>{githubStats.totalStars} stars</span>
+				</div>
+				<div class="flex items-center gap-1">
+					<Icon icon="mdi:account-group" class="h-4 w-4" />
+					<span>{githubStats.followers} followers</span>
+				</div>
 			</div>
-			<div class="flex items-center gap-1">
-				<Icon icon="mdi:star" class="h-4 w-4" />
-				<span>{githubStats.totalStars} stars</span>
-			</div>
-			<div class="flex items-center gap-1">
-				<Icon icon="mdi:account-group" class="h-4 w-4" />
-				<span>{githubStats.followers} followers</span>
-			</div>
+
+			{#if Object.keys(githubStats.languages).length > 0}
+				<div class="flex flex-col items-center">
+					<div class="w-full max-w-xs h-2 flex rounded-full overflow-hidden">
+						{#each Object.entries(githubStats.languages) as [lang, percentage]}
+							<div
+								class="h-full"
+								style="width: {percentage}%; background-color: {getLanguageColor(lang)};"
+								title="{lang}: {percentage.toFixed(1)}%"
+							></div>
+						{/each}
+					</div>
+					<div class="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+						{#each Object.entries(githubStats.languages) as [lang, percentage]}
+							<div class="flex items-center gap-1">
+								<div
+									class="w-2 h-2 rounded-full"
+									style="background-color: {getLanguageColor(lang)};"
+								></div>
+								<span>{lang} {percentage.toFixed(1)}%</span>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
 		</div>
 
 		<div
