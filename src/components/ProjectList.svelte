@@ -89,6 +89,14 @@
 				'Journal for tracking hypotheses and observations over time, tracking Bayesian probabilities and updating beliefs',
 			icon: 'mdi:function',
 			tags: ['Tool', 'Education']
+		},
+		{
+			name: 'Later',
+			url: 'https://later.nathanarthur.com/',
+			description:
+				'Todo list that lets you postpone tasks until tomorrow or any arbitrary date, helping you focus on what needs to be done today',
+			icon: 'mdi:calendar-clock',
+			tags: ['Productivity', 'Tool']
 		}
 	];
 </script>
