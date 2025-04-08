@@ -1,13 +1,16 @@
 # Nathan Arthur's Personal Website
 
 ## Purpose
+
 Personal website showcasing Nathan Arthur's work as a full-stack web developer focused on productivity tools.
 
 ## Technical Stack
+
 - SvelteKit for frontend framework
 - Static site deployment
 
 ## Design Guidelines
+
 - Use Instrument Sans for headings (weights: 400, 500, 700)
 - Keep it minimal and clean
 - Focus on usability and quick access to projects
@@ -21,7 +24,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Light gray (#666) for secondary text
   - Blue (#0066cc) for links
   - Light gray (#ddd) for borders
-  Dark mode:
+    Dark mode:
   - Subtle gradient background from gray-900 to a darker blue-gray
   - White for main text
   - Light gray (#999) for secondary text
@@ -41,6 +44,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Use display: inline-block on icons to ensure width/height are respected
 
 ## Content Guidelines
+
 - Highlight key projects and professional profiles
 - Keep descriptions concise and focused
 - Maintain up-to-date links to active projects
@@ -51,20 +55,22 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
 - Maintain up-to-date links to active projects
 
 ## Technical Stack
+
 - SvelteKit for frontend framework
 - Static site deployment
-- Tailwind CSS for styling  - GitHub API integration:
-    - Data fetched at build time via script
-    - Uses OAuth device flow for authentication
-    - Run `pnpm fetch-github` to update stats
-    - Stats stored in data/github-stats.json
-    - No runtime API calls or caching needed
-    - Run `pnpm prefetch-github` to install dependencies
+- Tailwind CSS for styling - GitHub API integration:
+  - Data fetched at build time via script
+  - Uses OAuth device flow for authentication
+  - Run `pnpm fetch-github` to update stats
+  - Stats stored in data/github-stats.json
+  - No runtime API calls or caching needed
+  - Run `pnpm prefetch-github` to install dependencies
   - Don't use @apply in Svelte style blocks
   - Use Tailwind classes directly in markup
   - Use regular CSS in style blocks when needed
 
 ## Services
+
 - GitHub API in services/github/
   - api.ts: Core API interaction and caching
   - types.ts: TypeScript interfaces
@@ -74,6 +80,7 @@ Personal website showcasing Nathan Arthur's work as a full-stack web developer f
   - Use regular CSS in style blocks when needed
 
 ## Build Configuration
+
 - Site uses @sveltejs/adapter-static for static deployment
 - Requires `export const prerender = true` in root +layout.ts for successful static build
 - Run `pnpm build` to build the site
