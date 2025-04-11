@@ -4,6 +4,7 @@
 	import { darkMode } from './+layout.svelte';
 	import ProjectList from '../components/ProjectList.svelte';
 	import GithubStats from '../components/GithubStats.svelte';
+	import SubscribeForm from '../components/SubscribeForm.svelte';
 
 	let showBackToTop = false;
 
@@ -48,8 +49,8 @@
 				{/if}
 			</button>
 		</div>
-		<h1 class="mb-3 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
-		<p class="mb-8 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
+		<h1 class="mb-1 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
+		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 
 		<!-- Profile Links -->
 		<div
@@ -72,6 +73,7 @@
 	</div>
 
 	<div class="space-y-12">
+		<SubscribeForm />
 		<ProjectList />
 		<GithubStats />
 	</div>
