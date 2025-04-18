@@ -24,15 +24,26 @@
 		);
 	};
 
-	const projectLinks = [
+	interface ProjectLink {
+		name: string;
+		url: string;
+		description: string;
+		icon: string;
+		tags: string[];
+		highlight?: boolean;
+		sort?: number;
+	}
+
+	const projectLinks: ProjectLink[] = [
 		{
 			name: "Let's Build Something Together",
 			url: 'https://pinepeakdigital.com/contact',
 			description:
-				'Have an idea for a project? Looking for a developer to help bring your vision to life? Get in touch and let\'s discuss how we can work together.',
+				"Have an idea for a project? Looking for a developer to help bring your vision to life? Get in touch and let's discuss how we can work together.",
 			icon: 'mdi:handshake',
 			tags: ['Available', 'Contact'],
-			highlight: true
+			highlight: true,
+			sort: 100
 		},
 		{
 			name: 'TaskRatchet',
@@ -40,7 +51,8 @@
 			description:
 				'Deadline-driven task management platform that charges real money if you miss your deadlines, helping you stay accountable to your goals',
 			icon: 'mdi:checkbox-marked-circle-outline',
-			tags: ['SaaS', 'Productivity']
+			tags: ['SaaS', 'Productivity'],
+			sort: 90
 		},
 		{
 			name: 'Autodialer',
@@ -48,7 +60,8 @@
 			description:
 				'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
 			icon: 'mdi:chart-line',
-			tags: ['Automation', 'Integration']
+			tags: ['Automation', 'Integration'],
+			sort: 10
 		},
 		{
 			name: 'Beeminder Dashboard',
@@ -56,7 +69,8 @@
 			description:
 				'Customizable dashboard providing enhanced visualization and management tools for Beeminder goals and data',
 			icon: 'mdi:view-dashboard',
-			tags: ['Dashboard', 'Integration']
+			tags: ['Dashboard', 'Integration'],
+			sort: 10
 		},
 		{
 			name: 'Life',
@@ -88,7 +102,8 @@
 			description:
 				'Journal for tracking hypotheses and observations over time, tracking Bayesian probabilities and updating beliefs',
 			icon: 'mdi:function',
-			tags: ['Tool', 'Education']
+			tags: ['Tool', 'Education'],
+			sort: 10
 		},
 		{
 			name: 'Later',
@@ -97,6 +112,24 @@
 				'Todo list that lets you postpone tasks until tomorrow or any arbitrary date, helping you focus on what needs to be done today',
 			icon: 'mdi:calendar-clock',
 			tags: ['Productivity', 'Tool']
+		},
+		{
+			name: 'Pa11y Ratchet',
+			url: 'https://github.com/marketplace/actions/pa11y-ratchet',
+			description:
+				"A GitHub Action that helps prevent the introduction of new accessibility issues. Pa11y Ratchet compares the current branch's accessibility issues against the base branch and fails if new issues are detected.",
+			icon: 'mdi:accessibility',
+			tags: ['Automation', 'Integration'],
+			sort: 10
+		},
+		{
+			name: 'The Guide',
+			url: 'https://guide.nathanarthur.com/',
+			description:
+				"An homage to The Hitchhiker's Guide to the Galaxy which auto-generates and caches every article visited using just-in-time AI",
+			icon: 'mdi:book-open-page-variant',
+			tags: ['AI', 'Experiment'],
+			sort: 10
 		}
 	];
 </script>
@@ -124,25 +157,29 @@
 		</div>
 	</div>
 	<ul class="grid grid-cols-1 gap-6">
-		{#each projectLinks.filter(filterProjects) as link (link.name)}
+		{#each projectLinks
+			.filter(filterProjects)
+			.sort((a, b) => (b.sort ?? 0) - (a.sort ?? 0)) as link (link.name)}
 			<li in:fade={{ duration: 200 }} out:slide={{ duration: 200 }}>
 				<a
 					href={link.url}
 					target="_blank"
-					rel="noopener noreferrer"							class={`group block rounded-lg border p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
-								link.highlight
-									? 'border-blue-200 bg-blue-50 hover:border-blue-300 dark:border-blue-800 dark:bg-blue-900/30 dark:hover:border-blue-700'
-									: 'border-gray-200 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600'
-							}`}
+					rel="noopener noreferrer"
+					class={`group block rounded-lg border p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+						link.highlight
+							? 'border-blue-200 bg-blue-50 hover:border-blue-300 dark:border-blue-800 dark:bg-blue-900/30 dark:hover:border-blue-700'
+							: 'border-gray-200 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600'
+					}`}
 					style="box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);"
 				>
 					<div class="flex items-center gap-4">
 						<Icon
-							icon={link.icon}									class={`h-10 w-10 flex-shrink-0 transition-colors ${
-										link.highlight
-											? 'text-blue-600 group-hover:text-blue-700 dark:text-blue-400 dark:group-hover:text-blue-300'
-											: 'text-gray-600 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400'
-									}`}
+							icon={link.icon}
+							class={`h-10 w-10 flex-shrink-0 transition-colors ${
+								link.highlight
+									? 'text-blue-600 group-hover:text-blue-700 dark:text-blue-400 dark:group-hover:text-blue-300'
+									: 'text-gray-600 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400'
+							}`}
 						/>
 						<div class="flex-grow">
 							<div class="flex items-center justify-between">
@@ -159,10 +196,10 @@
 									{#each link.tags as tag}
 										<span
 											class={`rounded px-2 py-1 text-xs ${
-										link.highlight
-											? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
-											: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-									}`}
+												link.highlight
+													? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
+													: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+											}`}
 										>
 											{tag}
 										</span>
