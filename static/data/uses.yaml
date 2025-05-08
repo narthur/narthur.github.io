@@ -1,0 +1,55 @@
+categories:
+  - title: Hardware
+    items:
+      - name: HP Z2 Mini G4 Workstation
+        description: My primary development machine
+        url: https://amzn.to/4jOvjuv
+      - name: Samsung 24" T350 LED monitor, LF24T350FHNXZA
+        description: Display 1
+        url: https://amzn.to/3F7F8o1
+      - name: ASUS VN279QL 27" 1920x1080 monitor
+        description: Display 2
+        url: https://amzn.to/44sVouj
+      - name: Monoprice Workstream USB keyboard
+        description: Basic wired keyboard
+        url: https://www.monoprice.com/product?p_id=35106
+      - name: Monoprice Essential USB optical mouse
+        description: Ergonomic wireless mouse
+        url: https://www.monoprice.com/product?p_id=15907
+
+  - title: Development
+    items:
+      - name: Zed
+        description: My code editor of choice
+        url: https://zed.dev/
+      - name: Warp
+        description: Terminal with AI and multiplayer features
+        url: https://app.warp.dev/referral/ME5ELJ
+      - name: Codebuff
+        description: Terminal-based agentic AI coding assistant
+        url: https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f
+      - name: Node.js
+        description: JavaScript runtime
+        url: https://nodejs.org/
+      - name: Svelte & SvelteKit
+        description: Framework for building web applications
+        url: https://svelte.dev/
+      - name: GitHub
+        description: For version control and project management
+        url: https://github.com/
+
+  - title: Productivity
+    items:
+      - name: Obsidian
+        description: For notes, documentation, and organization
+        url: https://obsidian.md/
+      - name: Beeminder
+        description: Goal tracking with real stakes
+        url: https://www.beeminder.com/home
+      - name: Slack
+        description: Team communication and collaboration
+        url: https://slack.com/
+
+meta:
+  lastUpdated: '2025-05-08'
+  affiliateDisclaimer: 'Some links on this page might be affiliate links. This means I may earn a small commission if you purchase a product through these links, at no extra cost to you.'
