@@ -26,11 +26,6 @@
 	let allTags: string[] = [];
 	let selectedTags: Set<string> = new Set();
 	let meta: UsesMeta | null = null;
-	let currentDate = new Date().toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	});
 	let isLoading = true;
 	let loadError = false;
 
@@ -210,13 +205,7 @@
 
 			<div class="mt-12">
 				<p class="text-gray-600 dark:text-gray-400">
-					Last updated: {meta && meta.lastUpdated
-						? new Date(meta.lastUpdated).toLocaleDateString('en-US', {
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric'
-							})
-						: currentDate}
+					Last updated: {meta?.lastUpdated}
 				</p>
 			</div>
 		{/if}
