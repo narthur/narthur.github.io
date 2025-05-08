@@ -72,72 +72,72 @@ items:
   - name: Node.js
     description: JavaScript runtime
     url: https://nodejs.org/
-    tags: [development]
+    tags: [development, runtime, webdev]
 
   - name: Svelte & SvelteKit
     description: Framework for building web applications
     url: https://svelte.dev/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: GitHub
     description: Hosted version control
     url: https://github.com/
-    tags: [development]
+    tags: [development, git, versioncontrol]
 
   - name: Carrd
     description: Single-page website builder
     url: https://try.carrd.co/d3zxlsms
-    tags: [development]
+    tags: [development, webdev]
 
   - name: JavaScript
     description: Programming language
     url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
-    tags: [development]
+    tags: [development, language, webdev]
 
   - name: TypeScript
     description: Typed superset of JavaScript
     url: https://www.typescriptlang.org/
-    tags: [development]
+    tags: [development, language, webdev]
 
   - name: React
     description: JavaScript library for building user interfaces
     url: https://reactjs.org/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: Vue.js
     description: Progressive JavaScript framework
     url: https://vuejs.org/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: Tailwind CSS
     description: Utility-first CSS framework
     url: https://tailwindcss.com/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: Next.js
     description: React framework for production
     url: https://nextjs.org/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: Docker
     description: Containerization platform
     url: https://www.docker.com/
-    tags: [development]
+    tags: [development, software, containerization]
 
   - name: Git
     description: Version control system
     url: https://git-scm.com/
-    tags: [development, cli, terminal]
+    tags: [development, cli, terminal, git, versioncontrol]
 
   - name: Ruby
     description: Programming language
     url: https://www.ruby-lang.org/
-    tags: [development]
+    tags: [development, language, webdev]
 
   - name: Ruby on Rails
     description: Web application framework
     url: https://rubyonrails.org/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: ASDF
     description: Plugin-based version manager
@@ -147,87 +147,87 @@ items:
   - name: Render.com
     description: Cloud platform
     url: https://render.com/
-    tags: [development, cloud, platform]
+    tags: [development, cloud, platform, webdev]
 
   - name: Cloudflare
     description: Cloud platform
     url: https://www.cloudflare.com/
-    tags: [development, cloud, platform]
+    tags: [development, cloud, platform, webdev]
 
   - name: Vercel
     description: Cloud platform
     url: https://vercel.com/
-    tags: [development, cloud, platform]
+    tags: [development, cloud, platform, webdev]
 
   - name: Netlify
     description: Cloud platform
     url: https://www.netlify.com/
-    tags: [development, cloud, platform]
+    tags: [development, cloud, platform, webdev]
 
   - name: Astro
     description: Static site generator
     url: https://astro.build/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: REST
     description: Representational State Transfer
     url: https://restfulapi.net/
-    tags: [development]
+    tags: [development, webdev]
 
   - name: GraphQL
     description: Query language for APIs
     url: https://graphql.org/
-    tags: [development]
+    tags: [development, webdev]
 
   - name: Hono
     description: Lightweight web framework for Node.js
     url: https://hono.dev/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: pnpm
     description: Node package manager
     url: https://pnpm.io/
-    tags: [development]
+    tags: [development, cli, terminal]
 
   - name: Convex
     description: Serverless backend-as-a-service
     url: https://convex.dev/
-    tags: [development]
+    tags: [development, platform, framework, webdev]
 
   - name: NestJS
     description: Progressive Node.js server-side framework
     url: https://nestjs.com/
-    tags: [development]
+    tags: [development, framework, webdev]
 
   - name: React Query
     description: Data fetching and state management library for React applications
     url: https://react-query.tanstack.com/
-    tags: [development]
+    tags: [development, webdev]
 
   - name: React Testing Library
     description: Testing library for React components
     url: https://testing-library.com/docs/react-testing-library/intro/
-    tags: [development]
+    tags: [development, webdev, testing]
 
   - name: Jest
     description: JavaScript testing framework
     url: https://jestjs.io/
-    tags: [development]
+    tags: [development, webdev, testing]
 
   - name: Vitest
     description: JavaScript testing framework
     url: https://vitest.dev/
-    tags: [development]
+    tags: [development, webdev, testing]
 
   - name: Google Cloud Platform
     description: Cloud computing platform
     url: https://cloud.google.com/
-    tags: [development]
+    tags: [development, platform, webdev]
 
   - name: Vite
     description: JavaScript frontend tooling
     url: https://vitejs.dev/
-    tags: [development]
+    tags: [development, webdev]
 
 meta:
   lastUpdated: '2025-05-08'
