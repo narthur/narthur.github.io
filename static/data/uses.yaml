@@ -106,63 +106,83 @@ items:
   - name: Ruby
     description: Programming language
     url: https://www.ruby-lang.org/
+    tags: [development]
   - name: Ruby on Rails
     description: Web application framework
     url: https://rubyonrails.org/
+    tags: [development]
   - name: ASDF
     description: Plugin-based version manager
     url: https://asdf-vm.com/
+    tags: [development, cli, terminal, software]
   - name: Render.com
     description: Cloud platform
     url: https://render.com/
+    tags: [development, cloud, platform]
   - name: Cloudflare
     description: Cloud platform
     url: https://www.cloudflare.com/
+    tags: [development, cloud, platform]
   - name: Vercel
     description: Cloud platform
     url: https://vercel.com/
+    tags: [development, cloud, platform]
   - name: Netlify
     description: Cloud platform
     url: https://www.netlify.com/
+    tags: [development, cloud, platform]
   - name: Astro
     description: Static site generator
     url: https://astro.build/
+    tags: [development]
   - name: REST
     description: Representational State Transfer
     url: https://restfulapi.net/
+    tags: [development]
   - name: GraphQL
     description: Query language for APIs
     url: https://graphql.org/
+    tags: [development]
   - name: Hono
     description: Lightweight web framework for Node.js
     url: https://hono.dev/
+    tags: [development]
   - name: pnpm
     description: Node package manager
     url: https://pnpm.io/
+    tags: [development]
   - name: Convex
     description: Serverless backend-as-a-service
     url: https://convex.dev/
+    tags: [development]
   - name: NestJS
     description: Progressive Node.js server-side framework
     url: https://nestjs.com/
+    tags: [development]
   - name: React Query
     description: Data fetching and state management library for React applications
     url: https://react-query.tanstack.com/
+    tags: [development]
   - name: React Testing Library
     description: Testing library for React components
     url: https://testing-library.com/docs/react-testing-library/intro/
+    tags: [development]
   - name: Jest
     description: JavaScript testing framework
     url: https://jestjs.io/
+    tags: [development]
   - name: Vitest
     description: JavaScript testing framework
     url: https://vitest.dev/
+    tags: [development]
   - name: Google Cloud Platform
     description: Cloud computing platform
     url: https://cloud.google.com/
+    tags: [development]
   - name: Vite
     description: JavaScript frontend tooling
     url: https://vitejs.dev/
+    tags: [development]
 
 meta:
   lastUpdated: '2025-05-08'
