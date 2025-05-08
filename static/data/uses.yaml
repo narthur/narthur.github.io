@@ -37,6 +37,9 @@ categories:
       - name: GitHub
         description: For version control and project management
         url: https://github.com/
+      - name: Carrd
+        description: Dead-simple builder for creating beautiful one-page websites
+        url: https://try.carrd.co/d3zxlsms
 
   - title: Productivity
     items:
