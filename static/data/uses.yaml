@@ -43,6 +43,12 @@ categories:
 
   - title: Productivity
     items:
+      - name: Debian
+        description: Linux distribution
+        url: https://www.debian.org/
+      - name: i3
+        description: Tiling window manager
+        url: https://i3wm.org/
       - name: Obsidian
         description: For notes, documentation, and organization
         url: https://obsidian.md/
