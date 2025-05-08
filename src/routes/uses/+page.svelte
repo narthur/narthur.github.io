@@ -34,11 +34,6 @@
 	let isLoading = true;
 	let loadError = false;
 
-	// Function to handle back navigation
-	function goBack() {
-		window.history.back();
-	}
-
 	// Toggle a tag selection
 	function toggleTag(tag: string) {
 		if (selectedTags.has(tag)) {
@@ -91,13 +86,13 @@
 
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12">
-		<button
-			onclick={goBack}
+		<a
+			href="/"
 			class="mb-8 flex items-center text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
 		>
 			<Icon icon="mdi:arrow-left" class="mr-2 h-5 w-5" />
-			<span>Back</span>
-		</button>
+			<span>Home</span>
+		</a>
 
 		<h1 class="mb-6 text-4xl font-medium tracking-tight">Uses</h1>
 		<p class="mb-8 text-lg text-gray-600 dark:text-gray-400">

@@ -23,6 +23,7 @@
 	};
 
 	const profileLinks = [
+		{ name: 'Uses', url: '/uses' },
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
 		{ name: 'Pine Peak Digital', url: 'https://pinepeakdigital.com/' },
 		{ name: 'GitHub', url: 'https://github.com/narthur' },
@@ -59,7 +60,6 @@
 			{#each profileLinks as link, i}
 				<a
 					href={link.url}
-					target="_blank"
 					rel="noopener noreferrer"
 					class="hover:text-blue-600 dark:hover:text-blue-400"
 				>
