@@ -3,182 +3,227 @@ items:
     description: My primary development machine
     url: https://amzn.to/4jOvjuv
     tags: [workstation, development, hardware]
+
   - name: Samsung 24" T350 LED monitor, LF24T350FHNXZA
     description: Monitor
     url: https://amzn.to/3F7F8o1
     tags: [monitor, hardware]
+
   - name: ASUS VN279QL 27" 1920x1080 monitor
     description: Monitor
     url: https://amzn.to/44sVouj
     tags: [monitor, hardware]
+
   - name: Monoprice Workstream USB keyboard
     description: Basic wired keyboard
     url: https://www.monoprice.com/product?p_id=35106
     tags: [keyboard, hardware]
+
   - name: Monoprice Essential USB optical mouse
     description: Ergonomic wireless mouse
     url: https://www.monoprice.com/product?p_id=15907
     tags: [mouse, hardware]
+
   - name: VIVO 42" Standing Desk Converter
     description: Standing desk converter
     url: https://amzn.to/4jVgGFF
     tags: [desk, hardware]
+
   - name: Debian
     description: Linux distribution
     url: https://www.debian.org/
     tags: [os, software]
+
   - name: i3
     description: Tiling window manager
     url: https://i3wm.org/
     tags: [wm, software]
+
   - name: Obsidian
     description: Notes
     url: https://obsidian.md/
     tags: [notes, software]
+
   - name: Beeminder
     description: Goal tracking with real stakes
     url: https://www.beeminder.com/home
     tags: [productivity, software]
+
   - name: Slack
     description: Communication
     url: https://slack.com/
     tags: [communication, software]
+
   - name: Zed
     description: IDE with AI & multiplayer features
     url: https://zed.dev/
     tags: [ide, software, development, ai]
+
   - name: Warp
     description: Terminal with AI & multiplayer features
     url: https://app.warp.dev/referral/ME5ELJ
     tags: [terminal, software, ai]
+
   - name: Codebuff
     description: Terminal-based agentic AI coding assistant
     url: https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f
     tags: [terminal, software, ai]
+
   - name: Node.js
     description: JavaScript runtime
     url: https://nodejs.org/
     tags: [development]
+
   - name: Svelte & SvelteKit
     description: Framework for building web applications
     url: https://svelte.dev/
     tags: [development]
+
   - name: GitHub
     description: Hosted version control
     url: https://github.com/
     tags: [development]
+
   - name: Carrd
     description: Single-page website builder
     url: https://try.carrd.co/d3zxlsms
     tags: [development]
+
   - name: JavaScript
     description: Programming language
     url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
     tags: [development]
+
   - name: TypeScript
     description: Typed superset of JavaScript
     url: https://www.typescriptlang.org/
     tags: [development]
+
   - name: React
     description: JavaScript library for building user interfaces
     url: https://reactjs.org/
     tags: [development]
+
   - name: Vue.js
     description: Progressive JavaScript framework
     url: https://vuejs.org/
     tags: [development]
+
   - name: Tailwind CSS
     description: Utility-first CSS framework
     url: https://tailwindcss.com/
     tags: [development]
+
   - name: Next.js
     description: React framework for production
     url: https://nextjs.org/
     tags: [development]
+
   - name: Docker
     description: Containerization platform
     url: https://www.docker.com/
     tags: [development]
+
   - name: Git
     description: Version control system
     url: https://git-scm.com/
     tags: [development, cli, terminal]
+
   - name: Ruby
     description: Programming language
     url: https://www.ruby-lang.org/
     tags: [development]
+
   - name: Ruby on Rails
     description: Web application framework
     url: https://rubyonrails.org/
     tags: [development]
+
   - name: ASDF
     description: Plugin-based version manager
     url: https://asdf-vm.com/
     tags: [development, cli, terminal, software]
+
   - name: Render.com
     description: Cloud platform
     url: https://render.com/
     tags: [development, cloud, platform]
+
   - name: Cloudflare
     description: Cloud platform
     url: https://www.cloudflare.com/
     tags: [development, cloud, platform]
+
   - name: Vercel
     description: Cloud platform
     url: https://vercel.com/
     tags: [development, cloud, platform]
+
   - name: Netlify
     description: Cloud platform
     url: https://www.netlify.com/
     tags: [development, cloud, platform]
+
   - name: Astro
     description: Static site generator
     url: https://astro.build/
     tags: [development]
+
   - name: REST
     description: Representational State Transfer
     url: https://restfulapi.net/
     tags: [development]
+
   - name: GraphQL
     description: Query language for APIs
     url: https://graphql.org/
     tags: [development]
+
   - name: Hono
     description: Lightweight web framework for Node.js
     url: https://hono.dev/
     tags: [development]
+
   - name: pnpm
     description: Node package manager
     url: https://pnpm.io/
     tags: [development]
+
   - name: Convex
     description: Serverless backend-as-a-service
     url: https://convex.dev/
     tags: [development]
+
   - name: NestJS
     description: Progressive Node.js server-side framework
     url: https://nestjs.com/
     tags: [development]
+
   - name: React Query
     description: Data fetching and state management library for React applications
     url: https://react-query.tanstack.com/
     tags: [development]
+
   - name: React Testing Library
     description: Testing library for React components
     url: https://testing-library.com/docs/react-testing-library/intro/
     tags: [development]
+
   - name: Jest
     description: JavaScript testing framework
     url: https://jestjs.io/
     tags: [development]
+
   - name: Vitest
     description: JavaScript testing framework
     url: https://vitest.dev/
     tags: [development]
+
   - name: Google Cloud Platform
     description: Cloud computing platform
     url: https://cloud.google.com/
     tags: [development]
+
   - name: Vite
     description: JavaScript frontend tooling
     url: https://vitejs.dev/
