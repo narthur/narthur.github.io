@@ -16,6 +16,9 @@ categories:
       - name: Monoprice Essential USB optical mouse
         description: Ergonomic wireless mouse
         url: https://www.monoprice.com/product?p_id=15907
+      - name: VIVO 42" Standing Desk Converter
+        description: Standing desk converter
+        url: https://amzn.to/4jVgGFF
 
   - title: Productivity
     items:
@@ -92,7 +95,7 @@ categories:
         description: Plugin-based version manager
         url: https://asdf-vm.com/
       - name: Render.com
-        description: Cloud platform for deploying web applications
+        description: Cloud platform
         url: https://render.com/
       - name: Cloudflare
         description: Cloud platform

@@ -114,21 +114,19 @@
 						<h2 class="mb-4 text-2xl font-medium">{category.title}</h2>
 						<div class="flex flex-wrap justify-stretch gap-6">
 							{#each category.items as item}
-								<div
-									class="grow rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+								<a
+									href={item.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="group grow rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
 								>
-									<h3 class="mb-1 text-xl font-medium">
-										<a
-											href={item.url}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="text-blue-600 hover:underline dark:text-blue-400"
-										>
-											{item.name}
-										</a>
+									<h3
+										class="mb-1 text-xl font-medium text-blue-600 group-hover:underline dark:text-blue-400"
+									>
+										{item.name}
 									</h3>
 									<p class="text-gray-600 dark:text-gray-400">{item.description}</p>
-								</div>
+								</a>
 							{/each}
 						</div>
 					</section>
