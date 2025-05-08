@@ -17,13 +17,31 @@ categories:
         description: Ergonomic wireless mouse
         url: https://www.monoprice.com/product?p_id=15907
 
+  - title: Productivity
+    items:
+      - name: Debian
+        description: Linux distribution
+        url: https://www.debian.org/
+      - name: i3
+        description: Tiling window manager
+        url: https://i3wm.org/
+      - name: Obsidian
+        description: Notes
+        url: https://obsidian.md/
+      - name: Beeminder
+        description: Goal tracking with real stakes
+        url: https://www.beeminder.com/home
+      - name: Slack
+        description: Communication
+        url: https://slack.com/
+
   - title: Development
     items:
       - name: Zed
-        description: My code editor of choice
+        description: IDE with AI & multiplayer features
         url: https://zed.dev/
       - name: Warp
-        description: Terminal with AI and multiplayer features
+        description: Terminal with AI & multiplayer features
         url: https://app.warp.dev/referral/ME5ELJ
       - name: Codebuff
         description: Terminal-based agentic AI coding assistant
@@ -35,29 +53,95 @@ categories:
         description: Framework for building web applications
         url: https://svelte.dev/
       - name: GitHub
-        description: For version control and project management
+        description: Hosted version control
         url: https://github.com/
       - name: Carrd
-        description: Dead-simple builder for creating beautiful one-page websites
+        description: Single-page website builder
         url: https://try.carrd.co/d3zxlsms
-
-  - title: Productivity
-    items:
-      - name: Debian
-        description: Linux distribution
-        url: https://www.debian.org/
-      - name: i3
-        description: Tiling window manager
-        url: https://i3wm.org/
-      - name: Obsidian
-        description: For notes, documentation, and organization
-        url: https://obsidian.md/
-      - name: Beeminder
-        description: Goal tracking with real stakes
-        url: https://www.beeminder.com/home
-      - name: Slack
-        description: Team communication and collaboration
-        url: https://slack.com/
+      - name: JavaScript
+        description: Programming language
+        url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+      - name: TypeScript
+        description: Typed superset of JavaScript
+        url: https://www.typescriptlang.org/
+      - name: React
+        description: JavaScript library for building user interfaces
+        url: https://reactjs.org/
+      - name: Vue.js
+        description: Progressive JavaScript framework
+        url: https://vuejs.org/
+      - name: Tailwind CSS
+        description: Utility-first CSS framework
+        url: https://tailwindcss.com/
+      - name: Next.js
+        description: React framework for production
+        url: https://nextjs.org/
+      - name: Docker
+        description: Containerization platform
+        url: https://www.docker.com/
+      - name: Git
+        description: Version control system
+        url: https://git-scm.com/
+      - name: Ruby
+        description: Programming language
+        url: https://www.ruby-lang.org/
+      - name: Ruby on Rails
+        description: Web application framework
+        url: https://rubyonrails.org/
+      - name: ASDF
+        description: Plugin-based version manager
+        url: https://asdf-vm.com/
+      - name: Render.com
+        description: Cloud platform for deploying web applications
+        url: https://render.com/
+      - name: Cloudflare
+        description: Cloud platform
+        url: https://www.cloudflare.com/
+      - name: Vercel
+        description: Cloud platform
+        url: https://vercel.com/
+      - name: Netlify
+        description: Cloud platform
+        url: https://www.netlify.com/
+      - name: Astro
+        description: Static site generator
+        url: https://astro.build/
+      - name: REST
+        description: Representational State Transfer
+        url: https://restfulapi.net/
+      - name: GraphQL
+        description: Query language for APIs
+        url: https://graphql.org/
+      - name: Hono
+        description: Lightweight web framework for Node.js
+        url: https://hono.dev/
+      - name: pnpm
+        description: Node package manager
+        url: https://pnpm.io/
+      - name: Convex
+        description: Serverless backend-as-a-service
+        url: https://convex.dev/
+      - name: NestJS
+        description: Progressive Node.js server-side framework
+        url: https://nestjs.com/
+      - name: React Query
+        description: Data fetching and state management library for React applications
+        url: https://react-query.tanstack.com/
+      - name: React Testing Library
+        description: Testing library for React components
+        url: https://testing-library.com/docs/react-testing-library/intro/
+      - name: Jest
+        description: JavaScript testing framework
+        url: https://jestjs.io/
+      - name: Vitest
+        description: JavaScript testing framework
+        url: https://vitest.dev/
+      - name: Google Cloud Platform
+        description: Cloud computing platform
+        url: https://cloud.google.com/
+      - name: Vite
+        description: JavaScript frontend tooling
+        url: https://vitejs.dev/
 
 meta:
   lastUpdated: '2025-05-08'

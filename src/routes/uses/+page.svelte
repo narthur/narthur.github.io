@@ -52,7 +52,10 @@
 			const yamlText = await response.text();
 			const data = yaml.load(yamlText) as UsesData;
 
-			uses = data.categories;
+			uses = data.categories.map((category) => ({
+				...category,
+				items: [...category.items].sort((a, b) => a.name.localeCompare(b.name))
+			}));
 			meta = data.meta;
 			isLoading = false;
 		} catch (error) {
@@ -109,10 +112,10 @@
 				{#each uses as category}
 					<section>
 						<h2 class="mb-4 text-2xl font-medium">{category.title}</h2>
-						<div class="space-y-6">
+						<div class="flex flex-wrap justify-stretch gap-6">
 							{#each category.items as item}
 								<div
-									class="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+									class="grow rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
 								>
 									<h3 class="mb-1 text-xl font-medium">
 										<a
