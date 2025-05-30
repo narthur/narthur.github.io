@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import { darkMode } from './+layout.svelte';
 	import ProjectList from '../components/ProjectList.svelte';
 	import GithubStats from '../components/GithubStats.svelte';
 	import SubscribeForm from '../components/SubscribeForm.svelte';
@@ -16,14 +15,9 @@
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
-	const toggleDarkMode = () => {
-		darkMode.update((d) => !d);
-		document.documentElement.classList.toggle('dark', $darkMode);
-		document.body.classList.toggle('dark', $darkMode);
-	};
-
 	const profileLinks = [
 		{ name: 'Uses', url: '/uses' },
+		{ name: 'Substack', url: 'https://narthur.substack.com/' },
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
 		{ name: 'Pine Peak Digital', url: 'https://pinepeakdigital.com/' },
 		{ name: 'GitHub', url: 'https://github.com/narthur' },
@@ -37,19 +31,6 @@
 
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12 text-center">
-		<div class="fixed right-4 top-4 z-10">
-			<button
-				on:click={toggleDarkMode}
-				class="rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-				aria-label="Toggle dark mode"
-			>
-				{#if $darkMode}
-					<Icon icon="mdi:weather-sunny" class="h-6 w-6" />
-				{:else}
-					<Icon icon="mdi:weather-night" class="h-6 w-6" />
-				{/if}
-			</button>
-		</div>
 		<h1 class="mb-1 text-5xl font-medium tracking-tight">Nathan Arthur</h1>
 		<p class="mb-4 text-xl font-light text-gray-600 dark:text-gray-400">Full-stack web developer</p>
 
