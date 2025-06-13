@@ -10,20 +10,9 @@
 		Sign up to receive mostly-weekly productivity tips and tools, AI news, and the random thoughts
 		of a self-employed web developer with ADHD.
 	</p>
-	<div id="custom-substack-embed" class="mt-6 flex justify-center"></div>
-	<script>
-		window.CustomSubstackWidget = {
-			substackUrl: 'narthur.substack.com',
-			placeholder: 'example@gmail.com',
-			buttonText: 'Subscribe',
-			theme: 'custom',
-			colors: {
-				primary: '#FFFFFF',
-				input: '#111827',
-				email: '#FFFFFF',
-				text: '#000000'
-			}
-		};
-	</script>
-	<script src="https://substackapi.com/widget.js" async></script>
+	<div
+		class="mt-6 flex justify-center"
+		data-supascribe-embed-id="128744500344"
+		data-supascribe-subscribe
+	></div>
 </section>
