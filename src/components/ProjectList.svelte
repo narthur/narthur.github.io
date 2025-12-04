@@ -137,7 +137,8 @@
 			description:
 				'Terminal user interface for Beeminder built with Bubble Tea. View goals in a colorful grid, navigate with arrow keys, and add datapoints from your terminal',
 			icon: 'mdi:console',
-			tags: ['CLI', 'Integration']
+			tags: ['CLI', 'Integration'],
+			sort: 10
 		}
 	];
 </script>
