@@ -61,7 +61,7 @@
 				'Automated system that adjusts Beeminder goal rates based on historical performance data to maintain optimal challenge levels',
 			icon: 'mdi:chart-line',
 			tags: ['Automation', 'Integration'],
-			sort: 10
+			sort: 50
 		},
 		{
 			name: 'Beeminder Dashboard',
@@ -70,7 +70,7 @@
 				'Customizable dashboard providing enhanced visualization and management tools for Beeminder goals and data',
 			icon: 'mdi:view-dashboard',
 			tags: ['Dashboard', 'Integration'],
-			sort: 10
+			sort: 50
 		},
 		{
 			name: 'Life',
@@ -120,7 +120,7 @@
 				"A GitHub Action that helps prevent the introduction of new accessibility issues. Pa11y Ratchet compares the current branch's accessibility issues against the base branch and fails if new issues are detected.",
 			icon: 'mdi:accessibility',
 			tags: ['Automation', 'Integration'],
-			sort: 10
+			sort: 50
 		},
 		{
 			name: 'The Guide',
@@ -138,7 +138,7 @@
 				'Terminal user interface for Beeminder built with Bubble Tea. View goals in a colorful grid, navigate with arrow keys, and add datapoints from your terminal',
 			icon: 'mdi:console',
 			tags: ['CLI', 'Integration'],
-			sort: 10
+			sort: 50
 		}
 	];
 </script>
