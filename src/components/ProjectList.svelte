@@ -89,14 +89,6 @@
 			tags: ['Algorithm', 'Visualization']
 		},
 		{
-			name: 'Codebuff Wizard',
-			url: 'https://codebuff.nathanarthur.com/',
-			description:
-				'Step-by-step tutorial wizard that guides developers through setting up and configuring web projects with Codebuff for AI code generation',
-			icon: 'mdi:wizard-hat',
-			tags: ['Tutorial', 'Developer Tool']
-		},
-		{
 			name: 'Bayes',
 			url: 'https://bayes.nathanarthur.com/',
 			description:
