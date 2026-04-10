@@ -9,6 +9,7 @@ Nathan Arthur's personal website built with SvelteKit as a static site generator
 ## Development Commands
 
 ### Core Development
+
 ```bash
 # Install dependencies (project uses pnpm)
 pnpm install
@@ -30,6 +31,7 @@ pnpm check:watch
 ```
 
 ### Testing & Quality
+
 ```bash
 # Run tests (use --run to avoid watch mode in WARP)
 pnpm test
@@ -45,6 +47,7 @@ pnpm format
 ```
 
 ### GitHub Statistics Integration
+
 ```bash
 # Install dependencies for GitHub stats fetching
 pnpm prefetch-github
@@ -56,17 +59,20 @@ pnpm fetch-github
 ## High-Level Architecture
 
 ### Static Site Generation
+
 - **SvelteKit** with `@sveltejs/adapter-static` for GitHub Pages deployment
 - **Pre-rendering** enabled via `export const prerender = true` in root layout
 - **Build-time data fetching** using static JSON files rather than runtime API calls
 
 ### GitHub Integration Flow
+
 1. **OAuth Device Flow**: `scripts/fetch-github-stats.ts` handles authentication
 2. **Data Fetching**: Pulls user profile, repositories, and language statistics
 3. **Static Generation**: Data stored in `data/github-stats.json` for build-time consumption
 4. **Display**: `src/services/github/api.ts` processes static data for components
 
 ### Technology Stack
+
 - **SvelteKit 5** for framework and routing
 - **TypeScript** for type safety throughout
 - **Tailwind CSS** with plugins for forms, typography, container queries
@@ -77,6 +83,7 @@ pnpm fetch-github
 ## Project Structure
 
 ### Key Directories
+
 ```
 src/
 ├── routes/                 # SvelteKit file-based routing
@@ -97,6 +104,7 @@ src/
 ```
 
 ### Data Flow
+
 1. **Build Time**: Static JSON (`data/github-stats.json`) consumed by services layer
 2. **Component Layer**: `GithubStats.svelte` calls `fetchGithubStats()` from `services/github/api.ts`
 3. **Data Processing**: API service calculates statistics and language percentages
@@ -105,17 +113,20 @@ src/
 ## GitHub Statistics System
 
 ### Authentication Setup
+
 1. Create GitHub OAuth app and get client ID
 2. Copy `.env-sample` to `.env` and set `GITHUB_OAUTH_CLIENT_ID`
 3. Run `pnpm prefetch-github` to install required dependencies
 
 ### Data Fetching Process
+
 ```bash
 # Authenticate via OAuth device flow (opens browser)
 pnpm fetch-github
 ```
 
 The script:
+
 1. Initiates OAuth device flow authentication
 2. Fetches user profile data for 'narthur'
 3. Retrieves all public repositories (up to 100)
@@ -123,6 +134,7 @@ The script:
 5. Saves complete dataset to `data/github-stats.json`
 
 ### Data Processing
+
 - **Stars**: Aggregated across all repositories
 - **Languages**: Byte counts summed and converted to percentages
 - **Top Languages**: Shows top 5, with remainder grouped as "Other"
@@ -131,22 +143,26 @@ The script:
 ## Development Patterns
 
 ### SvelteKit Conventions
+
 - **File Routes**: `+page.svelte` for pages, `+layout.svelte` for layouts
 - **Load Functions**: `+layout.ts` with `prerender: true` for static generation
 - **Component Naming**: PascalCase for `.svelte` components
 
 ### TypeScript Guidelines
+
 - Avoid `any` type, prefer `unknown` or specific types
 - Interface definitions in `src/types/` and `src/services/*/types.ts`
 - Acceptable `any` usage in test files only
 
 ### Styling Approach
+
 - **Tailwind First**: Use utility classes directly in markup
 - **Avoid @apply**: Don't use `@apply` directives in Svelte `<style>` blocks
 - **CSS Fallback**: Use regular CSS in `<style>` blocks when Tailwind insufficient
 - **Dark Mode**: Class-based dark mode with system preference detection
 
 ### Component Architecture
+
 - **Reusable Components**: Stored in `src/components/`
 - **Services Layer**: Business logic separated from presentation
 - **Static Imports**: Import JSON data directly rather than fetch at runtime
@@ -154,17 +170,20 @@ The script:
 ## Build Configuration
 
 ### Static Site Generation
+
 ```javascript
 // svelte.config.js
-adapter: adapter() // @sveltejs/adapter-static
+adapter: adapter(); // @sveltejs/adapter-static
 ```
 
 ### Vite Customizations
+
 - **File System Access**: Allows serving `./data` directory
 - **YAML HMR**: Custom plugin for hot reload on YAML file changes
 - **Vitest Integration**: Test configuration includes `src/**/*.{test,spec}.{js,ts}`
 
 ### Tailwind Setup
+
 - **Content Paths**: Configured to scan `src/**/*.{html,js,svelte,ts}`
 - **Plugins**: Includes forms, typography, and container queries
 - **Dark Mode**: `darkMode: 'class'` for manual toggle support
@@ -172,12 +191,14 @@ adapter: adapter() // @sveltejs/adapter-static
 ## Environment Requirements
 
 ### Required Environment Variables
+
 ```bash
 # .env file
 GITHUB_OAUTH_CLIENT_ID=your-client-id-here
 ```
 
 ### Dependencies
+
 - **Node.js**: Modern version supporting ES modules
 - **pnpm**: Package manager (check for `pnpm-lock.yaml` presence)
 - **GitHub OAuth App**: For statistics fetching functionality
@@ -185,6 +206,7 @@ GITHUB_OAUTH_CLIENT_ID=your-client-id-here
 ## Deployment
 
 ### Render.com Configuration
+
 ```yaml
 # render.yaml
 buildCommand: pnpm run build
@@ -195,6 +217,7 @@ domains:
 ```
 
 ### Pre-deployment Steps
+
 1. Ensure `data/github-stats.json` is current: `pnpm fetch-github`
 2. Run full build: `pnpm build`
 3. Verify static files generated in `./build/`
@@ -202,11 +225,13 @@ domains:
 ## Testing Strategy
 
 ### Unit Tests
+
 - **Vitest** configuration in `vite.config.ts`
 - **Demo Test**: `src/demo.spec.ts` provides testing example
 - **Non-blocking**: Use `pnpm vitest --run` to avoid watch mode
 
 ### Quality Assurance
+
 - **ESLint**: TypeScript and Svelte linting with Prettier integration
 - **Type Checking**: `svelte-check` with TypeScript compiler
 - **Formatting**: Prettier with Svelte and Tailwind plugins
