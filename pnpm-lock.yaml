@@ -97,13 +97,13 @@ importers:
         specifier: ^5.55.7
         version: 5.55.7(@typescript-eslint/types@8.20.0)
       svelte-check:
-        specifier: ^4.0.0
+        specifier: ^4.1.4
         version: 4.1.4(picomatch@4.0.4)(svelte@5.55.7(@typescript-eslint/types@8.20.0))(typescript@5.7.3)
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17
       typescript:
-        specifier: ^5.0.0
+        specifier: ^5.7.3
         version: 5.7.3
       typescript-eslint:
         specifier: ^8.20.0
@@ -1158,9 +1158,6 @@ packages:
   delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-
-  devalue@5.6.3:
-    resolution: {integrity: sha512-nc7XjUU/2Lb+SvEFVGcWLiKkzfw8+qHI7zn8WYXKkLMgfGSHbgCEaR6bJpev8Cm6Rmrb19Gfd/tZvGqx9is3wg==}
 
   devalue@5.8.1:
     resolution: {integrity: sha512-4CXDYRBGqN+57wVJkuXBYmpAVUSg3L6JAQa/DFqm238G73E1wuyc/JhGQJzN7vUf/CMphYau2zXbfWzDR5aTEw==}
@@ -2772,7 +2769,7 @@ snapshots:
       '@types/cookie': 0.6.0
       acorn: 8.16.0
       cookie: 0.6.0
-      devalue: 5.6.3
+      devalue: 5.8.1
       esm-env: 1.2.2
       kleur: 4.1.5
       magic-string: 0.30.21
@@ -3172,8 +3169,6 @@ snapshots:
   define-lazy-prop@3.0.0: {}
 
   delayed-stream@1.0.0: {}
-
-  devalue@5.6.3: {}
 
   devalue@5.8.1: {}
 
