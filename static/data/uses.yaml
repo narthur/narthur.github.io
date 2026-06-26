@@ -1,234 +1,247 @@
 items:
-  - name: HP Z2 Mini G4 Workstation
+  # Hardware
+  - name: Apple MacBook Air (M5)
     description: My primary development machine
-    url: https://amzn.to/4jOvjuv
+    url: https://www.apple.com/macbook-air/
+    category: Hardware
     tags: [workstation, development, hardware]
 
-  - name: Samsung 24" T350 LED monitor, LF24T350FHNXZA
-    description: Monitor
-    url: https://amzn.to/3F7F8o1
-    tags: [monitor, hardware, workstation]
-
-  - name: ASUS VN279QL 27" 1920x1080 monitor
-    description: Monitor
-    url: https://amzn.to/44sVouj
-    tags: [monitor, hardware, workstation]
-
-  - name: Monoprice Workstream USB keyboard
-    description: Basic wired keyboard
-    url: https://www.monoprice.com/product?p_id=35106
-    tags: [keyboard, hardware, workstation]
-
-  - name: Monoprice Essential USB optical mouse
-    description: Ergonomic wireless mouse
-    url: https://www.monoprice.com/product?p_id=15907
-    tags: [mouse, hardware, workstation]
-
-  - name: VIVO 42" Standing Desk Converter
-    description: Standing desk converter
-    url: https://amzn.to/4jVgGFF
-    tags: [desk, hardware, workstation]
-
-  - name: Debian
-    description: Linux distribution
-    url: https://www.debian.org/
+  # Apps
+  - name: macOS
+    description: Operating system
+    url: https://www.apple.com/macos/
+    category: Apps
     tags: [os, software, productivity]
-
-  - name: i3
-    description: Tiling window manager
-    url: https://i3wm.org/
-    tags: [wm, software, productivity]
 
   - name: Obsidian
     description: Notes
     url: https://obsidian.md/
+    category: Apps
     tags: [notes, software, productivity]
 
   - name: Beeminder
     description: Goal tracking with real stakes
     url: https://www.beeminder.com/home
+    category: Apps
     tags: [productivity, software]
 
   - name: Slack
     description: Communication
     url: https://slack.com/
+    category: Apps
     tags: [communication, software, productivity]
 
+  # Editors & Terminal
   - name: Zed
     description: IDE with AI & multiplayer features
     url: https://zed.dev/
+    category: Editors & Terminal
     tags: [ide, software, development, ai]
+
+  - name: Ghostty
+    description: Fast, native terminal emulator
+    url: https://ghostty.org/
+    category: Editors & Terminal
+    tags: [terminal, software]
 
   - name: Warp
     description: Terminal with AI & multiplayer features
     url: https://app.warp.dev/referral/ME5ELJ
+    category: Editors & Terminal
     tags: [terminal, software, ai]
 
-  - name: Codebuff
+  - name: Claude Code
     description: Terminal-based agentic AI coding assistant
-    url: https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f
+    url: https://www.anthropic.com/claude-code
+    category: Editors & Terminal
     tags: [terminal, software, ai]
 
-  - name: Node.js
-    description: JavaScript runtime
-    url: https://nodejs.org/
-    tags: [development, runtime, webdev]
-
-  - name: Svelte & SvelteKit
-    description: Framework for building web applications
-    url: https://svelte.dev/
-    tags: [development, framework, webdev]
-
-  - name: GitHub
-    description: Hosted version control
-    url: https://github.com/
-    tags: [development, git, versioncontrol]
-
-  - name: Carrd
-    description: Single-page website builder
-    url: https://try.carrd.co/d3zxlsms
-    tags: [development, webdev]
-
+  # Languages
   - name: JavaScript
     description: Programming language
     url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    category: Languages
     tags: [development, language, webdev]
 
   - name: TypeScript
     description: Typed superset of JavaScript
     url: https://www.typescriptlang.org/
+    category: Languages
     tags: [development, language, webdev]
+
+  - name: Ruby
+    description: Programming language
+    url: https://www.ruby-lang.org/
+    category: Languages
+    tags: [development, language, webdev]
+
+  - name: Go
+    description: Programming language
+    url: https://go.dev/
+    category: Languages
+    tags: [development, language]
+
+  # Frameworks & Libraries
+  - name: Svelte & SvelteKit
+    description: Framework for building web applications
+    url: https://svelte.dev/
+    category: Frameworks & Libraries
+    tags: [development, framework, webdev]
 
   - name: React
     description: JavaScript library for building user interfaces
     url: https://reactjs.org/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
 
   - name: Vue.js
     description: Progressive JavaScript framework
     url: https://vuejs.org/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
 
   - name: Tailwind CSS
     description: Utility-first CSS framework
     url: https://tailwindcss.com/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
 
   - name: Next.js
     description: React framework for production
     url: https://nextjs.org/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
-
-  - name: Docker
-    description: Containerization platform
-    url: https://www.docker.com/
-    tags: [development, software, containerization]
-
-  - name: Git
-    description: Version control system
-    url: https://git-scm.com/
-    tags: [development, cli, terminal, git, versioncontrol]
-
-  - name: Ruby
-    description: Programming language
-    url: https://www.ruby-lang.org/
-    tags: [development, language, webdev]
 
   - name: Ruby on Rails
     description: Web application framework
     url: https://rubyonrails.org/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
-
-  - name: ASDF
-    description: Plugin-based version manager
-    url: https://asdf-vm.com/
-    tags: [development, cli, terminal, software]
-
-  - name: Render.com
-    description: Cloud platform
-    url: https://render.com/
-    tags: [development, cloud, platform, webdev]
-
-  - name: Cloudflare
-    description: Cloud platform
-    url: https://www.cloudflare.com/
-    tags: [development, cloud, platform, webdev]
-
-  - name: Vercel
-    description: Cloud platform
-    url: https://vercel.com/
-    tags: [development, cloud, platform, webdev]
-
-  - name: Netlify
-    description: Cloud platform
-    url: https://www.netlify.com/
-    tags: [development, cloud, platform, webdev]
 
   - name: Astro
     description: Static site generator
     url: https://astro.build/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
-
-  - name: REST
-    description: Representational State Transfer
-    url: https://restfulapi.net/
-    tags: [development, webdev]
-
-  - name: GraphQL
-    description: Query language for APIs
-    url: https://graphql.org/
-    tags: [development, webdev]
 
   - name: Hono
     description: Lightweight web framework for Node.js
     url: https://hono.dev/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
-
-  - name: pnpm
-    description: Node package manager
-    url: https://pnpm.io/
-    tags: [development, cli, terminal]
-
-  - name: Convex
-    description: Serverless backend-as-a-service
-    url: https://convex.dev/
-    tags: [development, platform, framework, webdev]
 
   - name: NestJS
     description: Progressive Node.js server-side framework
     url: https://nestjs.com/
+    category: Frameworks & Libraries
     tags: [development, framework, webdev]
 
   - name: React Query
     description: Data fetching and state management library for React applications
     url: https://react-query.tanstack.com/
+    category: Frameworks & Libraries
     tags: [development, webdev]
 
+  # APIs
+  - name: REST
+    description: Representational State Transfer
+    url: https://restfulapi.net/
+    category: APIs
+    tags: [development, webdev]
+
+  - name: GraphQL
+    description: Query language for APIs
+    url: https://graphql.org/
+    category: APIs
+    tags: [development, webdev]
+
+  # Testing
   - name: React Testing Library
     description: Testing library for React components
     url: https://testing-library.com/docs/react-testing-library/intro/
+    category: Testing
     tags: [development, webdev, testing]
 
   - name: Jest
     description: JavaScript testing framework
     url: https://jestjs.io/
+    category: Testing
     tags: [development, webdev, testing]
 
   - name: Vitest
     description: JavaScript testing framework
     url: https://vitest.dev/
+    category: Testing
     tags: [development, webdev, testing]
 
-  - name: Google Cloud Platform
-    description: Cloud computing platform
-    url: https://cloud.google.com/
-    tags: [development, platform, webdev]
+  # Tooling
+  - name: Node.js
+    description: JavaScript runtime
+    url: https://nodejs.org/
+    category: Tooling
+    tags: [development, runtime, webdev]
+
+  - name: Git
+    description: Version control system
+    url: https://git-scm.com/
+    category: Tooling
+    tags: [development, cli, terminal, git, versioncontrol]
+
+  - name: GitHub
+    description: Hosted version control
+    url: https://github.com/
+    category: Tooling
+    tags: [development, git, versioncontrol]
+
+  - name: Docker
+    description: Containerization platform
+    url: https://www.docker.com/
+    category: Tooling
+    tags: [development, software, containerization]
+
+  - name: ASDF
+    description: Plugin-based version manager
+    url: https://asdf-vm.com/
+    category: Tooling
+    tags: [development, cli, terminal, software]
+
+  - name: pnpm
+    description: Node package manager
+    url: https://pnpm.io/
+    category: Tooling
+    tags: [development, cli, terminal]
 
   - name: Vite
     description: JavaScript frontend tooling
     url: https://vitejs.dev/
+    category: Tooling
     tags: [development, webdev]
 
+  # Hosting & Cloud
+  - name: Render.com
+    description: Cloud platform
+    url: https://render.com/
+    category: Hosting & Cloud
+    tags: [development, cloud, platform, webdev]
+
+  - name: Cloudflare
+    description: Cloud platform
+    url: https://www.cloudflare.com/
+    category: Hosting & Cloud
+    tags: [development, cloud, platform, webdev]
+
+  - name: Netlify
+    description: Cloud platform
+    url: https://www.netlify.com/
+    category: Hosting & Cloud
+    tags: [development, cloud, platform, webdev]
+
+  - name: Google Cloud Platform
+    description: Cloud computing platform
+    url: https://cloud.google.com/
+    category: Hosting & Cloud
+    tags: [development, platform, webdev]
+
 meta:
-  lastUpdated: '2025-05-08'
+  lastUpdated: '2026-06-26'
   affiliateDisclaimer: 'Some links on this page might be affiliate links. This means I may earn a small commission if you purchase a product through these links, at no extra cost to you.'

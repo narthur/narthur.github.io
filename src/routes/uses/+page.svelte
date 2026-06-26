@@ -8,6 +8,7 @@
 		name: string;
 		description: string;
 		url: string;
+		category?: string;
 		tags?: string[];
 	}
 
@@ -23,8 +24,18 @@
 
 	// State variables
 	let items: UsesItem[] = [];
+	let categories: string[] = [];
 	let allTags: string[] = [];
 	let selectedTags: Set<string> = new Set();
+
+	const UNCATEGORIZED = 'Other';
+
+	// Items in a category that pass the current tag filter, sorted by name
+	function itemsForCategory(category: string): UsesItem[] {
+		return items
+			.filter((item) => (item.category ?? UNCATEGORIZED) === category && shouldDisplayItem(item))
+			.sort((a, b) => a.name.localeCompare(b.name));
+	}
 	let meta: UsesMeta | null = null;
 	let isLoading = true;
 	let loadError = false;
@@ -59,8 +70,15 @@
 			const yamlText = await response.text();
 			const data = yaml.load(yamlText) as UsesData;
 
-			// Sort items alphabetically by name
-			items = [...data.items].sort((a, b) => a.name.localeCompare(b.name));
+			items = data.items;
+
+			// Build the category list in first-seen order from the YAML
+			const categoryOrder: string[] = [];
+			items.forEach((item) => {
+				const category = item.category ?? UNCATEGORIZED;
+				if (!categoryOrder.includes(category)) categoryOrder.push(category);
+			});
+			categories = categoryOrder;
 
 			// Extract all unique tags and sort them alphabetically
 			const tagSet = new Set<string>();
@@ -100,15 +118,6 @@
 			>.
 		</p>
 
-		{#if meta && meta.affiliateDisclaimer}
-			<div class="my-8 rounded-lg bg-gray-100 p-6 dark:bg-gray-800">
-				<h2 class="mb-3 text-2xl font-medium">A note about links</h2>
-				<p class="text-gray-600 dark:text-gray-400">
-					{meta.affiliateDisclaimer}
-				</p>
-			</div>
-		{/if}
-
 		{#if isLoading}
 			<div class="flex justify-center py-12">
 				<div class="animate-pulse text-xl text-gray-600 dark:text-gray-400">Loading...</div>
@@ -121,8 +130,21 @@
 				</p>
 			</div>
 		{:else}
-			<div class="mb-8">
-				<div class="flex flex-wrap gap-2">
+			<details class="mb-8">
+				<summary
+					class="flex cursor-pointer select-none list-none items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 [&::-webkit-details-marker]:hidden"
+				>
+					<Icon icon="mdi:filter-variant" class="h-4 w-4" />
+					<span>Filter by tag</span>
+					{#if selectedTags.size > 0}
+						<span
+							class="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
+						>
+							{selectedTags.size} selected
+						</span>
+					{/if}
+				</summary>
+				<div class="mt-3 flex flex-wrap gap-2">
 					{#each allTags as tag}
 						<button
 							onclick={() => toggleTag(tag)}
@@ -135,22 +157,14 @@
 					{/each}
 				</div>
 				{#if selectedTags.size > 0}
-					<div class="mt-4 flex items-center">
-						<button
-							onclick={() => (selectedTags = new Set())}
-							class="text-sm text-blue-600 hover:underline dark:text-blue-400"
-						>
-							Clear all filters
-						</button>
-						<span
-							class="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-sm text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
-						>
-							{selectedTags.size}
-							{selectedTags.size === 1 ? 'tag' : 'tags'} selected
-						</span>
-					</div>
+					<button
+						onclick={() => (selectedTags = new Set())}
+						class="mt-3 text-sm text-blue-600 hover:underline dark:text-blue-400"
+					>
+						Clear all filters
+					</button>
 				{/if}
-			</div>
+			</details>
 
 			{#if items.filter((item) => shouldDisplayItem(item)).length === 0}
 				<div class="my-12 rounded-lg bg-gray-100 p-8 text-center dark:bg-gray-800">
@@ -166,47 +180,60 @@
 					</button>
 				</div>
 			{:else}
-				<div class="flex flex-wrap gap-6">
-					{#each items as item}
-						{#if shouldDisplayItem(item)}
-							<div
-								class="flex-grow rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+				{#each categories as category}
+					{@const categoryItems = itemsForCategory(category)}
+					{#if categoryItems.length > 0}
+						<section class="mb-10">
+							<h2
+								class="mb-4 border-b border-gray-200 pb-2 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-700 dark:text-gray-400"
 							>
-								<h3 class="mb-1 text-xl font-medium">
-									<a
-										href={item.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="text-blue-600 hover:underline dark:text-blue-400"
+								{category}
+							</h2>
+							<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+								{#each categoryItems as item}
+									<div
+										class="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
 									>
-										{item.name}
-									</a>
-								</h3>
-								<p class="mb-2 text-gray-600 dark:text-gray-400">{item.description}</p>
-								<div class="flex flex-wrap gap-2">
-									{#each item.tags ?? [] as tag}
-										<button
-											onclick={() => toggleTag(tag)}
-											class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 {selectedTags.has(
-												tag
-											)
-												? 'ring-1 ring-blue-400 dark:ring-blue-500'
-												: ''}"
-										>
-											{tag}
-										</button>
-									{/each}
-								</div>
+										<h3 class="mb-1 text-xl font-medium">
+											<a
+												href={item.url}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-blue-600 hover:underline dark:text-blue-400"
+											>
+												{item.name}
+											</a>
+										</h3>
+										<p class="mb-2 text-gray-600 dark:text-gray-400">{item.description}</p>
+										<div class="flex flex-wrap gap-2">
+											{#each item.tags ?? [] as tag}
+												<button
+													onclick={() => toggleTag(tag)}
+													class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 {selectedTags.has(
+														tag
+													)
+														? 'ring-1 ring-blue-400 dark:ring-blue-500'
+														: ''}"
+												>
+													{tag}
+												</button>
+											{/each}
+										</div>
+									</div>
+								{/each}
 							</div>
-						{/if}
-					{/each}
-				</div>
+						</section>
+					{/if}
+				{/each}
 			{/if}
 
-			<div class="mt-12">
-				<p class="text-gray-600 dark:text-gray-400">
-					Last updated: {meta?.lastUpdated}
-				</p>
+			<div
+				class="mt-12 space-y-1 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-500"
+			>
+				<p>Last updated: {meta?.lastUpdated}</p>
+				{#if meta?.affiliateDisclaimer}
+					<p>{meta.affiliateDisclaimer}</p>
+				{/if}
 			</div>
 		{/if}
 	</div>
