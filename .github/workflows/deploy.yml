@@ -27,6 +27,6 @@ jobs:
       - uses: cloudflare/wrangler-action@v3
         with:
           # v3 defaults to wrangler 3.90, which lacks assets-only Worker support
-          wranglerVersion: "4"
+          wranglerVersion: '4'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
