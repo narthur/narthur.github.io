@@ -3,11 +3,13 @@
 	import '@fontsource/instrument-sans/400.css'; // Regular
 	import '@fontsource/instrument-sans/500.css'; // Medium
 	import '@fontsource/instrument-sans/700.css'; // Bold
+	import Nav from '../components/Nav.svelte';
 
 	let { children } = $props();
 </script>
 
 <div class="dark">
+	<Nav />
 	{@render children()}
 </div>
 

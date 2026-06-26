@@ -99,14 +99,6 @@
 
 <div class="mx-auto max-w-3xl px-8 py-16">
 	<div class="mb-12">
-		<a
-			href="/"
-			class="mb-8 flex items-center text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-		>
-			<Icon icon="mdi:arrow-left" class="mr-2 h-5 w-5" />
-			<span>Home</span>
-		</a>
-
 		<h1 class="mb-6 text-4xl font-medium tracking-tight">Uses</h1>
 		<p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
 			Here's a list of hardware, software, and tools I use on a daily basis for work and personal

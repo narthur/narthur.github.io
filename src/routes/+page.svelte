@@ -16,7 +16,6 @@
 	}
 
 	const profileLinks = [
-		{ name: 'Uses', url: '/uses' },
 		{ name: 'Substack', url: 'https://narthur.substack.com/' },
 		{ name: 'Ko-fi', url: 'https://ko-fi.com/narthur' },
 		{ name: 'Pine Peak Digital', url: 'https://pinepeakdigital.com/' },
