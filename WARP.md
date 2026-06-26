@@ -205,16 +205,13 @@ GITHUB_OAUTH_CLIENT_ID=your-client-id-here
 
 ## Deployment
 
-### Render.com Configuration
+### Cloudflare Workers (static assets)
 
-```yaml
-# render.yaml
-buildCommand: pnpm run build
-staticPublishPath: ./build
-domains:
-  - nathanarthur.com
-  - www.nathanarthur.com
-```
+Deployed via GitHub Actions (`.github/workflows/deploy.yml`) on push to `master`.
+Config in `wrangler.jsonc`: serves `./build` as static assets, with
+`nathanarthur.com` / `www.nathanarthur.com` as custom domains.
+
+Requires repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
 
 ### Pre-deployment Steps
 

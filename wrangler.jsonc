@@ -1,0 +1,12 @@
+{
+	"name": "nathanarthur-com",
+	"compatibility_date": "2025-06-26",
+	"assets": {
+		"directory": "./build"
+	},
+	// Custom domains require the zone to live in this Cloudflare account.
+	"routes": [
+		{ "pattern": "nathanarthur.com", "custom_domain": true },
+		{ "pattern": "www.nathanarthur.com", "custom_domain": true }
+	]
+}
