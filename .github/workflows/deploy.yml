@@ -4,11 +4,19 @@ on:
   push:
     branches: [master]
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -18,5 +26,7 @@ jobs:
       - run: pnpm run build
       - uses: cloudflare/wrangler-action@v3
         with:
+          # v3 defaults to wrangler 3.90, which lacks assets-only Worker support
+          wranglerVersion: '4'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
