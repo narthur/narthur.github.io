@@ -1,43 +1,13 @@
 items:
-  - name: HP Z2 Mini G4 Workstation
+  - name: Apple MacBook Air (M5)
     description: My primary development machine
-    url: https://amzn.to/4jOvjuv
+    url: https://www.apple.com/macbook-air/
     tags: [workstation, development, hardware]
 
-  - name: Samsung 24" T350 LED monitor, LF24T350FHNXZA
-    description: Monitor
-    url: https://amzn.to/3F7F8o1
-    tags: [monitor, hardware, workstation]
-
-  - name: ASUS VN279QL 27" 1920x1080 monitor
-    description: Monitor
-    url: https://amzn.to/44sVouj
-    tags: [monitor, hardware, workstation]
-
-  - name: Monoprice Workstream USB keyboard
-    description: Basic wired keyboard
-    url: https://www.monoprice.com/product?p_id=35106
-    tags: [keyboard, hardware, workstation]
-
-  - name: Monoprice Essential USB optical mouse
-    description: Ergonomic wireless mouse
-    url: https://www.monoprice.com/product?p_id=15907
-    tags: [mouse, hardware, workstation]
-
-  - name: VIVO 42" Standing Desk Converter
-    description: Standing desk converter
-    url: https://amzn.to/4jVgGFF
-    tags: [desk, hardware, workstation]
-
-  - name: Debian
-    description: Linux distribution
-    url: https://www.debian.org/
+  - name: macOS
+    description: Operating system
+    url: https://www.apple.com/macos/
     tags: [os, software, productivity]
-
-  - name: i3
-    description: Tiling window manager
-    url: https://i3wm.org/
-    tags: [wm, software, productivity]
 
   - name: Obsidian
     description: Notes
@@ -59,20 +29,30 @@ items:
     url: https://zed.dev/
     tags: [ide, software, development, ai]
 
+  - name: Ghostty
+    description: Fast, native terminal emulator
+    url: https://ghostty.org/
+    tags: [terminal, software]
+
   - name: Warp
     description: Terminal with AI & multiplayer features
     url: https://app.warp.dev/referral/ME5ELJ
     tags: [terminal, software, ai]
 
-  - name: Codebuff
+  - name: Claude Code
     description: Terminal-based agentic AI coding assistant
-    url: https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f
+    url: https://www.anthropic.com/claude-code
     tags: [terminal, software, ai]
 
   - name: Node.js
     description: JavaScript runtime
     url: https://nodejs.org/
     tags: [development, runtime, webdev]
+
+  - name: Go
+    description: Programming language
+    url: https://go.dev/
+    tags: [development, language]
 
   - name: Svelte & SvelteKit
     description: Framework for building web applications
@@ -189,9 +169,9 @@ items:
     url: https://pnpm.io/
     tags: [development, cli, terminal]
 
-  - name: Convex
-    description: Serverless backend-as-a-service
-    url: https://convex.dev/
+  - name: Supabase
+    description: Open-source Firebase alternative (Postgres backend-as-a-service)
+    url: https://supabase.com/
     tags: [development, platform, framework, webdev]
 
   - name: NestJS
@@ -230,5 +210,5 @@ items:
     tags: [development, webdev]
 
 meta:
-  lastUpdated: '2025-05-08'
+  lastUpdated: '2026-06-26'
   affiliateDisclaimer: 'Some links on this page might be affiliate links. This means I may earn a small commission if you purchase a product through these links, at no extra cost to you.'
