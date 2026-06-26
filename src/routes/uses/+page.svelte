@@ -8,6 +8,7 @@
 		name: string;
 		description: string;
 		url: string;
+		category?: string;
 		tags?: string[];
 	}
 
@@ -23,8 +24,18 @@
 
 	// State variables
 	let items: UsesItem[] = [];
+	let categories: string[] = [];
 	let allTags: string[] = [];
 	let selectedTags: Set<string> = new Set();
+
+	const UNCATEGORIZED = 'Other';
+
+	// Items in a category that pass the current tag filter, sorted by name
+	function itemsForCategory(category: string): UsesItem[] {
+		return items
+			.filter((item) => (item.category ?? UNCATEGORIZED) === category && shouldDisplayItem(item))
+			.sort((a, b) => a.name.localeCompare(b.name));
+	}
 	let meta: UsesMeta | null = null;
 	let isLoading = true;
 	let loadError = false;
@@ -59,8 +70,15 @@
 			const yamlText = await response.text();
 			const data = yaml.load(yamlText) as UsesData;
 
-			// Sort items alphabetically by name
-			items = [...data.items].sort((a, b) => a.name.localeCompare(b.name));
+			items = data.items;
+
+			// Build the category list in first-seen order from the YAML
+			const categoryOrder: string[] = [];
+			items.forEach((item) => {
+				const category = item.category ?? UNCATEGORIZED;
+				if (!categoryOrder.includes(category)) categoryOrder.push(category);
+			});
+			categories = categoryOrder;
 
 			// Extract all unique tags and sort them alphabetically
 			const tagSet = new Set<string>();
@@ -166,41 +184,51 @@
 					</button>
 				</div>
 			{:else}
-				<div class="flex flex-wrap gap-6">
-					{#each items as item}
-						{#if shouldDisplayItem(item)}
-							<div
-								class="flex-grow rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+				{#each categories as category}
+					{@const categoryItems = itemsForCategory(category)}
+					{#if categoryItems.length > 0}
+						<section class="mb-10">
+							<h2
+								class="mb-4 border-b border-gray-200 pb-2 text-sm font-semibold tracking-wide text-gray-500 uppercase dark:border-gray-700 dark:text-gray-400"
 							>
-								<h3 class="mb-1 text-xl font-medium">
-									<a
-										href={item.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="text-blue-600 hover:underline dark:text-blue-400"
+								{category}
+							</h2>
+							<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+								{#each categoryItems as item}
+									<div
+										class="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
 									>
-										{item.name}
-									</a>
-								</h3>
-								<p class="mb-2 text-gray-600 dark:text-gray-400">{item.description}</p>
-								<div class="flex flex-wrap gap-2">
-									{#each item.tags ?? [] as tag}
-										<button
-											onclick={() => toggleTag(tag)}
-											class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 {selectedTags.has(
-												tag
-											)
-												? 'ring-1 ring-blue-400 dark:ring-blue-500'
-												: ''}"
-										>
-											{tag}
-										</button>
-									{/each}
-								</div>
+										<h3 class="mb-1 text-xl font-medium">
+											<a
+												href={item.url}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-blue-600 hover:underline dark:text-blue-400"
+											>
+												{item.name}
+											</a>
+										</h3>
+										<p class="mb-2 text-gray-600 dark:text-gray-400">{item.description}</p>
+										<div class="flex flex-wrap gap-2">
+											{#each item.tags ?? [] as tag}
+												<button
+													onclick={() => toggleTag(tag)}
+													class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 {selectedTags.has(
+														tag
+													)
+														? 'ring-1 ring-blue-400 dark:ring-blue-500'
+														: ''}"
+												>
+													{tag}
+												</button>
+											{/each}
+										</div>
+									</div>
+								{/each}
 							</div>
-						{/if}
-					{/each}
-				</div>
+						</section>
+					{/if}
+				{/each}
 			{/if}
 
 			<div class="mt-12">
