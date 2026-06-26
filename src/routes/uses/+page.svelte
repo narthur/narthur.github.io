@@ -189,7 +189,7 @@
 					{#if categoryItems.length > 0}
 						<section class="mb-10">
 							<h2
-								class="mb-4 border-b border-gray-200 pb-2 text-sm font-semibold tracking-wide text-gray-500 uppercase dark:border-gray-700 dark:text-gray-400"
+								class="mb-4 border-b border-gray-200 pb-2 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-700 dark:text-gray-400"
 							>
 								{category}
 							</h2>
