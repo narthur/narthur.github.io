@@ -118,15 +118,6 @@
 			>.
 		</p>
 
-		{#if meta && meta.affiliateDisclaimer}
-			<div class="my-8 rounded-lg bg-gray-100 p-6 dark:bg-gray-800">
-				<h2 class="mb-3 text-2xl font-medium">A note about links</h2>
-				<p class="text-gray-600 dark:text-gray-400">
-					{meta.affiliateDisclaimer}
-				</p>
-			</div>
-		{/if}
-
 		{#if isLoading}
 			<div class="flex justify-center py-12">
 				<div class="animate-pulse text-xl text-gray-600 dark:text-gray-400">Loading...</div>
@@ -139,8 +130,21 @@
 				</p>
 			</div>
 		{:else}
-			<div class="mb-8">
-				<div class="flex flex-wrap gap-2">
+			<details class="mb-8">
+				<summary
+					class="flex cursor-pointer select-none list-none items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 [&::-webkit-details-marker]:hidden"
+				>
+					<Icon icon="mdi:filter-variant" class="h-4 w-4" />
+					<span>Filter by tag</span>
+					{#if selectedTags.size > 0}
+						<span
+							class="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
+						>
+							{selectedTags.size} selected
+						</span>
+					{/if}
+				</summary>
+				<div class="mt-3 flex flex-wrap gap-2">
 					{#each allTags as tag}
 						<button
 							onclick={() => toggleTag(tag)}
@@ -153,22 +157,14 @@
 					{/each}
 				</div>
 				{#if selectedTags.size > 0}
-					<div class="mt-4 flex items-center">
-						<button
-							onclick={() => (selectedTags = new Set())}
-							class="text-sm text-blue-600 hover:underline dark:text-blue-400"
-						>
-							Clear all filters
-						</button>
-						<span
-							class="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-sm text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
-						>
-							{selectedTags.size}
-							{selectedTags.size === 1 ? 'tag' : 'tags'} selected
-						</span>
-					</div>
+					<button
+						onclick={() => (selectedTags = new Set())}
+						class="mt-3 text-sm text-blue-600 hover:underline dark:text-blue-400"
+					>
+						Clear all filters
+					</button>
 				{/if}
-			</div>
+			</details>
 
 			{#if items.filter((item) => shouldDisplayItem(item)).length === 0}
 				<div class="my-12 rounded-lg bg-gray-100 p-8 text-center dark:bg-gray-800">
@@ -231,10 +227,13 @@
 				{/each}
 			{/if}
 
-			<div class="mt-12">
-				<p class="text-gray-600 dark:text-gray-400">
-					Last updated: {meta?.lastUpdated}
-				</p>
+			<div
+				class="mt-12 space-y-1 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-500"
+			>
+				<p>Last updated: {meta?.lastUpdated}</p>
+				{#if meta?.affiliateDisclaimer}
+					<p>{meta.affiliateDisclaimer}</p>
+				{/if}
 			</div>
 		{/if}
 	</div>
