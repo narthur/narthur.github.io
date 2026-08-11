@@ -3,6 +3,10 @@ name: Deploy
 on:
   push:
     branches: [master]
+  # Refresh the deployed GitHub stats on the 1st of each month, even without a push.
+  schedule:
+    - cron: '0 7 1 * *'
+  workflow_dispatch:
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -23,6 +27,13 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Fetch the latest public GitHub stats at build time. The committed
+      # data/github-stats.json is only a fallback, so a transient API failure
+      # degrades to slightly stale stats instead of breaking the deploy.
+      - name: Fetch GitHub stats
+        env:
+          GH_STATS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run fetch-github || echo "Stats fetch failed; building with committed data/github-stats.json"
       - run: pnpm run build
       - uses: cloudflare/wrangler-action@v3
         with:
