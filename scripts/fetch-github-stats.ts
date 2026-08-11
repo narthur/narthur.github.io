@@ -5,10 +5,26 @@ import path from 'path';
 import 'dotenv/config';
 import open from 'open';
 
-const clientId = process.env.GITHUB_OAUTH_CLIENT_ID as string;
 const scopes = ['public_repo', 'read:user'];
 
 async function getAccessToken() {
+	// In CI (or any non-interactive environment) a token can be supplied directly.
+	// All data fetched here is public, so a plain token — including the Actions
+	// default GITHUB_TOKEN — is sufficient and lets the script run unattended.
+	const envToken = process.env.GH_STATS_TOKEN || process.env.GITHUB_TOKEN;
+	if (envToken) {
+		return envToken;
+	}
+
+	// Otherwise fall back to interactive OAuth device flow for local use.
+	const clientId = process.env.GITHUB_OAUTH_CLIENT_ID;
+	if (!clientId) {
+		throw new Error(
+			'No GitHub credentials found. Set GH_STATS_TOKEN (or GITHUB_TOKEN) for ' +
+				'non-interactive use, or GITHUB_OAUTH_CLIENT_ID to use the device flow.'
+		);
+	}
+
 	const auth = createOAuthDeviceAuth({
 		clientType: 'oauth-app',
 		clientId,

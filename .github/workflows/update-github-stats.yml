@@ -1,0 +1,50 @@
+name: Update GitHub stats
+
+on:
+  # Refresh the committed GitHub stats every Monday at 07:00 UTC.
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: update-github-stats
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fetch GitHub stats
+        env:
+          GH_STATS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run fetch-github
+
+      - name: Commit, push, and deploy if stats changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- data/github-stats.json; then
+            echo "No changes to GitHub stats."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/github-stats.json
+          git commit -m "chore: update GitHub stats"
+          git push
+
+          # A push made with GITHUB_TOKEN does not trigger the Deploy workflow,
+          # so dispatch it explicitly to publish the refreshed stats.
+          gh workflow run deploy.yml --ref master
