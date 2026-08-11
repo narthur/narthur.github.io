@@ -62,7 +62,7 @@
 		"@octokit/auth-oauth-device": "^7.1.5",
 		"@octokit/rest": "^21.1.1",
 		"iconify": "^1.4.0",
-		"js-yaml": "^4.3.0",
+		"js-yaml": "^4.3.1",
 		"tsx": "^4.22.4"
 	}
 }
