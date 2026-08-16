@@ -46,6 +46,15 @@
 			sort: 100
 		},
 		{
+			name: 'AudioVerse',
+			url: '/audioverse',
+			description:
+				'Non-profit media platform hosting a large library of audio and video recordings. I led the rebuild of its public frontend on Next.js and directed the GraphQL backend and admin dashboard behind it',
+			icon: 'mdi:headphones',
+			tags: ['Client Work', 'Frontend'],
+			sort: 95
+		},
+		{
 			name: 'TaskRatchet',
 			url: 'https://taskratchet.com/',
 			description:
@@ -164,7 +173,7 @@
 			<li in:fade={{ duration: 200 }} out:slide={{ duration: 200 }}>
 				<a
 					href={link.url}
-					target="_blank"
+					target={link.url.startsWith('http') ? '_blank' : undefined}
 					rel="noopener noreferrer"
 					class={`group block rounded-lg border p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
 						link.highlight
