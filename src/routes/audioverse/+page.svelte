@@ -4,17 +4,23 @@
 		{
 			src: '/audioverse/home.jpg',
 			alt: 'AudioVerse home page: sidebar navigation, "Sound Doctrine" hero, latest content grid, blog posts, testimonials, and donation sections',
-			caption: 'Home'
+			caption: 'Home',
+			width: 1400,
+			height: 4958
 		},
 		{
 			src: '/audioverse/discover.jpg',
 			alt: 'AudioVerse Discover page: recent, trending, and featured teachings in card grids, plus blog posts, stories, and conferences',
-			caption: 'Discover'
+			caption: 'Discover',
+			width: 1400,
+			height: 3806
 		},
 		{
 			src: '/audioverse/sermon.jpg',
 			alt: 'AudioVerse recording page: video player with speed and download controls, description, series metadata, and a persistent bottom playback bar',
-			caption: 'Recording'
+			caption: 'Recording',
+			width: 1400,
+			height: 2104
 		}
 	];
 </script>
@@ -44,6 +50,8 @@
 			The rebuild shipped with an accessibility backlog too large to clear in one pass, which is why
 			I built <a
 				href="https://github.com/marketplace/actions/pa11y-ratchet"
+				target="_blank"
+				rel="noopener noreferrer"
 				class="text-blue-600 hover:underline dark:text-blue-400">Pa11y Ratchet</a
 			>. The CI action only fails on an increase in number of accessibility issues, allowing a team
 			to whittle an existing backlog down over time.
@@ -51,6 +59,7 @@
 		<p class="text-sm text-gray-500 dark:text-gray-400">
 			These are captures from 2024. The live <a
 				href="https://audioverse.org"
+				target="_blank"
 				rel="noopener noreferrer"
 				class="text-blue-600 hover:underline dark:text-blue-400">audioverse.org</a
 			> has changed since, and no longer represents my work.
@@ -58,7 +67,7 @@
 	</div>
 
 	<div class="mt-12 space-y-12">
-		{#each shots as shot}
+		{#each shots as shot, i}
 			<figure>
 				<figcaption class="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">
 					{shot.caption}
@@ -66,7 +75,9 @@
 				<img
 					src={shot.src}
 					alt={shot.alt}
-					loading="lazy"
+					width={shot.width}
+					height={shot.height}
+					loading={i === 0 ? 'eager' : 'lazy'}
 					class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700"
 				/>
 			</figure>
