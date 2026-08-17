@@ -98,6 +98,10 @@
 
 <svelte:head>
 	<title>Uses — Nathan Arthur</title>
+	<meta
+		name="description"
+		content="The hardware, software, and tools Nathan Arthur uses day to day."
+	/>
 </svelte:head>
 
 <p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">

@@ -33,4 +33,14 @@
 		text-decoration-color: #d9a05b;
 		text-underline-offset: 0.25em;
 	}
+
+	/* The palette is fully custom, so don't rely on the browser's default focus ring
+	   being legible against it. */
+	:global(a:focus-visible),
+	:global(button:focus-visible),
+	:global(summary:focus-visible) {
+		outline: 2px solid #d9a05b;
+		outline-offset: 3px;
+		border-radius: 1px;
+	}
 </style>

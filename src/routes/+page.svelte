@@ -51,6 +51,12 @@
 	const isExternal = (url: string) => url.startsWith('http');
 </script>
 
+<svelte:head>
+	<title>Nathan Arthur</title>
+	<!-- Derived from `positioning` so the tab, the search result, and the page can't drift apart. -->
+	<meta name="description" content={positioning} />
+</svelte:head>
+
 <h1 class="text-4xl font-medium tracking-tight sm:text-5xl">Nathan Arthur</h1>
 
 <p class="mt-5 max-w-prose text-lg leading-relaxed text-mute sm:text-xl">

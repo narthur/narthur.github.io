@@ -38,7 +38,7 @@ pnpm format        # prettier --write
 
 ### Project structure
 
-```
+```text
 src/
 ├── app.html                    # <head> and the Supascribe loader script
 ├── app.css                     # Tailwind entry point
@@ -96,7 +96,8 @@ Pre-deployment: `pnpm build`, then verify `./build/`.
 
 ## Common gotchas
 
-1. **Static prerendering**: `export const prerender = true` must stay in the root layout
+1. **Static prerendering**: `export const prerender = true` must stay in the root
+   layout
 2. **Dev server**: avoid starting dev servers in WARP to prevent execution blocking
 3. **Package manager**: always `pnpm`, never `npm` or `yarn`
 4. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,

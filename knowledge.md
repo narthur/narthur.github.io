@@ -25,8 +25,14 @@ ornament never.
 - Instrument Sans (400, 500) for prose and headings; the system mono stack for
   metadata — stack lists, dates, roles, section labels.
 - Section labels are small mono, uppercase, wide tracking.
-- Links are body-colored and underline on hover in `accent`. That is the entire
-  interaction vocabulary — no transitions, no hover lifts, no scroll effects.
+- Links are body-colored and underline on hover in `accent`. No hover lifts, no
+  scroll effects, no entrance animations. Genuine controls (the `/uses` tag
+  filter) may take a hover colour change and a `transition-colors`, because a
+  control that gives no feedback is an accessibility problem, not restraint.
+- Every interactive element gets a visible `:focus-visible` outline — the palette
+  is custom, so the browser default can't be assumed legible against it.
+- All text tokens clear WCAG AA (4.5:1) against `bg`. Check any new colour before
+  adding it; `faint` shipped at 3.27:1 once and had to be corrected.
 - Measure stays readable (`max-w-prose`); the page column is `max-w-2xl`.
 - Always set explicit width and height on images to prevent layout shift.
 
@@ -34,14 +40,14 @@ ornament never.
 
 - The positioning line under the name does the most work on the page. Keep it
   specific and falsifiable; "full-stack web developer" is not a claim.
-- Featured work is tiered: three entries get a role, a stack, a year range, and a
-  real description. Everything else is a one-line "Also built" list.
+- Featured work is tiered: three entries get a role, a stack, a year range, and
+  a real description. Everything else is a one-line "Also built" list.
 - No "open to work" banner — current clients read this site.
 - No hard-sell CTA. Contact is GitHub, LinkedIn, writing, and email, stated once.
 
 ## Structure
 
-```
+```text
 src/
 ├── app.html                    # <head>, Supascribe loader script
 ├── routes/
