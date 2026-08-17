@@ -2,85 +2,77 @@
 
 ## Purpose
 
-Personal website showcasing Nathan Arthur's work as a full-stack web developer focused on productivity tools.
+Personal website for Nathan Arthur, a full-stack web developer.
+
+Its job is **verification, not discovery**: almost everyone who lands here already
+has a reason to look him up — a hiring manager holding his application, someone
+who read a link. Design for a 30-second skim by that person. Evidence first,
+ornament never.
 
 ## Technical Stack
 
-- SvelteKit for frontend framework
-- Static site deployment
+- SvelteKit (Svelte 5) with `@sveltejs/adapter-static`
+- Tailwind CSS
+- Deployed to Cloudflare Workers static assets at nathanarthur.com
 
 ## Design Guidelines
 
-- Use Instrument Sans for headings (weights: 400, 500, 700)
-- Keep it minimal and clean
-- Focus on usability and quick access to projects
-- Maintain professional appearance
-- Ensure responsive design for all screen sizes
-- Color schemes:
-  Light mode:
-  - Subtle gradient background from gray-50 to gray-100
-  - White cards with layered shadows for depth
-  - Dark gray (#333) for main text
-  - Light gray (#666) for secondary text
-  - Blue (#0066cc) for links
-  - Light gray (#ddd) for borders
-    Dark mode:
-  - Subtle gradient background from gray-900 to a darker blue-gray
-  - White for main text
-  - Light gray (#999) for secondary text
-  - Light blue (#66b3ff) for links
-  - Subtle dark gray (#333) for borders and separators
-  - Slightly lighter gray (#444) for hover states
-  - Defaults to system preference
-  - Syncs with system preference changes
-  - Uses inline script in app.html to prevent flash of wrong theme and check localStorage
-  - Must toggle dark mode class on both html and body elements
-  - Requires darkMode: 'class' in Tailwind config
-  - Persists preference in localStorage
-  - Falls back to system preference if no stored value
-- Prefer subtle transitions for interactions
-- Keep layout spacious and readable
-- Always set explicit width and height on icons to prevent layout shift
-- Use display: inline-block on icons to ensure width/height are respected
+- **Typographic, not card-based.** Structure comes from type scale, hairline
+  rules, and whitespace. No boxes, no shadows, no rounded corners.
+- **Dark only.** There is no light theme and no toggle. The full palette lives in
+  `tailwind.config.js` as six tokens: `bg`, `ink`, `mute`, `faint`, `rule`,
+  `accent`. Don't introduce colors outside those.
+- Instrument Sans (400, 500) for prose and headings; the system mono stack for
+  metadata — stack lists, dates, roles, section labels.
+- Section labels are small mono, uppercase, wide tracking.
+- Links are body-colored and underline on hover in `accent`. That is the entire
+  interaction vocabulary — no transitions, no hover lifts, no scroll effects.
+- Measure stays readable (`max-w-prose`); the page column is `max-w-2xl`.
+- Always set explicit width and height on images to prevent layout shift.
 
 ## Content Guidelines
 
-- Highlight key projects and professional profiles
-- Keep descriptions concise and focused
-- Maintain up-to-date links to active projects
-- Add keyboard shortcuts for common actions (e.g., '/' for search)
+- The positioning line under the name does the most work on the page. Keep it
+  specific and falsifiable; "full-stack web developer" is not a claim.
+- Featured work is tiered: three entries get a role, a stack, a year range, and a
+  real description. Everything else is a one-line "Also built" list.
+- No "open to work" banner — current clients read this site.
+- No hard-sell CTA. Contact is GitHub, LinkedIn, writing, and email, stated once.
 
-- Highlight key projects and professional profiles
-- Keep descriptions concise and focused
-- Maintain up-to-date links to active projects
+## Structure
 
-## Technical Stack
+```
+src/
+├── app.html                    # <head>, Supascribe loader script
+├── routes/
+│   ├── +layout.svelte          # page column, global body/link styles
+│   ├── +layout.ts              # prerender: true (required for static build)
+│   ├── +page.svelte            # home: positioning, selected work, also built
+│   ├── uses/+page.svelte       # /uses, reads static/data/uses.yaml at runtime
+│   └── audioverse/+page.svelte # AudioVerse case study
+└── components/Footer.svelte    # newsletter embed + secondary links
+```
 
-- SvelteKit for frontend framework
-- Static site deployment
-- Tailwind CSS for styling - GitHub API integration:
-  - Data fetched at build time via script
-  - Uses OAuth device flow for authentication
-  - Run `pnpm fetch-github` to update stats
-  - Stats stored in data/github-stats.json
-  - No runtime API calls or caching needed
-  - Run `pnpm prefetch-github` to install dependencies
-  - Don't use @apply in Svelte style blocks
-  - Use Tailwind classes directly in markup
-  - Use regular CSS in style blocks when needed
+There is no nav component. Subpages carry a "← Nathan Arthur" link instead.
 
-## Services
+## Newsletter embed
 
-- GitHub API in services/github/
-  - api.ts: Core API interaction and caching
-  - types.ts: TypeScript interfaces
-  - colors.ts: Language color utilities
-  - Don't use @apply in Svelte style blocks
-  - Use Tailwind classes directly in markup
-  - Use regular CSS in style blocks when needed
+Supascribe, loaded via the script tag in `app.html` and mounted on the
+`data-supascribe-subscribe` div in `Footer.svelte`. Its default theme is a blue
+button; `Footer.svelte` overrides the `--csw-*` CSS variables to match the
+palette. Setting those colors in the Supascribe dashboard would let that block be
+deleted.
 
-## Build Configuration
+## Build
 
-- Site uses @sveltejs/adapter-static for static deployment
-- Requires `export const prerender = true` in root +layout.ts for successful static build
-- Run `pnpm build` to build the site
+- `pnpm dev` / `pnpm build` / `pnpm preview`
+- `pnpm check` (svelte-check) and `pnpm lint` (prettier + eslint) both run in CI
+- `export const prerender = true` in `src/routes/+layout.ts` is required for the
+  static build
+- Don't use `@apply` in Svelte `<style>` blocks; use Tailwind classes in markup
+  and plain CSS in `<style>` when needed
+
+## Traffic
+
+Zone-level analytics are in the Cloudflare dashboard. There is deliberately no
+analytics script on the site.

@@ -33,58 +33,53 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto max-w-3xl px-8 py-16">
-	<h1 class="mb-1 text-4xl font-medium tracking-tight">AudioVerse</h1>
-	<p class="mb-8 text-lg font-light text-gray-600 dark:text-gray-400">
-		Technology Director, 2019&ndash;2025
+<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+	<a href="/">&larr; Nathan Arthur</a>
+</p>
+
+<h1 class="text-4xl font-medium tracking-tight">AudioVerse</h1>
+<p class="mt-2 font-mono text-xs text-faint">technology director · 2019—2025 · next.js · graphql</p>
+
+<div class="mt-8 max-w-prose space-y-4 leading-relaxed text-mute">
+	<p>
+		AudioVerse is a non-profit media platform hosting a large library of audio and video recordings.
+		I led the rebuild of its public frontend on Next.js, working from designs by an outside design
+		firm, and directed the work on the GraphQL backend and admin dashboard behind it.
 	</p>
-
-	<div class="space-y-4 leading-relaxed text-gray-700 dark:text-gray-300">
-		<p>
-			AudioVerse is a non-profit media platform hosting a large library of audio and video
-			recordings. I led the rebuild of its public frontend on Next.js, working from designs by an
-			outside design firm, and directed the work on the GraphQL backend and admin dashboard behind
-			it.
-		</p>
-		<p>
-			The rebuild shipped with an accessibility backlog too large to clear in one pass, which is why
-			I built <a
-				href="https://github.com/marketplace/actions/pa11y-ratchet"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="text-blue-600 hover:underline dark:text-blue-400">Pa11y Ratchet</a
-			>. The CI action only fails on an increase in number of accessibility issues, allowing a team
-			to whittle an existing backlog down over time.
-		</p>
-		<p class="text-sm text-gray-500 dark:text-gray-400">
-			These are captures from 2024. The live <a
-				href="https://audioverse.org"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="text-blue-600 hover:underline dark:text-blue-400">audioverse.org</a
-			> has changed since, and no longer represents my work.
-		</p>
-	</div>
-
-	<div class="mt-12 space-y-12">
-		{#each shots as shot, i}
-			<figure>
-				<figcaption class="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">
-					{shot.caption}
-				</figcaption>
-				<img
-					src={shot.src}
-					alt={shot.alt}
-					width={shot.width}
-					height={shot.height}
-					loading={i === 0 ? 'eager' : 'lazy'}
-					class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700"
-				/>
-			</figure>
-		{/each}
-	</div>
-
-	<p class="mt-12">
-		<a href="/" class="text-blue-600 hover:underline dark:text-blue-400">&larr; Back home</a>
+	<p>
+		The rebuild shipped with an accessibility backlog too large to clear in one pass, which is why I
+		built <a
+			href="https://github.com/marketplace/actions/pa11y-ratchet"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="text-ink underline decoration-rule underline-offset-4">Pa11y Ratchet</a
+		>. The CI action only fails on an increase in number of accessibility issues, allowing a team to
+		whittle an existing backlog down over time.
 	</p>
+	<p class="text-sm text-faint">
+		These are captures from 2024. The live <a
+			href="https://audioverse.org"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="underline decoration-rule underline-offset-4">audioverse.org</a
+		> has changed since, and no longer represents my work.
+	</p>
+</div>
+
+<div class="mt-16 space-y-16">
+	{#each shots as shot, i}
+		<figure>
+			<figcaption class="mb-3 font-mono text-xs uppercase tracking-widest text-faint">
+				{shot.caption}
+			</figcaption>
+			<img
+				src={shot.src}
+				alt={shot.alt}
+				width={shot.width}
+				height={shot.height}
+				loading={i === 0 ? 'eager' : 'lazy'}
+				class="w-full border border-rule"
+			/>
+		</figure>
+	{/each}
 </div>

@@ -6,11 +6,6 @@ export default defineConfig({
 	plugins: [sveltekit(), YamlHmr()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
-	},
-	server: {
-		fs: {
-			allow: ['./data']
-		}
 	}
 });
 

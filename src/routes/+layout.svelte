@@ -2,29 +2,35 @@
 	import '../app.css';
 	import '@fontsource/instrument-sans/400.css'; // Regular
 	import '@fontsource/instrument-sans/500.css'; // Medium
-	import '@fontsource/instrument-sans/700.css'; // Bold
-	import Nav from '../components/Nav.svelte';
+	import Footer from '../components/Footer.svelte';
 
 	let { children } = $props();
 </script>
 
-<div class="dark">
-	<Nav />
-	{@render children()}
+<div class="mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-16 sm:px-8 sm:py-24">
+	<main class="flex-grow">
+		{@render children()}
+	</main>
+	<Footer />
 </div>
 
 <style>
 	:global(body) {
 		margin: 0;
-		font-family: 'Instrument Sans', sans-serif;
-		background: linear-gradient(150deg, rgb(249, 250, 251) 0%, rgb(243, 244, 246) 100%);
-		color: rgb(17, 24, 39);
-		min-height: 100vh;
+		background: #0a0c10;
+		color: #e8e9ec;
+		font-family: 'Instrument Sans', system-ui, sans-serif;
+		-webkit-font-smoothing: antialiased;
 	}
 
-	:global(html.dark),
-	:global(html.dark body) {
-		background: linear-gradient(150deg, rgb(17, 24, 39) 0%, rgb(12, 17, 27) 100%);
-		color: white;
+	:global(a) {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	:global(a:hover) {
+		text-decoration: underline;
+		text-decoration-color: #d9a05b;
+		text-underline-offset: 0.25em;
 	}
 </style>
