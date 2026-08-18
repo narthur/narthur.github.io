@@ -6,8 +6,11 @@
 
 	let { children } = $props();
 
-	// TEMPORARY: accent picker, dev-only — `dev` is false in the build, so none of this
-	// ships. Delete this block, the markup below it, and the import once a colour is chosen.
+	// Dev-only accent picker. Kept deliberately: the accent has been re-chosen more than
+	// once and this is how it gets tried against real pages. `dev` is false in the build,
+	// so the whole thing tree-shakes away — verified: the production bundle contains no
+	// `--accent` reference at all. Keep every part of it behind `dev`, including effect
+	// BODIES: an ungated $effect is emitted into the bundle even when its markup isn't.
 	const ACCENT_DEFAULT = '#8ded51';
 	const presets = [
 		{ name: 'lime', hex: '#8ded51' },
@@ -68,7 +71,7 @@
 </div>
 
 {#if dev}
-	<!-- TEMPORARY dev-only accent picker. Delete with the script block above. -->
+	<!-- Dev-only accent picker; see the note in the script block above. -->
 	<aside
 		class="fixed bottom-4 right-4 z-50 rounded border border-rule bg-bg/95 p-3 font-mono text-xs text-mute shadow-lg backdrop-blur"
 	>

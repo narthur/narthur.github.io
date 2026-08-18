@@ -72,6 +72,12 @@ src/
 There is no nav and no components directory. Subpages carry a "← Nathan Arthur"
 link, and the footer lives in the layout — its only consumer.
 
+`+layout.svelte` carries a dev-only accent picker (colour input, presets, and a
+live contrast readout). It is deliberate, not leftover scaffolding: `dev` is
+false in the build so it tree-shakes away entirely. If you touch it, keep every
+part behind `dev` — including effect _bodies_, since an ungated `$effect` is
+emitted into the production bundle even when its markup is eliminated.
+
 The favicon is self-hosted: `static/favicon.svg` is the source and
 `static/favicon.png` is rendered from it as the fallback for browsers that don't
 take SVG icons. Keep them in step. It carries a single letterform, not a
