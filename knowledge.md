@@ -41,8 +41,9 @@ ornament never.
 
 ## Content Guidelines
 
-- The positioning line under the name does the most work on the page. Keep it
-  specific and falsifiable; "full-stack web developer" is not a claim.
+- The positioning line under the name is also the home page's `<meta
+name="description">` — `+page.svelte` derives one from the other, so editing
+  the constant changes the search result too.
 - Featured work is tiered: three entries get a role, a stack, a year range, and
   a real description. Everything else is a one-line "Also built" list.
 - No "open to work" banner — current clients read this site.
