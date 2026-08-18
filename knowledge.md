@@ -32,6 +32,10 @@ ornament never.
   scroll effects, no entrance animations. Genuine controls (the `/uses` tag
   filter) may take a hover colour change and a `transition-colors`, because a
   control that gives no feedback is an accessibility problem, not restraint.
+- **External links open in a new tab; internal ones don't.** Every `http(s)` link
+  gets `target="_blank"` and `rel="noopener noreferrer"`; every in-site link gets
+  neither. Use the `isExternal` helper rather than hardcoding, and check the
+  footer — it is the one place this has drifted before.
 - Every interactive element gets a visible `:focus-visible` outline — the palette
   is custom, so the browser default can't be assumed legible against it.
 - All text tokens clear WCAG AA (4.5:1) against `bg`. Check any new colour before
