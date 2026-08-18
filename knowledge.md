@@ -32,6 +32,14 @@ ornament never.
   scroll effects, no entrance animations. Genuine controls (the `/uses` tag
   filter) may take a hover colour change and a `transition-colors`, because a
   control that gives no feedback is an accessibility problem, not restraint.
+- **Every link opens in the same tab.** No `target="_blank"` anywhere, external
+  or not, and therefore no `rel="noopener noreferrer"`. "It's external" is not a
+  reason to take the tab away from the reader; nothing here is a form, editor, or
+  checkout worth protecting, and anyone wanting a new tab can middle-click.
+  `noreferrer` in particular was actively costing us: it strips the `Referer`
+  header even on same-tab navigation, so Substack and Pine Peak Digital could not
+  see this site as a traffic source. If a future link genuinely needs a new tab,
+  it gets `rel="noopener"` — not `noreferrer` — plus a visible cue in the label.
 - Every interactive element gets a visible `:focus-visible` outline — the palette
   is custom, so the browser default can't be assumed legible against it.
 - All text tokens clear WCAG AA (4.5:1) against `bg`. Check any new colour before

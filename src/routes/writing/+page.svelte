@@ -46,9 +46,7 @@
 	<article class="mt-8 border-t border-rule pt-8">
 		<div class="flex items-baseline justify-between gap-4">
 			<h3 class="text-lg font-medium tracking-tight">
-				<a href="https://narthur.substack.com/" target="_blank" rel="noopener noreferrer">
-					Narthur Online
-				</a>
+				<a href="https://narthur.substack.com/"> Narthur Online </a>
 			</h3>
 			<span class="whitespace-nowrap font-mono text-xs text-faint">weekly-ish</span>
 		</div>
@@ -65,7 +63,7 @@
 		<article class="mt-8 border-t border-rule pt-8">
 			<div class="flex items-baseline justify-between gap-4">
 				<h3 class="text-lg font-medium tracking-tight">
-					<a href={post.url} target="_blank" rel="noopener noreferrer">{post.title}</a>
+					<a href={post.url}>{post.title}</a>
 				</h3>
 				<span class="whitespace-nowrap font-mono text-xs text-faint">{post.date}</span>
 			</div>

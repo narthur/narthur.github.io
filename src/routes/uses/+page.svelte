@@ -36,11 +36,8 @@
 <h1 class="text-4xl font-medium tracking-tight">Uses</h1>
 <p class="mt-5 max-w-prose leading-relaxed text-mute">
 	Hardware, software, and tools I use day to day for work and personal projects. Inspired by
-	<a
-		href="https://uses.tech/"
-		target="_blank"
-		rel="noopener noreferrer"
-		class="text-ink underline decoration-rule underline-offset-4">uses.tech</a
+	<a href="https://uses.tech/" class="text-ink underline decoration-rule underline-offset-4"
+		>uses.tech</a
 	>.
 </p>
 
@@ -92,7 +89,7 @@
 				{#each group.items as item (item.name)}
 					<li class="mt-6 border-t border-rule pt-6">
 						<h3 class="font-medium tracking-tight">
-							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}</a>
+							<a href={item.url}>{item.name}</a>
 						</h3>
 						<p class="mt-2 max-w-prose text-sm leading-relaxed text-mute">{item.description}</p>
 						{#if item.tags?.length}

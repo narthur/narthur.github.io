@@ -63,7 +63,7 @@
 		<ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-faint">
 			{#each footerLinks as link}
 				<li>
-					<a href={link.url} rel="noopener noreferrer">{link.name}</a>
+					<a href={link.url}>{link.name}</a>
 				</li>
 			{/each}
 		</ul>
