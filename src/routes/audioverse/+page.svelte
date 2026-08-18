@@ -50,8 +50,6 @@
 		The rebuild shipped with an accessibility backlog too large to clear in one pass, which is why I
 		built <a
 			href="https://github.com/marketplace/actions/pa11y-ratchet"
-			target="_blank"
-			rel="noopener noreferrer"
 			class="text-ink underline decoration-rule underline-offset-4">Pa11y Ratchet</a
 		>. The CI action only fails on an increase in number of accessibility issues, allowing a team to
 		whittle an existing backlog down over time.
@@ -59,8 +57,6 @@
 	<p class="text-sm text-faint">
 		These are captures from 2024. The live <a
 			href="https://audioverse.org"
-			target="_blank"
-			rel="noopener noreferrer"
 			class="underline decoration-rule underline-offset-4">audioverse.org</a
 		> has changed since, and no longer represents my work.
 	</p>

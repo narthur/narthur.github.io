@@ -45,8 +45,6 @@
 		{ name: 'Maze Gen', url: 'https://maze.nathanarthur.com/' },
 		{ name: 'Life', url: 'https://life.nathanarthur.com/' }
 	];
-
-	const isExternal = (url: string) => url.startsWith('http');
 </script>
 
 <svelte:head>
@@ -64,11 +62,7 @@
 <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs uppercase tracking-widest">
 	{#each contact as link}
 		<li>
-			<a
-				href={link.url}
-				target={isExternal(link.url) ? '_blank' : undefined}
-				rel="noopener noreferrer">{link.name}</a
-			>
+			<a href={link.url}>{link.name}</a>
 		</li>
 	{/each}
 </ul>
@@ -80,11 +74,7 @@
 		<article class="mt-8 border-t border-rule pt-8">
 			<div class="flex items-baseline justify-between gap-4">
 				<h3 class="text-lg font-medium tracking-tight">
-					<a
-						href={project.url}
-						target={isExternal(project.url) ? '_blank' : undefined}
-						rel="noopener noreferrer">{project.name}</a
-					>
+					<a href={project.url}>{project.name}</a>
 				</h3>
 				<span class="whitespace-nowrap font-mono text-xs text-faint">{project.years}</span>
 			</div>
@@ -99,7 +89,7 @@
 	<ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-mute">
 		{#each alsoBuilt as project}
 			<li>
-				<a href={project.url} target="_blank" rel="noopener noreferrer">{project.name}</a>
+				<a href={project.url}>{project.name}</a>
 			</li>
 		{/each}
 	</ul>

@@ -39,9 +39,6 @@
 		((luminance(accent) + 0.05) / (luminance('#0a0c10') + 0.05)).toFixed(2)
 	);
 
-	// Same rule as +page.svelte: external links open in a new tab, internal ones don't.
-	const isExternal = (url: string) => url.startsWith('http');
-
 	const footerLinks = [
 		{ name: 'Uses', url: '/uses' },
 		{ name: 'Substack', url: 'https://narthur.substack.com/' },
@@ -66,11 +63,7 @@
 		<ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-faint">
 			{#each footerLinks as link}
 				<li>
-					<a
-						href={link.url}
-						target={isExternal(link.url) ? '_blank' : undefined}
-						rel={isExternal(link.url) ? 'noopener noreferrer' : undefined}>{link.name}</a
-					>
+					<a href={link.url}>{link.name}</a>
 				</li>
 			{/each}
 		</ul>
