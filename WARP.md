@@ -81,7 +81,11 @@ editing those arrays; there is no CMS.
 
 ## Build configuration
 
-- `svelte.config.js`: `@sveltejs/adapter-static`
+- `svelte.config.js`: `@sveltejs/adapter-static` with `fallback: '404.html'`, so
+  `+error.svelte` is emitted as `build/404.html`. `wrangler.jsonc` sets
+  `not_found_handling: "404-page"` so Cloudflare serves it for unmatched paths.
+  The fallback is a client-rendered shell: it has no title until JS runs, which
+  is an accepted trade for a page that should never be indexed.
 - `vite.config.ts`: the SvelteKit plugin and the Vitest include pattern
 - `tailwind.config.js`: content paths, color tokens, font families. No plugins.
 
@@ -108,5 +112,9 @@ Pre-deployment: `pnpm build`, then verify `./build/`.
    layout
 2. **Dev server**: avoid starting dev servers in WARP to prevent execution blocking
 3. **Package manager**: always `pnpm`, never `npm` or `yarn`
-4. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,
-   overridden in `Footer.svelte`. If the button turns blue, that override broke.
+4. **`pnpm preview` does not reproduce production 404s.** It SSRs on the fly, so
+   an unknown path renders the error page even when the static build contains no
+   404 file. To check what the host will actually serve, build and serve
+   `build/` with a plain static file server.
+5. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,
+   overridden in `+layout.svelte`. If the button turns blue, that override broke.

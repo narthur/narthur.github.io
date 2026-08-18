@@ -2,7 +2,10 @@
 	"name": "nathanarthur-com",
 	"compatibility_date": "2025-06-26",
 	"assets": {
-		"directory": "./build"
+		"directory": "./build",
+		// Serve the generated 404.html (from +error.svelte) for unmatched paths
+		// instead of Cloudflare's generic one.
+		"not_found_handling": "404-page"
 	},
 	// Custom domains require the zone to live in this Cloudflare account.
 	"routes": [

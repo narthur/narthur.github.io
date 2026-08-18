@@ -69,10 +69,10 @@ link, and the footer lives in the layout — its only consumer.
 ## Newsletter embed
 
 Supascribe, loaded via the script tag in `app.html` and mounted on the
-`data-supascribe-subscribe` div in `Footer.svelte`. Its default theme is a blue
-button; `Footer.svelte` overrides the `--csw-*` CSS variables to match the
-palette. Setting those colors in the Supascribe dashboard would let that block be
-deleted.
+`data-supascribe-subscribe` div in `+layout.svelte`. Its default theme is a blue
+button; the layout's style block overrides the `--csw-*` CSS variables to match
+the palette. Setting those colors in the Supascribe dashboard would let that
+block be deleted.
 
 ## Build
 
