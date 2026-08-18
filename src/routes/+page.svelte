@@ -1,7 +1,6 @@
 <script lang="ts">
-	// TODO(nathan): this is the one line the whole page hangs on — replace with yours.
 	const positioning =
-		'I build web products end to end and keep them running. Mostly alone: design through payments, deploys, and whatever breaks at 2am.';
+		'Full-stack web developer building in React and TypeScript';
 
 	const contact = [
 		{ name: 'GitHub', url: 'https://github.com/narthur' },
@@ -17,7 +16,7 @@
 			years: '2019—now',
 			meta: 'solo · typescript · react · cloudflare d1 · stripe',
 			description:
-				'A task manager that charges your credit card when you miss a deadline. It has been taking live payments since 2019, and I own all of it — the Stripe paths, the billing cron and its dead-man’s switch, and the pager when either one misbehaves.'
+				'A todo app that lets users pledge mony on completing their tasks on time. I built it in 2019 and have continued maintaining and developing it since.'
 		},
 		{
 			name: 'AudioVerse',
@@ -25,7 +24,7 @@
 			years: '2019—2025',
 			meta: 'technology director · next.js · graphql',
 			description:
-				'Non-profit media platform hosting a large library of audio and video recordings. I led the rebuild of its public frontend on Next.js and directed the GraphQL backend and admin dashboard behind it.'
+				'Non-profit media platform hosting a large library of audio and video recordings. I led the rebuild of its public frontend on Next.js and directed development of the GraphQL backend and admin dashboard behind it.'
 		},
 		{
 			name: 'Pa11y Ratchet',

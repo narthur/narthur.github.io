@@ -12,14 +12,14 @@
 			url: 'https://blog.beeminder.com/cbt/',
 			date: '2022-09-15',
 			blurb:
-				'A response to the recurring claim that Beeminder is a worse version of cognitive behavioural therapy — where the comparison holds and where it stops.'
+				'A response to the critique that Beeminder is a worse version of cognitive behavioural therapy.'
 		},
 		{
 			title: 'Announcing TaskRatchet: Like Beeminder for Your Todo List',
 			url: 'https://blog.beeminder.com/taskratchet/',
 			date: '2020-06-22',
 			blurb:
-				'Introducing TaskRatchet on the Beeminder blog: a todo list that charges your card when you miss a deadline, and why I built it.'
+				'An introduction to TaskRatchet, a todo app I built that lets you pledge money on completing your tasks on time.'
 		}
 	];
 </script>
