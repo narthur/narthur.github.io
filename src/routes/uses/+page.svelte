@@ -1,232 +1,126 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
-	import { onMount } from 'svelte';
-	import * as yaml from 'js-yaml';
+	import { itemsInCategory } from './filter';
 
-	// Interface definitions for our data
-	interface UsesItem {
-		name: string;
-		description: string;
-		url: string;
-		category?: string;
-		tags?: string[];
-	}
+	let { data } = $props();
 
-	interface UsesMeta {
-		lastUpdated: string;
-		affiliateDisclaimer: string;
-	}
+	let selectedTags = $state(new Set<string>());
 
-	interface UsesData {
-		items: UsesItem[];
-		meta: UsesMeta;
-	}
-
-	// State variables
-	let items: UsesItem[] = [];
-	let categories: string[] = [];
-	let allTags: string[] = [];
-	let selectedTags: Set<string> = new Set();
-
-	const UNCATEGORIZED = 'Other';
-
-	// Items in a category that pass the current tag filter, sorted by name
-	function itemsForCategory(category: string): UsesItem[] {
-		return items
-			.filter((item) => (item.category ?? UNCATEGORIZED) === category && shouldDisplayItem(item))
-			.sort((a, b) => a.name.localeCompare(b.name));
-	}
-	let meta: UsesMeta | null = null;
-	let isLoading = true;
-	let loadError = false;
-
-	// Toggle a tag selection
 	function toggleTag(tag: string) {
-		if (selectedTags.has(tag)) {
-			selectedTags.delete(tag);
-		} else {
-			selectedTags.add(tag);
-		}
-		selectedTags = new Set(selectedTags); // Force reactivity
+		const next = new Set(selectedTags);
+		if (!next.delete(tag)) next.add(tag);
+		selectedTags = next;
 	}
 
-	// Check if an item should be displayed based on selected tags
-	function shouldDisplayItem(item: UsesItem): boolean {
-		// If no tags are selected, show all items
-		if (selectedTags.size === 0) return true;
-
-		// Show the item if it has at least one of the selected tags
-		return item.tags?.some((tag) => selectedTags.has(tag)) ?? false;
-	}
-
-	// Load the YAML data on mount
-	onMount(async () => {
-		try {
-			const response = await fetch('/data/uses.yaml');
-			if (!response.ok) {
-				throw new Error(`Failed to fetch YAML data: ${response.status}`);
-			}
-
-			const yamlText = await response.text();
-			const data = yaml.load(yamlText) as UsesData;
-
-			items = data.items;
-
-			// Build the category list in first-seen order from the YAML
-			const categoryOrder: string[] = [];
-			items.forEach((item) => {
-				const category = item.category ?? UNCATEGORIZED;
-				if (!categoryOrder.includes(category)) categoryOrder.push(category);
-			});
-			categories = categoryOrder;
-
-			// Extract all unique tags and sort them alphabetically
-			const tagSet = new Set<string>();
-			items.forEach((item) => {
-				item.tags?.forEach((tag) => tagSet.add(tag));
-			});
-			allTags = Array.from(tagSet).sort();
-
-			meta = data.meta;
-			isLoading = false;
-		} catch (error) {
-			console.error('Error loading uses data:', error);
-			loadError = true;
-			isLoading = false;
-		}
-	});
+	const visible = $derived(
+		data.categories
+			.map((category: string) => ({
+				category,
+				items: itemsInCategory(data.items, category, selectedTags)
+			}))
+			.filter((group: { items: unknown[] }) => group.items.length > 0)
+	);
 </script>
 
-<div class="mx-auto max-w-3xl px-8 py-16">
-	<div class="mb-12">
-		<h1 class="mb-6 text-4xl font-medium tracking-tight">Uses</h1>
-		<p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
-			Here's a list of hardware, software, and tools I use on a daily basis for work and personal
-			projects. This page is inspired by <a
-				href="https://uses.tech/"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="text-blue-600 hover:underline dark:text-blue-400">uses.tech</a
-			>.
-		</p>
+<svelte:head>
+	<title>Uses — Nathan Arthur</title>
+	<meta
+		name="description"
+		content="The hardware, software, and tools Nathan Arthur uses day to day."
+	/>
+</svelte:head>
 
-		{#if isLoading}
-			<div class="flex justify-center py-12">
-				<div class="animate-pulse text-xl text-gray-600 dark:text-gray-400">Loading...</div>
-			</div>
-		{:else if loadError}
-			<div class="rounded-lg bg-red-100 p-6 dark:bg-red-900/20">
-				<h2 class="mb-2 text-xl font-medium text-red-700 dark:text-red-400">Error Loading Data</h2>
-				<p class="text-red-600 dark:text-red-300">
-					Sorry, there was a problem loading the tools and equipment data. Please try again later.
-				</p>
-			</div>
-		{:else}
-			<details class="mb-8">
-				<summary
-					class="flex cursor-pointer select-none list-none items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 [&::-webkit-details-marker]:hidden"
-				>
-					<Icon icon="mdi:filter-variant" class="h-4 w-4" />
-					<span>Filter by tag</span>
-					{#if selectedTags.size > 0}
-						<span
-							class="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"
-						>
-							{selectedTags.size} selected
-						</span>
-					{/if}
-				</summary>
-				<div class="mt-3 flex flex-wrap gap-2">
-					{#each allTags as tag}
-						<button
-							onclick={() => toggleTag(tag)}
-							class="rounded-full px-3 py-1 text-sm transition-colors {selectedTags.has(tag)
-								? 'bg-blue-600 text-white dark:bg-blue-700'
-								: 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}"
-						>
-							{tag}
-						</button>
-					{/each}
-				</div>
-				{#if selectedTags.size > 0}
-					<button
-						onclick={() => (selectedTags = new Set())}
-						class="mt-3 text-sm text-blue-600 hover:underline dark:text-blue-400"
-					>
-						Clear all filters
-					</button>
-				{/if}
-			</details>
+<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+	<a href="/">&larr; Nathan Arthur</a>
+</p>
 
-			{#if items.filter((item) => shouldDisplayItem(item)).length === 0}
-				<div class="my-12 rounded-lg bg-gray-100 p-8 text-center dark:bg-gray-800">
-					<h3 class="mb-2 text-xl font-medium">No items match your selected tags</h3>
-					<p class="mb-4 text-gray-600 dark:text-gray-400">
-						Try selecting different tags or clear your filters to see all items.
-					</p>
-					<button
-						onclick={() => (selectedTags = new Set())}
-						class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600"
-					>
-						Clear all filters
-					</button>
-				</div>
-			{:else}
-				{#each categories as category}
-					{@const categoryItems = itemsForCategory(category)}
-					{#if categoryItems.length > 0}
-						<section class="mb-10">
-							<h2
-								class="mb-4 border-b border-gray-200 pb-2 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-700 dark:text-gray-400"
-							>
-								{category}
-							</h2>
-							<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-								{#each categoryItems as item}
-									<div
-										class="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+<h1 class="text-4xl font-medium tracking-tight">Uses</h1>
+<p class="mt-5 max-w-prose leading-relaxed text-mute">
+	Hardware, software, and tools I use day to day for work and personal projects. Inspired by
+	<a
+		href="https://uses.tech/"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-ink underline decoration-rule underline-offset-4">uses.tech</a
+	>.
+</p>
+
+<details class="mt-12">
+	<summary
+		class="flex cursor-pointer select-none list-none items-center gap-2 font-mono text-xs uppercase tracking-widest text-faint hover:text-ink [&::-webkit-details-marker]:hidden"
+	>
+		<span>Filter by tag</span>
+		{#if selectedTags.size > 0}
+			<span class="text-accent">({selectedTags.size})</span>
+		{/if}
+	</summary>
+	<div class="mt-4 flex flex-wrap gap-2">
+		{#each data.tags as tag}
+			<button
+				onclick={() => toggleTag(tag)}
+				aria-pressed={selectedTags.has(tag)}
+				aria-label="Filter by {tag}"
+				class="border px-2 py-0.5 text-xs transition-colors {selectedTags.has(tag)
+					? 'border-accent text-accent'
+					: 'border-rule text-mute hover:border-faint'}"
+			>
+				{tag}
+			</button>
+		{/each}
+	</div>
+	{#if selectedTags.size > 0}
+		<button
+			onclick={() => (selectedTags = new Set())}
+			class="mt-3 font-mono text-xs uppercase tracking-widest text-faint hover:text-ink"
+		>
+			Clear filters
+		</button>
+	{/if}
+</details>
+
+{#if visible.length === 0}
+	<p class="mt-16 max-w-prose leading-relaxed text-mute">
+		Nothing matches those tags.
+		<button onclick={() => (selectedTags = new Set())} class="text-accent underline"
+			>Clear filters</button
+		>.
+	</p>
+{:else}
+	{#each visible as group (group.category)}
+		<section class="mt-16">
+			<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">{group.category}</h2>
+			<ul>
+				{#each group.items as item (item.name)}
+					<li class="mt-6 border-t border-rule pt-6">
+						<h3 class="font-medium tracking-tight">
+							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}</a>
+						</h3>
+						<p class="mt-2 max-w-prose text-sm leading-relaxed text-mute">{item.description}</p>
+						{#if item.tags?.length}
+							<div class="mt-3 flex flex-wrap gap-3">
+								{#each item.tags as tag}
+									<button
+										onclick={() => toggleTag(tag)}
+										aria-pressed={selectedTags.has(tag)}
+										aria-label="Filter by {tag}"
+										class="font-mono text-xs transition-colors {selectedTags.has(tag)
+											? 'text-accent'
+											: 'text-faint hover:text-mute'}"
 									>
-										<h3 class="mb-1 text-xl font-medium">
-											<a
-												href={item.url}
-												target="_blank"
-												rel="noopener noreferrer"
-												class="text-blue-600 hover:underline dark:text-blue-400"
-											>
-												{item.name}
-											</a>
-										</h3>
-										<p class="mb-2 text-gray-600 dark:text-gray-400">{item.description}</p>
-										<div class="flex flex-wrap gap-2">
-											{#each item.tags ?? [] as tag}
-												<button
-													onclick={() => toggleTag(tag)}
-													class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 {selectedTags.has(
-														tag
-													)
-														? 'ring-1 ring-blue-400 dark:ring-blue-500'
-														: ''}"
-												>
-													{tag}
-												</button>
-											{/each}
-										</div>
-									</div>
+										{tag}
+									</button>
 								{/each}
 							</div>
-						</section>
-					{/if}
+						{/if}
+					</li>
 				{/each}
-			{/if}
+			</ul>
+		</section>
+	{/each}
+{/if}
 
-			<div
-				class="mt-12 space-y-1 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-500"
-			>
-				<p>Last updated: {meta?.lastUpdated}</p>
-				{#if meta?.affiliateDisclaimer}
-					<p>{meta.affiliateDisclaimer}</p>
-				{/if}
-			</div>
-		{/if}
-	</div>
+<div class="mt-16 space-y-1 border-t border-rule pt-6 text-xs text-faint">
+	<p>Last updated: {data.meta.lastUpdated}</p>
+	{#if data.meta.affiliateDisclaimer}
+		<p class="max-w-prose">{data.meta.affiliateDisclaimer}</p>
+	{/if}
 </div>

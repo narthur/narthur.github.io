@@ -5,7 +5,9 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter()
+		// fallback emits build/404.html from +error.svelte. Without it adapter-static
+		// writes nothing for unmatched paths and the host serves its own generic 404.
+		adapter: adapter({ fallback: '404.html' })
 	}
 };
 

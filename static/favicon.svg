@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<rect width="64" height="64" rx="10" fill="#0a0c10" />
+	<!-- One letterform, not two: at the 16px browsers actually render, "na" collapses
+	     into an unreadable smudge while a single "n" stays legible. -->
+	<text
+		x="32"
+		y="47"
+		fill="#8ded51"
+		font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+		font-size="46"
+		font-weight="700"
+		text-anchor="middle"
+	>
+		n
+	</text>
+</svg>

@@ -9,6 +9,10 @@ package-lock.json
 /.svelte-kit
 /build
 
+# Local tooling scratch (playwright-cli sessions, static-analysis reports)
+.playwright-cli
+.static-analysis
+
 # OS
 .DS_Store
 Thumbs.db
