@@ -6,7 +6,7 @@
 	const contact = [
 		{ name: 'GitHub', url: 'https://github.com/narthur' },
 		{ name: 'LinkedIn', url: 'https://www.linkedin.com/in/nathanarthur/' },
-		{ name: 'Writing', url: 'https://blog.beeminder.com/authors/Nathan%20Arthur' },
+		{ name: 'Writing', url: '/writing' },
 		{ name: 'Email', url: 'mailto:nathan@pinepeakdigital.com' }
 	];
 
