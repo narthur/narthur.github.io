@@ -22,6 +22,9 @@ ornament never.
 - **Dark only.** There is no light theme and no toggle. The full palette lives in
   `tailwind.config.js` as six tokens: `bg`, `ink`, `mute`, `faint`, `rule`,
   `accent`. Don't introduce colors outside those.
+- `accent` resolves to the CSS variable `--accent`, declared once on `:root` in
+  `+layout.svelte`. Change the accent there, not in the Tailwind config. Anything
+  that needs the accent in plain CSS uses `var(--accent)` so it stays in step.
 - Instrument Sans (400, 500) for prose and headings; the system mono stack for
   metadata — stack lists, dates, roles, section labels.
 - Section labels are small mono, uppercase, wide tracking.
@@ -54,7 +57,9 @@ src/
     ├── +layout.svelte          # page column, footer, global link/focus styles
     ├── +layout.ts              # prerender: true (required for static build)
     ├── +page.svelte            # home: positioning, selected work, also built
+    ├── +error.svelte           # 404; emitted as build/404.html by the adapter
     ├── audioverse/+page.svelte # AudioVerse case study
+    ├── writing/+page.svelte    # newsletter + individual Beeminder articles
     └── uses/
         ├── +page.ts            # parses uses.yaml at build time
         ├── +page.svelte        # renders it; owns only the tag-filter state
@@ -65,6 +70,11 @@ src/
 
 There is no nav and no components directory. Subpages carry a "← Nathan Arthur"
 link, and the footer lives in the layout — its only consumer.
+
+The favicon is self-hosted: `static/favicon.svg` is the source and
+`static/favicon.png` is rendered from it as the fallback for browsers that don't
+take SVG icons. Keep them in step. It carries a single letterform, not a
+monogram — at the 16px browsers actually draw, two letters turn to mush.
 
 ## Newsletter embed
 

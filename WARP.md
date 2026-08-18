@@ -4,8 +4,8 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Overview
 
-Nathan Arthur's personal website: a small static SvelteKit site — a home page, a
-`/uses` page, and one case study — deployed to Cloudflare Workers static assets
+Nathan Arthur's personal website: a small static SvelteKit site — a home page,
+`/writing`, `/uses`, and one case study — deployed to Cloudflare Workers assets
 at nathanarthur.com. See `knowledge.md` for the design and content rules; they
 are load-bearing, not decoration.
 
@@ -47,7 +47,9 @@ src/
     ├── +layout.svelte          # page column, footer, global link/focus styles
     ├── +layout.ts              # prerender: true
     ├── +page.svelte            # home page (content lives in this file)
+    ├── +error.svelte           # 404 page (emitted as build/404.html)
     ├── audioverse/+page.svelte
+    ├── writing/+page.svelte    # newsletter + Beeminder articles
     └── uses/
         ├── +page.ts            # parses uses.yaml at build time
         ├── +page.svelte        # renders it; owns only the tag-filter state
@@ -74,7 +76,9 @@ editing those arrays; there is no CMS.
 - **Tailwind first** — utility classes directly in markup
 - **Dark only.** There is no light theme, no `dark:` variants, and no toggle.
   The palette is six tokens in `tailwind.config.js`: `bg`, `ink`, `mute`,
-  `faint`, `rule`, `accent`. Don't add colors outside them.
+  `faint`, `rule`, `accent`. Don't add colors outside them. `accent` resolves to
+  the CSS variable `--accent`, declared on `:root` in `+layout.svelte` — change
+  the accent there, not in the Tailwind config.
 - **No `@apply`** in Svelte `<style>` blocks; use plain CSS there when a utility
   won't do
 - Mono is the system stack (`font-mono`), used for metadata and section labels
@@ -121,3 +125,7 @@ Pre-deployment: `pnpm build`, then verify `./build/`.
    plain static file server.
 5. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,
    overridden in `+layout.svelte`. If the button turns blue, that override broke.
+6. **`tailwind.config.js` edits do not hot-reload.** Vite keeps the previously
+   generated CSS, so utility classes like `.text-accent` keep the old value while
+   plain-CSS rules pick up the new one — half the UI changes colour and half
+   doesn't. Restart `pnpm dev`.

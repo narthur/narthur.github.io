@@ -8,9 +8,9 @@
 
 	// TEMPORARY: accent picker, dev-only — `dev` is false in the build, so none of this
 	// ships. Delete this block, the markup below it, and the import once a colour is chosen.
-	const ACCENT_DEFAULT = '#8dee00';
+	const ACCENT_DEFAULT = '#8ded51';
 	const presets = [
-		{ name: 'lime', hex: '#8dee00' },
+		{ name: 'lime', hex: '#8ded51' },
 		{ name: 'teal', hex: '#5ecfc0' },
 		{ name: 'periwinkle', hex: '#a5b4fc' },
 		{ name: 'green', hex: '#7ee787' },
@@ -22,7 +22,9 @@
 	let accent = $state(ACCENT_DEFAULT);
 
 	$effect(() => {
-		document.documentElement.style.setProperty('--accent', accent);
+		// Gate the body, not just the markup: an ungated effect is emitted into the
+		// production bundle and runs on every page load even though the picker isn't there.
+		if (dev) document.documentElement.style.setProperty('--accent', accent);
 	});
 
 	const channel = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
@@ -100,7 +102,7 @@
 
 <style>
 	:global(:root) {
-		--accent: #8dee00;
+		--accent: #8ded51;
 	}
 
 	:global(body) {
