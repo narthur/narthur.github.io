@@ -29,8 +29,9 @@ pnpm format        # prettier --write
 
 - **SvelteKit 5** with `@sveltejs/adapter-static`
 - Pre-rendering enabled via `export const prerender = true` in `src/routes/+layout.ts`
-- No runtime data fetching except `/uses`, which loads `static/data/uses.yaml`
-  in the browser on mount
+- **No runtime data fetching at all.** `/uses` reads `src/routes/uses/uses.yaml`
+  at build time in `+page.ts` (Vite `?raw` import, parsed with js-yaml), so it
+  prerenders to static HTML and renders with JS disabled
 
 ### Technology stack
 
@@ -42,19 +43,24 @@ pnpm format        # prettier --write
 src/
 ├── app.html                    # <head> and the Supascribe loader script
 ├── app.css                     # Tailwind entry point
-├── routes/
-│   ├── +layout.svelte          # page column + global body/link styles
-│   ├── +layout.ts              # prerender: true
-│   ├── +page.svelte            # home page (content lives in this file)
-│   ├── uses/+page.svelte
-│   └── audioverse/+page.svelte
-└── components/
-    └── Footer.svelte           # newsletter embed + secondary links
+└── routes/
+    ├── +layout.svelte          # page column, footer, global link/focus styles
+    ├── +layout.ts              # prerender: true
+    ├── +page.svelte            # home page (content lives in this file)
+    ├── audioverse/+page.svelte
+    └── uses/
+        ├── +page.ts            # parses uses.yaml at build time
+        ├── +page.svelte        # renders it; owns only the tag-filter state
+        ├── filter.ts           # tag/category logic — the only tested code
+        ├── filter.spec.ts
+        └── uses.yaml
 ```
+
+There is no `src/components/`. The footer lives in the layout, its only consumer.
 
 Home page content — the positioning line, featured work, "also built" — is plain
 data at the top of `src/routes/+page.svelte`. Editing the site's content means
-editing those arrays; there is no CMS and no build-time data pipeline.
+editing those arrays; there is no CMS.
 
 ## Development patterns
 
@@ -76,8 +82,7 @@ editing those arrays; there is no CMS and no build-time data pipeline.
 ## Build configuration
 
 - `svelte.config.js`: `@sveltejs/adapter-static`
-- `vite.config.ts`: a small YAML HMR plugin (full reload when `.yaml` changes)
-  and the Vitest include pattern
+- `vite.config.ts`: the SvelteKit plugin and the Vitest include pattern
 - `tailwind.config.js`: content paths, color tokens, font families. No plugins.
 
 ## Deployment
@@ -91,7 +96,10 @@ Pre-deployment: `pnpm build`, then verify `./build/`.
 
 ## Testing
 
-- Vitest configured in `vite.config.ts`; `src/demo.spec.ts` is the example
+- Vitest configured in `vite.config.ts`. The only tested code is
+  `src/routes/uses/filter.ts` — pure tag/category functions with no Svelte
+  involved. Everything else on this site is markup, and there is deliberately no
+  component-test or e2e harness.
 - Use `pnpm test` (single run) rather than watch mode
 
 ## Common gotchas

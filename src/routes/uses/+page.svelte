@@ -58,6 +58,7 @@
 			<button
 				onclick={() => toggleTag(tag)}
 				aria-pressed={selectedTags.has(tag)}
+				aria-label="Filter by {tag}"
 				class="border px-2 py-0.5 text-xs transition-colors {selectedTags.has(tag)
 					? 'border-accent text-accent'
 					: 'border-rule text-mute hover:border-faint'}"
@@ -100,6 +101,7 @@
 									<button
 										onclick={() => toggleTag(tag)}
 										aria-pressed={selectedTags.has(tag)}
+										aria-label="Filter by {tag}"
 										class="font-mono text-xs transition-colors {selectedTags.has(tag)
 											? 'text-accent'
 											: 'text-faint hover:text-mute'}"

@@ -50,16 +50,21 @@ ornament never.
 ```text
 src/
 ├── app.html                    # <head>, Supascribe loader script
-├── routes/
-│   ├── +layout.svelte          # page column, global body/link styles
-│   ├── +layout.ts              # prerender: true (required for static build)
-│   ├── +page.svelte            # home: positioning, selected work, also built
-│   ├── uses/+page.svelte       # /uses, reads static/data/uses.yaml at runtime
-│   └── audioverse/+page.svelte # AudioVerse case study
-└── components/Footer.svelte    # newsletter embed + secondary links
+└── routes/
+    ├── +layout.svelte          # page column, footer, global link/focus styles
+    ├── +layout.ts              # prerender: true (required for static build)
+    ├── +page.svelte            # home: positioning, selected work, also built
+    ├── audioverse/+page.svelte # AudioVerse case study
+    └── uses/
+        ├── +page.ts            # parses uses.yaml at build time
+        ├── +page.svelte        # renders it; owns only the tag-filter state
+        ├── filter.ts           # tag/category logic, the only tested code
+        ├── filter.spec.ts
+        └── uses.yaml           # the list itself
 ```
 
-There is no nav component. Subpages carry a "← Nathan Arthur" link instead.
+There is no nav and no components directory. Subpages carry a "← Nathan Arthur"
+link, and the footer lives in the layout — its only consumer.
 
 ## Newsletter embed
 
