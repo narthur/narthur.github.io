@@ -1,6 +1,5 @@
 <script lang="ts">
-	const positioning =
-		'Full-stack web developer building in React and TypeScript';
+	const positioning = 'Full-stack web developer building in React and TypeScript';
 
 	const contact = [
 		{ name: 'GitHub', url: 'https://github.com/narthur' },
@@ -16,7 +15,7 @@
 			years: '2019—now',
 			meta: 'solo · typescript · react · cloudflare d1 · stripe',
 			description:
-				'A todo app that lets users pledge mony on completing their tasks on time. I built it in 2019 and have continued maintaining and developing it since.'
+				'A todo app that lets users pledge money on completing their tasks on time. I built it in 2019 and have continued maintaining and developing it since.'
 		},
 		{
 			name: 'AudioVerse',

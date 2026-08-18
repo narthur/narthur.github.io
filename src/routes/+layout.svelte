@@ -52,8 +52,8 @@
 
 	<footer class="mt-24 border-t border-rule pt-8 text-sm text-mute">
 		<p class="max-w-prose">
-			I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and the random
-			thoughts of a web developer with ADHD.
+			I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and
+			the random thoughts of a web developer with ADHD.
 		</p>
 		<div class="mt-4" data-supascribe-embed-id="128744500344" data-supascribe-subscribe></div>
 
