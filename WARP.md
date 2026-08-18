@@ -112,9 +112,12 @@ Pre-deployment: `pnpm build`, then verify `./build/`.
    layout
 2. **Dev server**: avoid starting dev servers in WARP to prevent execution blocking
 3. **Package manager**: always `pnpm`, never `npm` or `yarn`
-4. **`pnpm preview` does not reproduce production 404s.** It SSRs on the fly, so
-   an unknown path renders the error page even when the static build contains no
-   404 file. To check what the host will actually serve, build and serve
-   `build/` with a plain static file server.
+4. **`pnpm preview` does not reproduce production 404s.** SvelteKit replaces
+   Vite's preview middleware with its own, so preview applies SvelteKit routing
+   and server-renders `+error.svelte` for unknown paths. Verified: with `build/`
+   containing no `404.html` at all, `pnpm preview` still returned a fully
+   rendered "404 — Nathan Arthur" page. A static host has no such fallback. To
+   check what production will actually serve, build and serve `build/` with a
+   plain static file server.
 5. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,
    overridden in `+layout.svelte`. If the button turns blue, that override broke.
