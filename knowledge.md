@@ -69,13 +69,39 @@ src/
 │   ├── index.astro             # home: positioning, selected work, also built
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── audioverse.astro        # AudioVerse case study
-│   ├── writing.astro           # newsletter + individual Beeminder articles
+│   ├── writing.astro           # newsletter post list, Beeminder articles
+│   ├── writing/[slug].astro    # one newsletter post
+│   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+├── content.config.ts           # the `posts` collection schema
+├── content/posts/*.md          # newsletter posts
 └── uses/
     ├── filter.ts               # tag/category logic, the only tested code
     ├── filter.spec.ts
     └── uses.yaml               # the list itself
 ```
+
+The newsletter lives here: this site is its primary home, having moved off
+Substack in September 2026. Each post is a Markdown file in
+`src/content/posts/`, served at `/writing/<file name>`. Frontmatter is
+`title`, optional `subtitle`, `date`, and optional `substack`. To publish a
+post, add a file; it appears on `/writing` and in `/rss.xml` automatically.
+
+The posts written before the move were imported from a Substack export
+(2026-09-18). They keep their Substack slug as the file name, so
+`/writing/<slug>` mirrors `narthur.substack.com/p/<slug>`, and their original
+URL in `substack`, which the post page shows as "Originally on Substack". New
+posts leave `substack` out. Imported images live in `public/writing/<slug>/`
+as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
+in the Markdown so they keep explicit dimensions; follow the same pattern for
+new images. Post body styles are in `writing/[slug].astro`, built from the
+palette tokens; syntax highlighting is off because Shiki brings its own
+colours.
+
+The feed carries each post's full rendered HTML with root-relative URLs made
+absolute, and uses `trailingSlash: false` so item links (which double as
+guids) match the real page URLs. Changing a post's file name changes its URL
+and its guid.
 
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
