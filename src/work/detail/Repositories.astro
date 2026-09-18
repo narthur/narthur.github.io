@@ -1,0 +1,60 @@
+---
+import { blur, mirroredPath, rangeLabel } from '../chart';
+import { perMonth, totals } from '../commits';
+import { project } from '../project';
+import Axis from './Axis.astro';
+import Grid from './Grid.astro';
+
+interface Props {
+	project: string;
+}
+
+const { commits, months, lanes, grid, ticks } = await project(Astro.props.project);
+// Square-rooted and on one shared scale, so a small repository reads small but stays visible.
+// A lane I never committed to has no line to draw, so it sits out this chart.
+const drawn = lanes.filter((lane) => totals(commits, lane.repos).first);
+const series = drawn.map((lane) =>
+	blur(perMonth(commits, months, lane.repos).mine.map(Math.sqrt), 1)
+);
+const peak = Math.max(...series.flat(), 1);
+const rows = drawn.map((lane, i) => {
+	const { mine: count, first = '', last = '' } = totals(commits, lane.repos);
+	return {
+		name: lane.name,
+		range: rangeLabel({ start: Number(first.slice(0, 4)), end: Number(last.slice(0, 4)) }),
+		mine: count.toLocaleString('en-US'),
+		d: mirroredPath(series[i].map((v) => v / peak))
+	};
+});
+---
+
+<figure>
+	<div class="relative mx-5">
+		<Grid grid={grid} />
+		<ul class="relative">
+			{rows.map((row) => (
+				<li class="relative h-[50px]">
+					<span class="absolute left-0 top-0.5 flex items-baseline gap-2 whitespace-nowrap">
+						<span class="text-[13px] leading-4">{row.name}</span>
+						<span class="font-mono text-[11px] leading-4 text-faint">
+							{row.range} · {row.mine}
+						</span>
+					</span>
+					<svg
+						viewBox="0 0 1000 100"
+						preserveAspectRatio="none"
+						class="absolute inset-x-0 top-5 h-[26px] w-full"
+						aria-hidden="true"
+					>
+						<path d={row.d} class="fill-accent opacity-[.55]" />
+					</svg>
+				</li>
+			))}
+		</ul>
+	</div>
+	<Axis ticks={ticks} />
+	<figcaption>
+		My commits per month in each part of the system, with the years and total beside each name.
+		Every row shares one scale, square-rooted so the small ones stay visible.
+	</figcaption>
+</figure>

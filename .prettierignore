@@ -8,3 +8,6 @@ yarn.lock
 
 # Machine-local Claude Code settings (git-ignored globally, never reaches CI)
 .claude/settings.local.json
+
+# Written by `pnpm project-stats`; one line per project so a refresh is one changed line
+src/work/commits/

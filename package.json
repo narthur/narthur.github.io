@@ -16,10 +16,12 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "vitest run",
-		"activity": "node scripts/github-activity.mjs"
+		"activity": "node scripts/github-activity.mjs",
+		"project-stats": "node scripts/project-stats.mjs"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
+		"@astrojs/mdx": "^8.0.1",
 		"@astrojs/rss": "^4.0.19",
 		"@eslint/compat": "^1.4.1",
 		"@eslint/js": "^9.39.4",

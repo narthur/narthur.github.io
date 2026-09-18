@@ -1,0 +1,141 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { rangeLabel } from '../work/chart';
+import { projects } from '../work/work';
+
+export async function getStaticPaths() {
+	const pages = await getCollection('projects');
+	return pages.map((page) => ({ params: { project: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const work = projects.find((p) => p.url === `/${page.id}`);
+if (!work) throw new Error(`No work.yaml entry has url /${page.id}`);
+const { Content, headings } = await render(page);
+const sections = headings.filter((heading) => heading.depth === 2);
+---
+
+<Layout title={`${work.name} — Nathan Arthur`} description={work.description} wide>
+	<div class="lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start lg:gap-12">
+		<!-- On wide screens this column stays put while the sections scroll past, so it holds only
+		     what fits a short viewport: the name, the role line, and the section list. -->
+		<aside class="lg:sticky lg:top-12">
+			<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+				<a href="/work">&larr; Work</a>
+			</p>
+			<h1 class="text-3xl font-medium tracking-tight sm:text-4xl">{work.name}</h1>
+			<p class="mt-2 font-mono text-xs leading-relaxed text-faint">
+				{rangeLabel(work)}
+				<br />
+				{work.meta}
+			</p>
+			<nav aria-label="On this page" class="mt-8 border-t border-rule pt-4">
+				<ol
+					class="space-y-2.5 font-mono text-xs uppercase tracking-widest text-faint"
+					data-sections
+				>
+					{sections.map((section) => (
+						<li>
+							<a
+								href={`#${section.slug}`}
+								class="group flex items-center gap-2.5 aria-[current=location]:text-ink"
+							>
+								<span class="h-0.5 w-4 bg-rule group-aria-[current=location]:bg-accent motion-safe:transition-colors" />
+								{section.text}
+							</a>
+						</li>
+					))}
+				</ol>
+			</nav>
+		</aside>
+
+		<article class="project mt-14 lg:mt-0">
+			<Content />
+		</article>
+	</div>
+</Layout>
+
+<script>
+	// Marks the section being read in the list: the last one whose heading has passed a line a
+	// third of the way down the viewport, or the last section once the page bottoms out.
+	const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-sections] a')];
+	const headings = links.map((link) =>
+		document.getElementById(decodeURIComponent(link.hash.slice(1)))
+	);
+
+	function mark() {
+		const line = innerHeight / 3;
+		const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+		let current = 0;
+		headings.forEach((heading, i) => {
+			if (heading && heading.getBoundingClientRect().top <= line) current = i;
+		});
+		if (atBottom) current = links.length - 1;
+		links.forEach((link, i) => {
+			if (i === current) link.setAttribute('aria-current', 'location');
+			else link.removeAttribute('aria-current');
+		});
+	}
+
+	let queued = false;
+	addEventListener(
+		'scroll',
+		() => {
+			if (queued) return;
+			queued = true;
+			requestAnimationFrame(() => {
+				queued = false;
+				mark();
+			});
+		},
+		{ passive: true }
+	);
+	addEventListener('resize', mark);
+	mark();
+</script>
+
+<style>
+	/* MDX output carries no classes, so the body is styled here from the palette tokens, as the
+	   newsletter posts are. Each ## heading starts a section: text, a chart, or a screenshot. */
+	.project {
+		color: theme('colors.mute');
+		line-height: 1.65;
+	}
+	.project > :global(* + *) {
+		margin-top: 1rem;
+	}
+	.project > :global(h2) {
+		scroll-margin-top: 3rem;
+		font-family: theme('fontFamily.mono');
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		color: theme('colors.faint');
+	}
+	.project > :global(* + h2) {
+		margin-top: 5.5rem;
+	}
+	.project > :global(figure) {
+		margin-top: 2rem;
+	}
+	.project :global(figcaption) {
+		margin-top: 0.75rem;
+		font-size: 0.8125rem;
+		line-height: 1.6;
+		color: theme('colors.faint');
+	}
+	.project :global(a) {
+		color: theme('colors.ink');
+		text-decoration: underline;
+		text-decoration-color: theme('colors.rule');
+		text-underline-offset: 0.25em;
+	}
+	.project :global(a:hover) {
+		text-decoration-color: var(--accent);
+	}
+	.project :global(strong) {
+		font-weight: 500;
+		color: theme('colors.ink');
+	}
+</style>

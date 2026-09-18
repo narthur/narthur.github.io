@@ -1,0 +1,44 @@
+---
+import { totals } from '../commits';
+import { project } from '../project';
+import Legend from './Legend.astro';
+
+interface Props {
+	project: string;
+}
+
+const { commits, lanes } = await project(Astro.props.project);
+const rows = lanes
+	.map((lane) => {
+		const { mine, others } = totals(commits, lane.repos);
+		return { name: lane.name, mine, all: mine + others };
+	})
+	.filter((row) => row.all > 0);
+const most = Math.max(...rows.map((row) => row.all));
+const count = (n: number) => n.toLocaleString('en-US');
+---
+
+<figure>
+	<ul class="border-b border-rule">
+		{rows.map((row) => (
+			<li class="border-t border-rule py-2.5">
+				<div class="flex items-baseline justify-between gap-3">
+					<span class="text-[13px]">{row.name}</span>
+					<span class="font-mono text-[11px] text-faint">
+						{count(row.mine)} / {count(row.all)} · {Math.round((row.mine / row.all) * 100)}%
+					</span>
+				</div>
+				<!-- Bar lengths are to scale with each other; the accent part is mine. -->
+				<div class="mt-2 flex h-2" style={`width: max(3px, ${(row.all / most) * 100}%)`}>
+					<span class="bg-accent opacity-70" style={`width: ${(row.mine / row.all) * 100}%`} />
+					<span class="flex-grow bg-mute opacity-40" />
+				</div>
+			</li>
+		))}
+	</ul>
+	<Legend />
+	<figcaption>
+		Every commit in each part of the system over its whole history, and how many are mine. Bots
+		excluded.
+	</figcaption>
+</figure>

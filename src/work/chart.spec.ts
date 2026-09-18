@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	axis,
 	bar,
+	blur,
 	mirroredPath,
 	newestFirst,
 	oldestFirst,
@@ -65,6 +66,7 @@ describe('rangeLabel', () => {
 		expect(rangeLabel({ start: 2024 })).toBe('2024');
 		expect(rangeLabel({ start: 2019, end: 2025 })).toBe('2019—2025');
 		expect(rangeLabel({ start: 2019, end: 'now' })).toBe('2019—now');
+		expect(rangeLabel({ start: 2020, end: 2020 })).toBe('2020');
 	});
 });
 
@@ -123,6 +125,28 @@ describe('axis', () => {
 	it('never places a tick past the end of a short axis', () => {
 		const { ticks } = axis(timeScale(2024, '2025-01'));
 		expect(ticks.map((t) => t.label)).toEqual(['2024', 'now']);
+	});
+});
+
+describe('axis for a finished span', () => {
+	it('ends on the closing year instead of "now"', () => {
+		const { ticks } = axis(timeScale(2018, '2025-12'), '2025');
+		expect(ticks.map((t) => t.label)).toEqual(['2018', '2020', '2022', '2024', '2025']);
+	});
+
+	it('labels a closing year once, even when a two-year tick lands on it', () => {
+		expect(axis(timeScale(2020, '2020-12'), '2020').ticks.map((t) => t.label)).toEqual(['2020']);
+		const { grid, ticks } = axis(timeScale(2018, '2020-12'), '2020');
+		expect(ticks.map((t) => t.label)).toEqual(['2018', '2020']);
+		expect(grid).toHaveLength(2);
+	});
+});
+
+describe('blur', () => {
+	it('keeps the series in its own units', () => {
+		const out = blur([0, 0, 10, 0, 0], 1);
+		expect(out[2]).toBeLessThan(10);
+		expect(out.reduce((a, b) => a + b)).toBeGreaterThan(5);
 	});
 });
 
