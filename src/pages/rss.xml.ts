@@ -22,7 +22,7 @@ export async function GET(context: APIContext) {
 			link: `/writing/${post.id}`,
 			// Full post, so readers needn't click through. Root-relative src/href become absolute,
 			// since feed readers resolve them against the feed, not the post.
-			content: post.rendered?.html.replace(/(src|href)="\//g, `$1="${site.origin}/`)
+			content: post.rendered?.html.replace(/(src|href)="\/(?!\/)/g, `$1="${site.origin}/`)
 		}))
 	});
 }
