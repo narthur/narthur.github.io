@@ -11,8 +11,8 @@ ornament never.
 
 ## Technical Stack
 
-- SvelteKit (Svelte 5) with `@sveltejs/adapter-static`
-- Tailwind CSS
+- Astro, static output, no UI framework
+- Tailwind CSS (v3, via PostCSS)
 - Deployed to Cloudflare Workers static assets at nathanarthur.com
 
 ## Design Guidelines
@@ -23,7 +23,7 @@ ornament never.
   `tailwind.config.js` as six tokens: `bg`, `ink`, `mute`, `faint`, `rule`,
   `accent`. Don't introduce colors outside those.
 - `accent` resolves to the CSS variable `--accent`, declared once on `:root` in
-  `+layout.svelte`. Change the accent there, not in the Tailwind config. Anything
+  `Layout.astro`. Change the accent there, not in the Tailwind config. Anything
   that needs the accent in plain CSS uses `var(--accent)` so it stays in step.
 - Instrument Sans (400, 500) for prose and headings; the system mono stack for
   metadata — stack lists, dates, roles, section labels.
@@ -50,7 +50,7 @@ ornament never.
 ## Content Guidelines
 
 - The positioning line under the name is also the home page's `<meta
-name="description">` — `+page.svelte` derives one from the other, so editing
+name="description">` — `index.astro` derives one from the other, so editing
   the constant changes the search result too.
 - Featured work is tiered: three entries get a role, a stack, a year range, and
   a real description. Everything else is a one-line "Also built" list.
@@ -61,52 +61,58 @@ name="description">` — `+page.svelte` derives one from the other, so editing
 
 ```text
 src/
-├── app.html                    # <head>, Supascribe loader script
-└── routes/
-    ├── +layout.svelte          # page column, footer, global link/focus styles
-    ├── +layout.ts              # prerender: true (required for static build)
-    ├── +page.svelte            # home: positioning, selected work, also built
-    ├── +error.svelte           # 404; emitted as build/404.html by the adapter
-    ├── audioverse/+page.svelte # AudioVerse case study
-    ├── writing/+page.svelte    # newsletter + individual Beeminder articles
-    └── uses/
-        ├── +page.ts            # parses uses.yaml at build time
-        ├── +page.svelte        # renders it; owns only the tag-filter state
-        ├── filter.ts           # tag/category logic, the only tested code
-        ├── filter.spec.ts
-        └── uses.yaml           # the list itself
+├── app.css                     # Tailwind entry point
+├── layouts/
+│   ├── Layout.astro            # <head>, column, footer, global styles
+│   └── AccentPicker.astro      # dev-only accent picker
+├── pages/
+│   ├── index.astro             # home: positioning, selected work, also built
+│   ├── 404.astro               # emitted as dist/404.html
+│   ├── audioverse.astro        # AudioVerse case study
+│   ├── writing.astro           # newsletter + individual Beeminder articles
+│   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+└── uses/
+    ├── filter.ts               # tag/category logic, the only tested code
+    ├── filter.spec.ts
+    └── uses.yaml               # the list itself
 ```
+
+`src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
+`pages/` as an endpoint.
 
 There is no nav and no components directory. Subpages carry a "← Nathan Arthur"
 link, and the footer lives in the layout — its only consumer.
 
-`+layout.svelte` carries a dev-only accent picker (colour input, presets, and a
-live contrast readout). It is deliberate, not leftover scaffolding: `dev` is
-false in the build so it tree-shakes away entirely. If you touch it, keep every
-part behind `dev` — including effect _bodies_, since an ungated `$effect` is
-emitted into the production bundle even when its markup is eliminated.
+`Layout.astro` renders a dev-only accent picker (colour input, presets, and a
+live contrast readout) behind `import.meta.env.DEV`. It is deliberate, not
+leftover scaffolding, and it never reaches the build. Keep its script
+`is:inline`: a processed `<script>` is bundled into the build whether or not the
+component renders.
 
-The favicon is self-hosted: `static/favicon.svg` is the source and
-`static/favicon.png` is rendered from it as the fallback for browsers that don't
+The favicon is self-hosted: `public/favicon.svg` is the source and
+`public/favicon.png` is rendered from it as the fallback for browsers that don't
 take SVG icons. Keep them in step. It carries a single letterform, not a
 monogram — at the 16px browsers actually draw, two letters turn to mush.
 
 ## Newsletter embed
 
-Supascribe, loaded via the script tag in `app.html` and mounted on the
-`data-supascribe-subscribe` div in `+layout.svelte`. Its default theme is a blue
-button; the layout's style block overrides the `--csw-*` CSS variables to match
-the palette. Setting those colors in the Supascribe dashboard would let that
-block be deleted.
+Supascribe, loaded via the script tag in `Layout.astro` and mounted on the
+`data-supascribe-subscribe` div in its footer. Its default theme is a blue
+button; the layout's global style block overrides the `--csw-*` CSS variables
+to match the palette. Setting those colors in the Supascribe dashboard would
+let that block be deleted.
 
 ## Build
 
 - `pnpm dev` / `pnpm build` / `pnpm preview`
-- `pnpm check` (svelte-check) and `pnpm lint` (prettier + eslint) both run in CI
-- `export const prerender = true` in `src/routes/+layout.ts` is required for the
-  static build
-- Don't use `@apply` in Svelte `<style>` blocks; use Tailwind classes in markup
-  and plain CSS in `<style>` when needed
+- `pnpm check` (astro check), `pnpm lint` (prettier + eslint), and `pnpm test`
+  all run in CI
+- `build.format: 'file'` in `astro.config.mjs` emits `uses.html` rather than
+  `uses/index.html`, so Cloudflare serves `/uses` directly instead of
+  redirecting it to `/uses/`
+- Astro drops the whitespace between a line of text and an element that starts
+  the next line (`Inspired by` ⏎ `<a>` renders as `Inspired by<a>`). Where
+  prettier breaks a link onto its own line, keep the space with `{' '}`
 
 ## Traffic
 

@@ -30,8 +30,15 @@ export function allTags(items: UsesItem[]): string[] {
 }
 
 /** An empty selection matches everything; otherwise an item needs at least one selected tag. */
-export function matchesTags(item: UsesItem, selected: Set<string>): boolean {
+export function matchesTags(item: Pick<UsesItem, 'tags'>, selected: Set<string>): boolean {
 	return selected.size === 0 || (item.tags?.some((tag) => selected.has(tag)) ?? false);
+}
+
+/** A copy of `selected` with `tag` flipped: added if absent, removed if present. */
+export function toggleTag(selected: Set<string>, tag: string): Set<string> {
+	const next = new Set(selected);
+	if (!next.delete(tag)) next.add(tag);
+	return next;
 }
 
 export function itemsInCategory(

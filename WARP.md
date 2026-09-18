@@ -4,128 +4,73 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Overview
 
-Nathan Arthur's personal website: a small static SvelteKit site — a home page,
+Nathan Arthur's personal website: a small static Astro site — a home page,
 `/writing`, `/uses`, and one case study — deployed to Cloudflare Workers assets
-at nathanarthur.com. See `knowledge.md` for the design and content rules; they
-are load-bearing, not decoration.
+at nathanarthur.com. See `knowledge.md` for the design and content rules and the
+file layout; they are load-bearing, not decoration.
 
 ## Development Commands
 
 ```bash
 pnpm install       # project uses pnpm
 pnpm dev           # dev server (avoid in WARP to prevent blocking)
-pnpm build         # static build into ./build
+pnpm build         # static build into ./dist
 pnpm preview       # preview the production build
-pnpm check         # svelte-check
-pnpm check:watch
+pnpm check         # astro check
 pnpm test          # vitest, single run
 pnpm lint          # prettier --check + eslint
 pnpm format        # prettier --write
 ```
 
+Astro needs Node >= 22.19.
+
 ## Architecture
 
-### Static site generation
+- **Astro**, static output, no UI framework. TypeScript, Tailwind CSS (no
+  plugins, run through `postcss.config.js`), Vitest, ESLint + Prettier.
+- **No first-party runtime fetching.** `/uses` reads `src/uses/uses.yaml` at
+  build time (Vite `?raw` import, parsed with js-yaml), so the whole list is in
+  the HTML. The tag filter is the site's only first-party client JS: a
+  `<script>` in `uses.astro` that hides what the build rendered. The one
+  third-party script is the Supascribe newsletter loader in `Layout.astro`.
+- Page content — the positioning line, featured work, "also built" — is plain
+  data in each page's frontmatter. There is no CMS.
 
-- **SvelteKit 5** with `@sveltejs/adapter-static`
-- Pre-rendering enabled via `export const prerender = true` in `src/routes/+layout.ts`
-- **No runtime data fetching at all.** `/uses` reads `src/routes/uses/uses.yaml`
-  at build time in `+page.ts` (Vite `?raw` import, parsed with js-yaml), so it
-  prerenders to static HTML and renders with JS disabled
+## Styling
 
-### Technology stack
+- **Tailwind first** — utility classes directly in markup.
+- **Dark only.** No light theme, no `dark:` variants, no toggle. The palette is
+  six tokens in `tailwind.config.js`: `bg`, `ink`, `mute`, `faint`, `rule`,
+  `accent`. `accent` resolves to `--accent`, declared on `:root` in
+  `Layout.astro` — change the accent there, not in the Tailwind config.
+- Global element styles live in the layout's `<style is:global>` block.
 
-- SvelteKit 5, TypeScript, Tailwind CSS (no plugins), Vite, Vitest, ESLint + Prettier
+## Build and deployment
 
-### Project structure
-
-```text
-src/
-├── app.html                    # <head> and the Supascribe loader script
-├── app.css                     # Tailwind entry point
-└── routes/
-    ├── +layout.svelte          # page column, footer, global link/focus styles
-    ├── +layout.ts              # prerender: true
-    ├── +page.svelte            # home page (content lives in this file)
-    ├── +error.svelte           # 404 page (emitted as build/404.html)
-    ├── audioverse/+page.svelte
-    ├── writing/+page.svelte    # newsletter + Beeminder articles
-    └── uses/
-        ├── +page.ts            # parses uses.yaml at build time
-        ├── +page.svelte        # renders it; owns only the tag-filter state
-        ├── filter.ts           # tag/category logic — the only tested code
-        ├── filter.spec.ts
-        └── uses.yaml
-```
-
-There is no `src/components/`. The footer lives in the layout, its only consumer.
-
-Home page content — the positioning line, featured work, "also built" — is plain
-data at the top of `src/routes/+page.svelte`. Editing the site's content means
-editing those arrays; there is no CMS.
-
-## Development patterns
-
-### SvelteKit conventions
-
-- `+page.svelte` for pages, `+layout.svelte` for layouts
-- PascalCase for `.svelte` component filenames
-
-### Styling
-
-- **Tailwind first** — utility classes directly in markup
-- **Dark only.** There is no light theme, no `dark:` variants, and no toggle.
-  The palette is six tokens in `tailwind.config.js`: `bg`, `ink`, `mute`,
-  `faint`, `rule`, `accent`. Don't add colors outside them. `accent` resolves to
-  the CSS variable `--accent`, declared on `:root` in `+layout.svelte` — change
-  the accent there, not in the Tailwind config.
-- **No `@apply`** in Svelte `<style>` blocks; use plain CSS there when a utility
-  won't do
-- Mono is the system stack (`font-mono`), used for metadata and section labels
-
-## Build configuration
-
-- `svelte.config.js`: `@sveltejs/adapter-static` with `fallback: '404.html'`, so
-  `+error.svelte` is emitted as `build/404.html`. `wrangler.jsonc` sets
+- `src/pages/404.astro` builds to `dist/404.html`; `wrangler.jsonc` sets
   `not_found_handling: "404-page"` so Cloudflare serves it for unmatched paths.
-  The fallback is a client-rendered shell: it has no title until JS runs, which
-  is an accepted trade for a page that should never be indexed.
-- `vite.config.ts`: the SvelteKit plugin and the Vitest include pattern
-- `tailwind.config.js`: content paths, color tokens, font families. No plugins.
-
-## Deployment
-
-Deployed via GitHub Actions (`.github/workflows/deploy.yml`) on push to `master`.
-`wrangler.jsonc` serves `./build` as static assets with `nathanarthur.com` /
-`www.nathanarthur.com` as custom domains. Requires repo secrets
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
-
-Pre-deployment: `pnpm build`, then verify `./build/`.
+- Deployed via GitHub Actions (`.github/workflows/deploy.yml`) on push to
+  `master`. Requires repo secrets `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Testing
 
-- Vitest configured in `vite.config.ts`. The only tested code is
-  `src/routes/uses/filter.ts` — pure tag/category functions with no Svelte
-  involved. Everything else on this site is markup, and there is deliberately no
-  component-test or e2e harness.
-- Use `pnpm test` (single run) rather than watch mode
+The only tested code is `src/uses/filter.ts` — pure tag/category functions.
+Everything else is markup, and there is deliberately no component-test or e2e
+harness. Use `pnpm test` (single run) rather than watch mode.
 
 ## Common gotchas
 
-1. **Static prerendering**: `export const prerender = true` must stay in the root
-   layout
-2. **Dev server**: avoid starting dev servers in WARP to prevent execution blocking
-3. **Package manager**: always `pnpm`, never `npm` or `yarn`
-4. **`pnpm preview` does not reproduce production 404s.** SvelteKit replaces
-   Vite's preview middleware with its own, so preview applies SvelteKit routing
-   and server-renders `+error.svelte` for unknown paths. Verified: with `build/`
-   containing no `404.html` at all, `pnpm preview` still returned a fully
-   rendered "404 — Nathan Arthur" page. A static host has no such fallback. To
-   check what production will actually serve, build and serve `build/` with a
-   plain static file server.
-5. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS variables,
-   overridden in `+layout.svelte`. If the button turns blue, that override broke.
-6. **`tailwind.config.js` edits do not hot-reload.** Vite keeps the previously
-   generated CSS, so utility classes like `.text-accent` keep the old value while
-   plain-CSS rules pick up the new one — half the UI changes colour and half
-   doesn't. Restart `pnpm dev`.
+1. **Package manager**: always `pnpm`, never `npm` or `yarn`.
+2. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS
+   variables, overridden in `Layout.astro`. If the button turns blue, that
+   override broke.
+3. **`tailwind.config.js` edits do not hot-reload.** Vite keeps the previously
+   generated CSS, so utility classes keep the old value while plain-CSS rules
+   pick up the new one. Restart `pnpm dev`.
+4. **Dropped spaces before links**: see the Build section of `knowledge.md`.
+5. **`pnpm preview` does not reproduce production 404s.** For an unknown path it
+   serves Astro's generic "404: Not Found" page, not `dist/404.html`, and a plain
+   static file server won't serve `404.html` either. To check what Cloudflare
+   will actually serve, run `npx wrangler dev` after a build — it applies
+   `wrangler.jsonc`'s `not_found_handling` — or check the deployed site.

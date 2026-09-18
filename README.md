@@ -1,38 +1,28 @@
-# sv
+# nathanarthur.com
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Source for [nathanarthur.com](https://nathanarthur.com/): a small static site
+built with [Astro](https://astro.build/) and Tailwind CSS, deployed to
+Cloudflare Workers static assets.
 
-## Creating a project
+## Development
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Requires Node >= 22.19 (`.tool-versions` pins a version for asdf) and pnpm.
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm install
+pnpm dev       # dev server
+pnpm build     # static build into ./dist
+pnpm check     # astro check
+pnpm lint      # prettier --check + eslint
+pnpm test      # vitest
 ```
 
-## Building
+## Deployment
 
-To create a production version of your app:
+Pushes to `master` deploy via `.github/workflows/deploy.yml`, which builds the
+site and publishes `dist/` with Wrangler.
 
-```bash
-npm run build
-```
+## More
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- `knowledge.md`: design and content rules, and the file layout
+- `WARP.md`: architecture notes and common gotchas

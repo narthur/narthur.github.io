@@ -1,0 +1,76 @@
+---
+// Dev-only accent picker, rendered by Layout.astro behind `import.meta.env.DEV`. Kept
+// deliberately: the accent has been re-chosen more than once and this is how it gets tried
+// against real pages. Its script must stay is:inline — a processed <script> is bundled into
+// the build whether or not the component renders.
+const presets = [
+	{ name: 'lime', hex: '#8ded51' },
+	{ name: 'teal', hex: '#5ecfc0' },
+	{ name: 'periwinkle', hex: '#a5b4fc' },
+	{ name: 'green', hex: '#7ee787' },
+	{ name: 'sky', hex: '#7fb3ff' },
+	{ name: 'coral', hex: '#ff8b7e' },
+	{ name: 'gold', hex: '#d9a05b' },
+	{ name: 'mono', hex: '#e8e9ec' }
+];
+---
+
+<aside
+	id="accent-picker"
+	class="fixed bottom-4 right-4 z-50 rounded border border-rule bg-bg/95 p-3 font-mono text-xs text-mute shadow-lg backdrop-blur"
+>
+	<div class="flex items-center gap-2">
+		<input
+			type="color"
+			aria-label="Accent colour"
+			class="h-7 w-7 cursor-pointer border border-rule bg-transparent p-0"
+		/>
+		<span class="text-ink" data-hex-label></span>
+		<span data-contrast></span>
+	</div>
+	<div class="mt-2 flex flex-wrap gap-1">
+		{presets.map((preset) => (
+			<button
+				data-hex={preset.hex}
+				title={`${preset.name} ${preset.hex}`}
+				aria-label={`Use ${preset.name}`}
+				class="h-5 w-5 border border-rule"
+				style={`background: ${preset.hex}`}
+			/>
+		))}
+	</div>
+</aside>
+
+<script is:inline>
+	const picker = document.getElementById('accent-picker');
+	const input = picker.querySelector('input');
+	const channel = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+	const luminance = (hex) => {
+		const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+		return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+	};
+
+	function setAccent(hex) {
+		input.value = hex;
+		document.documentElement.style.setProperty('--accent', hex);
+		picker.querySelector('[data-hex-label]').textContent = hex;
+		// Round before comparing, so the AA/FAIL label always agrees with the number shown.
+		const ratio = Number(((luminance(hex) + 0.05) / (luminance('#0a0c10') + 0.05)).toFixed(2));
+		const out = picker.querySelector('[data-contrast]');
+		out.textContent = `${ratio.toFixed(2)}:1 ${ratio >= 4.5 ? 'AA' : 'FAIL'}`;
+		out.className = ratio >= 4.5 ? 'text-accent' : 'text-red-400';
+		// Every navigation is a full page load, so carry the choice across pages.
+		sessionStorage.setItem('accent', hex);
+		for (const b of picker.querySelectorAll('button')) {
+			const on = b.dataset.hex === hex.toLowerCase();
+			b.classList.toggle('border-ink', on);
+			b.classList.toggle('border-rule', !on);
+		}
+	}
+
+	input.addEventListener('input', () => setAccent(input.value));
+	for (const b of picker.querySelectorAll('button')) {
+		b.addEventListener('click', () => setAccent(b.dataset.hex));
+	}
+	setAccent(sessionStorage.getItem('accent') ?? '#8ded51');
+</script>
