@@ -63,7 +63,7 @@ name="description">` — `index.astro` derives one from the other, so editing
 src/
 ├── app.css                     # Tailwind entry point
 ├── layouts/
-│   ├── Layout.astro            # <head>, page column, footer, global link/focus styles
+│   ├── Layout.astro            # <head>, column, footer, global styles
 │   └── AccentPicker.astro      # dev-only accent picker
 ├── pages/
 │   ├── index.astro             # home: positioning, selected work, also built
@@ -98,9 +98,9 @@ monogram — at the 16px browsers actually draw, two letters turn to mush.
 
 Supascribe, loaded via the script tag in `Layout.astro` and mounted on the
 `data-supascribe-subscribe` div in its footer. Its default theme is a blue
-button; the layout's global style block overrides the `--csw-*` CSS variables to match
-the palette. Setting those colors in the Supascribe dashboard would let that
-block be deleted.
+button; the layout's global style block overrides the `--csw-*` CSS variables
+to match the palette. Setting those colors in the Supascribe dashboard would
+let that block be deleted.
 
 ## Build
 
