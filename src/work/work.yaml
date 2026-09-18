@@ -53,7 +53,7 @@ projects:
         alt: The Ivy theme with its default content, 2017
 
   - name: TaskRatchet
-    url: https://taskratchet.com/
+    url: /taskratchet
     start: 2019
     end: now
     meta: solo · typescript · react · hono · cloudflare d1 · stripe
