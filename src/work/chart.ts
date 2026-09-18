@@ -45,8 +45,9 @@ export type TimeScale = ReturnType<typeof timeScale>;
 /**
  * Gridline positions and tick labels, every two years from the first, plus `endLabel` at the
  * end: "now" for an axis that runs to the present, a year for one that closes in the past.
- * The first and last labels sit inside the axis instead of centring past its ends, and a year
- * close enough to "now" to collide with it on a phone is hidden there.
+ * The first and last labels sit inside the axis instead of centring past its ends, a year
+ * close enough to "now" to collide with it on a phone is hidden there, and a year the end
+ * label already names isn't labelled twice.
  */
 export function axis(scale: TimeScale, endLabel = 'now') {
 	const years = Array.from(
@@ -56,16 +57,18 @@ export function axis(scale: TimeScale, endLabel = 'now') {
 	return {
 		grid: years.map((y) => scale.x(y)),
 		ticks: [
-			...years.map((y) => ({
-				label: String(y),
-				left: scale.x(y),
-				shift:
-					y === scale.firstYear
-						? ''
-						: scale.x(y) > 90
-							? 'hidden sm:inline -translate-x-1/2'
-							: '-translate-x-1/2'
-			})),
+			...years
+				.filter((y) => String(y) !== endLabel)
+				.map((y) => ({
+					label: String(y),
+					left: scale.x(y),
+					shift:
+						y === scale.firstYear
+							? ''
+							: scale.x(y) > 90
+								? 'hidden sm:inline -translate-x-1/2'
+								: '-translate-x-1/2'
+				})),
 			{ label: endLabel, left: 100, shift: '-translate-x-full' }
 		]
 	};

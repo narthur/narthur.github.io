@@ -133,6 +133,13 @@ describe('axis for a finished span', () => {
 		const { ticks } = axis(timeScale(2018, '2025-12'), '2025');
 		expect(ticks.map((t) => t.label)).toEqual(['2018', '2020', '2022', '2024', '2025']);
 	});
+
+	it('labels a closing year once, even when a two-year tick lands on it', () => {
+		expect(axis(timeScale(2020, '2020-12'), '2020').ticks.map((t) => t.label)).toEqual(['2020']);
+		const { grid, ticks } = axis(timeScale(2018, '2020-12'), '2020');
+		expect(ticks.map((t) => t.label)).toEqual(['2018', '2020']);
+		expect(grid).toHaveLength(2);
+	});
 });
 
 describe('blur', () => {

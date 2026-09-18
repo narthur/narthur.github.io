@@ -147,8 +147,9 @@ and its guid.
 `pages/` as an endpoint.
 
 There is no site nav, and components live beside the data they draw (`src/work/detail/`)
-rather than in a components directory. Subpages carry a "← Nathan Arthur"
-link, and the footer lives in the layout — its only consumer.
+rather than in a components directory. Subpages carry a back link to their parent: "←
+Nathan Arthur" on most, "← Writing" on a post, "← Work" on a project page. The footer
+lives in the layout — its only consumer.
 
 `Layout.astro` renders a dev-only accent picker (colour input, presets, and a
 live contrast readout) behind `import.meta.env.DEV`. It is deliberate, not

@@ -18,9 +18,17 @@ export async function project(slug: string) {
 	const ongoing = work.end === 'now';
 	const lastYear = work.end === 'now' ? new Date().getFullYear() : (work.end ?? work.start);
 	const scale = timeScale(work.start, `${lastYear}-12`);
+	// Repositories no lane names still count: they share an "Other repositories" row rather than
+	// dropping out of the lane and share charts while the monthly chart includes them.
+	const named = new Set((entry.data.lanes ?? []).flatMap((lane) => lane.repos));
+	const rest = Object.keys(commits).filter((repo) => !named.has(repo));
+	const lanes = [
+		...(entry.data.lanes ?? []),
+		...(rest.length > 0 ? [{ name: 'Other repositories', repos: rest }] : [])
+	];
 	return {
 		work,
-		lanes: entry.data.lanes ?? [],
+		lanes,
 		commits,
 		months: monthsBetween(work.start, lastYear),
 		scale,

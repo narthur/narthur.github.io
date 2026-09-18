@@ -21,7 +21,6 @@ const posts = defineCollection({
 const projects = defineCollection({
 	loader: glob({ pattern: '*.mdx', base: './src/content/projects' }),
 	schema: z.object({
-		note: z.string().optional(),
 		lanes: z.array(z.object({ name: z.string(), repos: z.array(z.string()).min(1) })).optional()
 	})
 });

@@ -8,10 +8,12 @@ interface Props {
 }
 
 const { commits, lanes } = await project(Astro.props.project);
-const rows = lanes.map((lane) => {
-	const { mine, others } = totals(commits, lane.repos);
-	return { name: lane.name, mine, all: mine + others };
-});
+const rows = lanes
+	.map((lane) => {
+		const { mine, others } = totals(commits, lane.repos);
+		return { name: lane.name, mine, all: mine + others };
+	})
+	.filter((row) => row.all > 0);
 const most = Math.max(...rows.map((row) => row.all));
 const count = (n: number) => n.toLocaleString('en-US');
 ---

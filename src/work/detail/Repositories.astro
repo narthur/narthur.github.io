@@ -11,16 +11,18 @@ interface Props {
 
 const { commits, months, lanes, grid, ticks } = await project(Astro.props.project);
 // Square-rooted and on one shared scale, so a small repository reads small but stays visible.
-const series = lanes.map((lane) =>
+// A lane I never committed to has no line to draw, so it sits out this chart.
+const drawn = lanes.filter((lane) => totals(commits, lane.repos).first);
+const series = drawn.map((lane) =>
 	blur(perMonth(commits, months, lane.repos).mine.map(Math.sqrt), 1)
 );
 const peak = Math.max(...series.flat(), 1);
-const rows = lanes.map((lane, i) => {
-	const { mine, first, last } = totals(commits, lane.repos);
+const rows = drawn.map((lane, i) => {
+	const { mine: count, first = '', last = '' } = totals(commits, lane.repos);
 	return {
 		name: lane.name,
 		range: rangeLabel({ start: Number(first.slice(0, 4)), end: Number(last.slice(0, 4)) }),
-		mine: mine.toLocaleString('en-US'),
+		mine: count.toLocaleString('en-US'),
 		d: mirroredPath(series[i].map((v) => v / peak))
 	};
 });
