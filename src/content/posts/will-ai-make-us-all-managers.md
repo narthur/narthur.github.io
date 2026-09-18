@@ -34,18 +34,10 @@ Ways AI tools and products could improve to require less managerial prowess:
 
 In short, my current feeling is that AI tools and systems will increasingly manage themselves rather than needing something akin to traditional team management.
 
-#### Featured Project: _[Pa11y Ratchet](https://github.com/marketplace/actions/pa11y-ratchet?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)_
+#### Featured Project: _[Pa11y Ratchet](https://github.com/marketplace/actions/pa11y-ratchet)_
 
-Speaking of CI, _[a couple of collaborators and I](https://github.com/narthur/pa11y-ratchet/graphs/contributors?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)_ have built _[a GitHub action](https://github.com/marketplace/actions/pa11y-ratchet?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)_ that allows you to ensure a team makes progress on fixing accessibility issues, even if you have a huge existing backlog of problems.
+Speaking of CI, _[a couple of collaborators and I](https://github.com/narthur/pa11y-ratchet/graphs/contributors)_ have built _[a GitHub action](https://github.com/marketplace/actions/pa11y-ratchet)_ that allows you to ensure a team makes progress on fixing accessibility issues, even if you have a huge existing backlog of problems.
 
 It does so by comparing the total count of issues between a PR and the branch it’s merging into, and only failing if the number of issues go up.
 
-I’ve been using it for basically a year at this point, including on client projects, and it’s been working great. _[Give it a look!](https://github.com/marketplace/actions/pa11y-ratchet?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)_
-
-#### Enjoyed this issue?
-
-Consider doing one of the following:
-
-- 📬 Forward this email to someone you think would enjoy it
-- ✨ *[Check out](https://nathanarthur.com/?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)* all the other things I’ve been working on
-- ☕ _[Join my Ko-fi](https://ko-fi.com/narthur?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=will-ai-make-us-all-managers)_ to provide ongoing support, or just leave a tip
+I’ve been using it for basically a year at this point, including on client projects, and it’s been working great. _[Give it a look!](https://github.com/marketplace/actions/pa11y-ratchet)_

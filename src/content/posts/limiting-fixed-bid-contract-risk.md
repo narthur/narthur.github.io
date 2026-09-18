@@ -43,11 +43,3 @@ This has quite a few benefits:
 - It creates an additional incentive to effectively break down the tasks within the contract during initial proposal to allow us to be paid fairly in the case that we don’t meet our deadline.
 
 I haven’t yet discussed this with my clients. I’m a little nervous about how they’ll react. I’m hopeful, though, that they’ll like the idea. I need to change something in order for our fixed bids to continue to be a practical part of our work.
-
-#### Enjoyed this issue?
-
-Consider doing one of the following:
-
-- 📬 Forward this email to someone you think would enjoy it
-- ✨ *[Check out](https://nathanarthur.com/?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=limiting-fixed-bid-contract-risk)* all the other things I’ve been working on
-- ☕ _[Join my Ko-fi](https://ko-fi.com/narthur?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=limiting-fixed-bid-contract-risk)_ to provide ongoing support, or just leave a tip
