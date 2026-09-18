@@ -54,10 +54,13 @@ const presets = [
 		input.value = hex;
 		document.documentElement.style.setProperty('--accent', hex);
 		picker.querySelector('[data-hex-label]').textContent = hex;
-		const ratio = (luminance(hex) + 0.05) / (luminance('#0a0c10') + 0.05);
+		// Round before comparing, so the AA/FAIL label always agrees with the number shown.
+		const ratio = Number(((luminance(hex) + 0.05) / (luminance('#0a0c10') + 0.05)).toFixed(2));
 		const out = picker.querySelector('[data-contrast]');
 		out.textContent = `${ratio.toFixed(2)}:1 ${ratio >= 4.5 ? 'AA' : 'FAIL'}`;
 		out.className = ratio >= 4.5 ? 'text-accent' : 'text-red-400';
+		// Every navigation is a full page load, so carry the choice across pages.
+		sessionStorage.setItem('accent', hex);
 		for (const b of picker.querySelectorAll('button')) {
 			const on = b.dataset.hex === hex.toLowerCase();
 			b.classList.toggle('border-ink', on);
@@ -69,5 +72,5 @@ const presets = [
 	for (const b of picker.querySelectorAll('button')) {
 		b.addEventListener('click', () => setAccent(b.dataset.hex));
 	}
-	setAccent('#8ded51');
+	setAccent(sessionStorage.getItem('accent') ?? '#8ded51');
 </script>
