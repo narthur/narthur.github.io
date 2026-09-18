@@ -30,10 +30,12 @@ const footerLinks = [
 		<meta name="color-scheme" content="dark" />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<!-- defer, not async: the loader looks up the footer's embed target as soon as it runs
+		     and doesn't wait for the DOM, so it must run after the body is parsed. -->
 		<script
 			is:inline
 			src="https://js.supascribe.com/v1/loader/OBK1714YhYRDd0Lcjm40h5ph3a92.js"
-			async
+			defer
 		></script>
 	</head>
 	<body>

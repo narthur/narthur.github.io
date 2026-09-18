@@ -28,10 +28,11 @@ Astro needs Node >= 22.19.
 
 - **Astro**, static output, no UI framework. TypeScript, Tailwind CSS (no
   plugins, run through `postcss.config.js`), Vitest, ESLint + Prettier.
-- **No runtime data fetching at all.** `/uses` reads `src/uses/uses.yaml` at
+- **No first-party runtime fetching.** `/uses` reads `src/uses/uses.yaml` at
   build time (Vite `?raw` import, parsed with js-yaml), so the whole list is in
-  the HTML. The tag filter is the site's only client JS: a `<script>` in
-  `uses.astro` that hides what the build rendered.
+  the HTML. The tag filter is the site's only first-party client JS: a
+  `<script>` in `uses.astro` that hides what the build rendered. The one
+  third-party script is the Supascribe newsletter loader in `Layout.astro`.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 
