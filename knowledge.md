@@ -115,7 +115,8 @@ becomes an entry in the sticky "On this page" list, which marks the section bein
 A section holds prose, a chart, or a `<Shot>`; put each chart inside the prose it
 illustrates rather than grouping them. The charts (`<CommitsPerMonth>`, `<Repositories>`,
 `<CommitShare>`, in `src/work/detail/`) read `src/work/commits/<name>.json`, and the
-page's `lanes` frontmatter groups its repositories into rows. That JSON comes from local
+page's `lanes` frontmatter groups its repositories into rows; any repository no lane names
+lands in an automatic "Other repositories" row, so the three charts count the same commits. That JSON comes from local
 clones, not GitHub, because client repos can become unreachable: run
 `pnpm project-stats <name> <repo dir>...` (archived clones work) and commit the result.
 It holds counts only, split into mine and everyone else's, never names or emails, so

@@ -21,16 +21,18 @@ const git = (args, cwd) =>
 	execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 1 << 28, stdio: 'pipe' });
 const me = process.env.PROJECT_STATS_AUTHOR ?? git(['config', 'user.name']).trim();
 
-// Bare clones count as repositories too; anything else is named on the way past, so a
-// mistyped path can't quietly leave a repository out.
+// Only a repository's own root counts: git answers ".git" there, "." at the root of a bare
+// clone, and the parent's path from a folder inside another repository, which would otherwise
+// be charted as that whole repository. Anything else is named on the way past, so a mistyped
+// path can't quietly leave a repository out.
 const isRepo = (dir) => {
 	try {
-		git(['rev-parse', '--git-dir'], dir);
-		return true;
+		if (['.git', '.'].includes(git(['rev-parse', '--git-dir'], dir).trim())) return true;
 	} catch {
-		console.warn(`Skipping ${dir}: not a git repository`);
-		return false;
+		// Not inside any repository, or not a directory.
 	}
+	console.warn(`Skipping ${dir}: not the root of a git repository`);
+	return false;
 };
 
 // --all, not just the default branch: work on branches that never merged is still work. Rebased
