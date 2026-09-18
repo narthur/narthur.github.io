@@ -18,15 +18,15 @@ I’ve been continuing my job search, and that’s meant continuing to use AI to
 
 By necessity that editing process has required me to think through what makes writing good.
 
-1.  It shouldn’t use many words to say something that fewer words could say just as well.
-2.  Conversely, it shouldn’t cut words that are necessary to communicating the desired idea.
-3.  It shouldn’t use fancy words when simple words would do.
-4.  Conversely, it shouldn’t shy away from fancy words when a fancy word communicates the idea better.
-5.  It should be confident, straight-forward, and unapologetic, unless there is a specific reason to communicate insecurity or ambiguity.
-6.  It should avoid being overly evocative, except when being evocative supports the goal of the piece.
-7.  It should be aware of the context for which it is being written—the relationship between the author and the reader, the reader’s likely state of mind, and the broader societal context.
-8.  It should avoid careless repetition, such as the same word being used multiple times in one sentence (see: “context” in the previous point).
-9.  It should be easy to read. Words and structure should feel natural, not surprising or jarring.
+1. It shouldn’t use many words to say something that fewer words could say just as well.
+2. Conversely, it shouldn’t cut words that are necessary to communicating the desired idea.
+3. It shouldn’t use fancy words when simple words would do.
+4. Conversely, it shouldn’t shy away from fancy words when a fancy word communicates the idea better.
+5. It should be confident, straight-forward, and unapologetic, unless there is a specific reason to communicate insecurity or ambiguity.
+6. It should avoid being overly evocative, except when being evocative supports the goal of the piece.
+7. It should be aware of the context for which it is being written—the relationship between the author and the reader, the reader’s likely state of mind, and the broader societal context.
+8. It should avoid careless repetition, such as the same word being used multiple times in one sentence (see: “context” in the previous point).
+9. It should be easy to read. Words and structure should feel natural, not surprising or jarring.
 
 <figure><img src="/writing/what-is-good-writing/2.gif" alt="Why Waste Time When Few Word Do Trick GIF - Why Waste Time When Few ..." width="498" height="277" loading="lazy"></figure>
 

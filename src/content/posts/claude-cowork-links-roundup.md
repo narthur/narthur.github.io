@@ -12,9 +12,9 @@ Claude just [introduced Cowork](https://claude.com/blog/cowork-research-preview?
 
 I’ve already been working this way for a long time. The workflow:
 
-1.  Navigate to a project folder inside [Warp](https://www.warp.dev/).
-2.  Talk to Warp’s AI, allowing it to create, update, and reference project notes as needed.
-3.  Warp asks questions, suggests next steps, searches the internet, etc.
+1. Navigate to a project folder inside [Warp](https://www.warp.dev/).
+2. Talk to Warp’s AI, allowing it to create, update, and reference project notes as needed.
+3. Warp asks questions, suggests next steps, searches the internet, etc.
 
 That’s it.
 

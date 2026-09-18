@@ -8,9 +8,9 @@ substack: https://narthur.substack.com/p/github-cli-alias-to-prep-git-for
 
 A while back I found myself getting mildly annoyed by the friction around ensuring a repo’s git was in the correct state for starting a new task with Claude Code.
 
-1.  Am I on the default branch so Claude Code doesn’t create a PR based on another branch it shouldn’t?
-2.  Is the default branch up-to-date with origin?
-3.  Is the branch I was on previously merged and ready to be deleted?
+1. Am I on the default branch so Claude Code doesn’t create a PR based on another branch it shouldn’t?
+2. Is the default branch up-to-date with origin?
+3. Is the branch I was on previously merged and ready to be deleted?
 
 I ended up adding a GitHub CLI alias built on top of [gh-poi](https://github.com/seachicken/gh-poi), a GitHub CLI plugin that deletes branches that are already merged into the default branch. I called the alias “doi” based on it running “poi” on the **d**efault branch.
 

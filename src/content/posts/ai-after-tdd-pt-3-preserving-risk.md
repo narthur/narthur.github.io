@@ -11,8 +11,8 @@ substack: https://narthur.substack.com/p/ai-after-tdd-pt-3-preserving-risk
 
 Previous posts in this series:
 
-1.  [Is Test-Driven Development Dead?](/writing/is-test-driven-development-dead)
-2.  [AI After TDD: Keeping Test Coverage High](/writing/ai-after-tdd-keeping-test-coverage)
+1. [Is Test-Driven Development Dead?](/writing/is-test-driven-development-dead)
+2. [AI After TDD: Keeping Test Coverage High](/writing/ai-after-tdd-keeping-test-coverage)
 
 ---
 

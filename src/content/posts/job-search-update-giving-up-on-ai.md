@@ -20,11 +20,11 @@ I won’t be relying on a single goal to require this. I plan to create four new
 
 After stopping using AI to write my cover letters, I’ve found a process that seems to be working well for writing my letters efficiently:
 
-1.  I talk back-and-forth with Claude about the role until I have a good handle on everything I want to say and the relevant experience and gaps I want to include.
-2.  I write the letter in Obsidian, pulling in reusable paragraphs I’ve saved from previous cover letters, modifying them and adding surrounding paragraphs as needed.
-3.  Claude reviews the letter for accuracy and gaps.
-4.  Once complete, I submit the cover letter with my application.
-5.  Claude then extracts any new reusable paragraphs from my submitted cover letter and saves them for future cover letters.
+1. I talk back-and-forth with Claude about the role until I have a good handle on everything I want to say and the relevant experience and gaps I want to include.
+2. I write the letter in Obsidian, pulling in reusable paragraphs I’ve saved from previous cover letters, modifying them and adding surrounding paragraphs as needed.
+3. Claude reviews the letter for accuracy and gaps.
+4. Once complete, I submit the cover letter with my application.
+5. Claude then extracts any new reusable paragraphs from my submitted cover letter and saves them for future cover letters.
 
 This has helped writing the letters be a lot less overwhelming and faster than any of the approaches I’ve tried previously.
 

@@ -8,11 +8,11 @@ substack: https://narthur.substack.com/p/are-llms-conscious
 
 So far I’ve been staunchly agnostic on AI consciousness. My reasoning:
 
-1.  I define consciousness as subjective experience.
-2.  By definition, subjective experience cannot be measured except by the subject.
-3.  I assume naturalism to be true. I don’t believe souls or divine intervention or cosmic non-material magic are required for beings to be conscious.
-4.  Emergence is as good a theory of the origin of consciousness as any other, though probably unprovable due to 1 and 2.
-5.  Therefore, it isn’t out of the question that an LLM might have some sort of consciousness, though impossible to prove either way.
+1. I define consciousness as subjective experience.
+2. By definition, subjective experience cannot be measured except by the subject.
+3. I assume naturalism to be true. I don’t believe souls or divine intervention or cosmic non-material magic are required for beings to be conscious.
+4. Emergence is as good a theory of the origin of consciousness as any other, though probably unprovable due to 1 and 2.
+5. Therefore, it isn’t out of the question that an LLM might have some sort of consciousness, though impossible to prove either way.
 
 Given those opinions, I haven’t found any arguments I’ve heard in either direction to be compelling.
 

@@ -19,11 +19,11 @@ So. What comes after test-driven development?
 
 These are the benefits to using test-driven development I listed previously:
 
-1.  Your test coverage naturally remains very high.
-2.  This high test coverage makes changing existing code less risky.
-3.  You’re forced to think through and demonstrate the change in behavior of the code you’re writing before you jump to implementation.
-4.  You’re less likely to get lost in the weeds when solving a complex problem, since TDD allows you to focus on a single, tiny behavior change at a time, and ensures if a previously-implemented behavior breaks, you know immediately.
-5.  Your code is naturally testable, since you’ve been testing everything from the beginning. And, arguably, testable code tends to be well-architected code.
+1. Your test coverage naturally remains very high.
+2. This high test coverage makes changing existing code less risky.
+3. You’re forced to think through and demonstrate the change in behavior of the code you’re writing before you jump to implementation.
+4. You’re less likely to get lost in the weeds when solving a complex problem, since TDD allows you to focus on a single, tiny behavior change at a time, and ensures if a previously-implemented behavior breaks, you know immediately.
+5. Your code is naturally testable, since you’ve been testing everything from the beginning. And, arguably, testable code tends to be well-architected code.
 
 How do we ensure we keep as many of these advantages as possible without using test-driven development?
 

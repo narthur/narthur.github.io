@@ -45,24 +45,24 @@ I’ve found that last option to be the most fraught. There seems to be a lot of
 
 I’ve tried a few tools that are designed to produce documentation for a repository, either using AI or more-traditional static analysis, or a combination. I’ve even played around with creating my own such tool. They all seem to have their own drawbacks. Here’s a list, some of which I’ve tried and some I haven’t.
 
-- https://www.doxygen.nl/index.html
-- https://deepwiki.org/
-- https://www.sphinx-doc.org/en/master/usage/quickstart.html
-- https://docs.swimm.io/
-- https://workik.com/ai-powered-code-documentation
-- https://github.com/ingig/code-narrator
-- https://scribe.knuckles.wtf/laravel
-- https://www.docuwriter.ai/
-- https://docs.codegpt.co/docs/tutorial-features/code\_documentation
-- https://mintlify.com/docs/guides/claude-code
-- https://github.com/connor-john/ai-docs
-- https://github.com/fynnfluegge/doc-comments-ai
-- https://bito.ai/blog/ai-documentation-generator/
+- <https://www.doxygen.nl/index.html>
+- <https://deepwiki.org/>
+- <https://www.sphinx-doc.org/en/master/usage/quickstart.html>
+- <https://docs.swimm.io/>
+- <https://workik.com/ai-powered-code-documentation>
+- <https://github.com/ingig/code-narrator>
+- <https://scribe.knuckles.wtf/laravel>
+- <https://www.docuwriter.ai/>
+- <https://docs.codegpt.co/docs/tutorial-features/code\_documentation>
+- <https://mintlify.com/docs/guides/claude-code>
+- <https://github.com/connor-john/ai-docs>
+- <https://github.com/fynnfluegge/doc-comments-ai>
+- <https://bito.ai/blog/ai-documentation-generator/>
 
 In the past, Codebuff promised to do this kind of thing iteratively, creating and updating knowledge.md files throughout your codebase as it went. However it’s seemed to become less of an emphasis over time, and the tool doesn’t seem to do this very often. Though with Codebuff’s more-recent customization options, you might be able to configure it to do better.
 
-- https://www.codebuff.com/docs/agents
-- https://www.codebuff.com/docs/advanced#configuration
+- <https://www.codebuff.com/docs/agents>
+- <https://www.codebuff.com/docs/advanced#configuration>
 
 I think in the future it would be nice if CI-time tools like [CodeRabbit](https://www.coderabbit.ai/) were better at automatically suggesting improvements and new additions to a repo’s documentation based on changes made in each pull request. Perhaps you could get closer by adding [custom review instructions](https://docs.coderabbit.ai/guides/review-instructions)?
 

@@ -14,9 +14,9 @@ I’ve been planning to purchase a new development computer for a while now. I c
 
 Currently I have three computers:
 
-1.  A mini PC running Debian that I use for work.
-2.  An older MacBook Pro that crashes when I use it for heavy work stuff so it’s been relegated to my personal machine.
-3.  A beefy gaming PC that was a gift from my family, also running Debian.
+1. A mini PC running Debian that I use for work.
+2. An older MacBook Pro that crashes when I use it for heavy work stuff so it’s been relegated to my personal machine.
+3. A beefy gaming PC that was a gift from my family, also running Debian.
 
 I’m planning to be more mobile in the future, so I need a laptop that I can do work on.
 

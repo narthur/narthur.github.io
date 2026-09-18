@@ -26,8 +26,8 @@ When this workflow works, it feels really good.
 
 I’ve had two main challenges so far:
 
-1.  Ensuring the workflow is followed consistently and the AI doesn’t start skipping steps
-2.  Dialing in how well the AI identifies an ideal subset of changes to extract
+1. Ensuring the workflow is followed consistently and the AI doesn’t start skipping steps
+2. Dialing in how well the AI identifies an ideal subset of changes to extract
 
 On issue two, the problem I’ve been dealing with is that the AI focuses on extracting the smallest possible change, even to the point of suggesting things like adding a single unused import statement to a file.
 

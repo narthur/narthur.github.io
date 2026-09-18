@@ -10,10 +10,10 @@ Or, more precisely, are its days numbered?
 
 Here I’m defining TDD (test-driven development) as a process by which code is written using the following steps:
 
-1.  Write a failing test
-2.  Write just enough code to make the test pass
-3.  Refactor
-4.  GOTO 1
+1. Write a failing test
+2. Write just enough code to make the test pass
+3. Refactor
+4. GOTO 1
 
 (And by defining I mean stealing an existing definition.)
 

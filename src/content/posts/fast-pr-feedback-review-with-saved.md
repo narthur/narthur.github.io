@@ -8,15 +8,15 @@ substack: https://narthur.substack.com/p/fast-pr-feedback-review-with-saved
 
 I’ve been continuing to work to improve at using AI for programming. There are a couple of issues that I find I repeatedly run into now:
 
-1.  My usage of AI can easily result in very large pull requests that are difficult to review.
-2.  AI review tools are great, but can result in a large amount of feedback that is then difficult to address.
+1. My usage of AI can easily result in very large pull requests that are difficult to review.
+2. AI review tools are great, but can result in a large amount of feedback that is then difficult to address.
 
 Over the past few days I think I’ve started to make progress toward solutions for both these problems, starting with the too-much-feedback issue.
 
 In the past, I’ve felt that I had two options for addressing the occasional avalanche of AI code review feedback:
 
-1.  Address the feedback myself locally, one-by-one, which could be very time intensive even when using AI tools.
-2.  Ask GitHub Copilot coding agent to address all the feedback on the PR in one go, which results in a new potentially large PR against the original PR that I have to review.
+1. Address the feedback myself locally, one-by-one, which could be very time intensive even when using AI tools.
+2. Ask GitHub Copilot coding agent to address all the feedback on the PR in one go, which results in a new potentially large PR against the original PR that I have to review.
 
 After [publishing my dotfiles](/writing/publishing-my-dotfiles), I found myself creating helper scripts to make it easier for me to address feedback left on my PRs one at a time. And it really started helping speed up the process.
 

@@ -12,9 +12,9 @@ I had been thinking that having [Honeycomb](https://www.honeycomb.io/) meant I d
 
 I’ve just about decided to use [Neon](https://neon.com/) for TaskRatchet’s database instead of [Cloudflare D1](https://developers.cloudflare.com/d1/). This has a few advantages:
 
-1.  Since it doesn’t require a worker to connect to it, I can switch databases before moving the API to Cloudflare.
-2.  It should make it quite easy to set up [feature branch database forks](https://neon.com/docs/introduction/branching).
-3.  [It’s just postgres](https://neon.com/docs/get-started/why-neon#neon-is-postgres), which should make it easier to migrate to something else in the future if needed.
+1. Since it doesn’t require a worker to connect to it, I can switch databases before moving the API to Cloudflare.
+2. It should make it quite easy to set up [feature branch database forks](https://neon.com/docs/introduction/branching).
+3. [It’s just postgres](https://neon.com/docs/get-started/why-neon#neon-is-postgres), which should make it easier to migrate to something else in the future if needed.
 
 Making the switch means modeling TaskRatchet’s data relationally and creating a corresponding schema. This is something I didn’t have to do with [Firestore](https://firebase.google.com/docs/firestore/), since Firestore is a no-SQL document store.
 

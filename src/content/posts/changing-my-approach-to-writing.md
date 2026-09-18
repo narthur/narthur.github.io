@@ -12,9 +12,9 @@ Up to this point, I’ve been beeminding spending thirty-minute blocks on the ne
 
 My plan going forward is to break that single Beeminder goal into two—one for capturing thoughts, organizing ideas, doing train-of-thought writing; and a separate goal for publishing posts. I’m hoping this will have several benefits:
 
-1.  Having time spent thinking separated from the need to hit publish will hopefully reduce anxiety.
-2.  Time dedicated to exploration of ideas separate from a specific newsletter issue should allow my thoughts the room to develop before publishing, even if that means some ideas take weeks or months before they’re ready to share.
-3.  Having the freedom to vary the size of my posts, rather than every post being roughly thirty minutes worth of words, should allow posts to be more contained and coherent.
+1. Having time spent thinking separated from the need to hit publish will hopefully reduce anxiety.
+2. Time dedicated to exploration of ideas separate from a specific newsletter issue should allow my thoughts the room to develop before publishing, even if that means some ideas take weeks or months before they’re ready to share.
+3. Having the freedom to vary the size of my posts, rather than every post being roughly thirty minutes worth of words, should allow posts to be more contained and coherent.
 
 I’ve just taken a moment to complete the step I’ve been procrastinating on, actually creating the two goals:
 

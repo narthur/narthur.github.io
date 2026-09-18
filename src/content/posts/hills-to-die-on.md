@@ -9,9 +9,9 @@ substack: https://narthur.substack.com/p/hills-to-die-on
 
 I find myself using this rubric when deciding how much I should push back on something that doesn’t feel quite right.
 
-1.  **Reversibility:** Would it be difficult to reverse this decision later?
-2.  **Blast radius:** Is the impact of getting this decision wrong large?
-3.  **Forward binding:** Will this decision change how future decisions are made?
+1. **Reversibility:** Would it be difficult to reverse this decision later?
+2. **Blast radius:** Is the impact of getting this decision wrong large?
+3. **Forward binding:** Will this decision change how future decisions are made?
 
 If I can answer “no” to all three questions, it isn’t something I should overthink.
 

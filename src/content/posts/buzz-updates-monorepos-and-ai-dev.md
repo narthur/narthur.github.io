@@ -71,12 +71,12 @@ Once I’m happy with the state of an issue, I assign it to Copilot, which will 
 
 When Copilot finishes its first pass, I do the following in this specific order:
 
-1.  I manually review the code changes.
-2.  I mark the PR as ready for review, taking it out of draft mode.
-3.  I manually request CodeRabbit review the PR, since CodeRabbit won’t auto-review a PR opened by a bot.
-4.  I go back-and-forth with Copilot and CodeRabbit, asking Copilot to address CodeRabbit’s feedback, and CodeRabbit to make new reviews.
-5.  Once CodeRabbit is happy with the PR (or I’ve dismissed its feedback as out-of-scope), I approve CI jobs to run.
-6.  Once all CI jobs have successfully run, I merge the PR.
+1. I manually review the code changes.
+2. I mark the PR as ready for review, taking it out of draft mode.
+3. I manually request CodeRabbit review the PR, since CodeRabbit won’t auto-review a PR opened by a bot.
+4. I go back-and-forth with Copilot and CodeRabbit, asking Copilot to address CodeRabbit’s feedback, and CodeRabbit to make new reviews.
+5. Once CodeRabbit is happy with the PR (or I’ve dismissed its feedback as out-of-scope), I approve CI jobs to run.
+6. Once all CI jobs have successfully run, I merge the PR.
 
 The main thing to notice here is that I intentionally go through the CodeRabbit review process before approving CI jobs to run. This is to reduce the cost of this workflow.
 
