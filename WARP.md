@@ -33,13 +33,15 @@ Astro needs Node >= 22.19.
   build time (Vite `?raw` import, parsed with js-yaml), so the whole list is in
   the HTML. The tag filter is the site's only first-party client JS: a
   `<script>` in `uses.astro` that hides what the build rendered. The one
-  third-party script is the Supascribe newsletter loader in `Layout.astro`.
+  third-party script is Cloudflare Turnstile, guarding the footer's subscribe
+  form in `Layout.astro`.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an
   Astro content collection (`src/content.config.ts`) rendered by
-  `src/pages/writing/[slug].astro` and fed by `src/pages/rss.xml.ts`. To
-  publish, add a file; see `knowledge.md`.
+  `src/pages/writing/[slug].astro` and fed by two feeds built by
+  `src/feed.ts`: `rss.xml.ts` for feed readers, `newsletter.xml.ts` for email.
+  To publish, add a file; see `knowledge.md`.
 
 ## Styling
 
@@ -67,14 +69,11 @@ harness. Use `pnpm test` (single run) rather than watch mode.
 ## Common gotchas
 
 1. **Package manager**: always `pnpm`, never `npm` or `yarn`.
-2. **Supascribe**: the newsletter widget themes itself via `--csw-*` CSS
-   variables, overridden in `Layout.astro`. If the button turns blue, that
-   override broke.
-3. **`tailwind.config.js` edits do not hot-reload.** Vite keeps the previously
+2. **`tailwind.config.js` edits do not hot-reload.** Vite keeps the previously
    generated CSS, so utility classes keep the old value while plain-CSS rules
    pick up the new one. Restart `pnpm dev`.
-4. **Dropped spaces before links**: see the Build section of `knowledge.md`.
-5. **`pnpm preview` does not reproduce production 404s.** For an unknown path it
+3. **Dropped spaces before links**: see the Build section of `knowledge.md`.
+4. **`pnpm preview` does not reproduce production 404s.** For an unknown path it
    serves Astro's generic "404: Not Found" page, not `dist/404.html`, and a plain
    static file server won't serve `404.html` either. To check what Cloudflare
    will actually serve, run `npx wrangler dev` after a build — it applies

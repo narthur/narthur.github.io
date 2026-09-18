@@ -71,8 +71,10 @@ src/
 │   ├── audioverse.astro        # AudioVerse case study
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
-│   ├── rss.xml.ts              # RSS feed of the newsletter, full content
+│   ├── rss.xml.ts              # public RSS feed, footer for feed readers
+│   ├── newsletter.xml.ts       # same feed, email footer; read by rss-to-email-worker
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+├── feed.ts                     # builds both feeds; each passes its own footer
 ├── content.config.ts           # the `posts` collection schema
 ├── content/posts/*.md          # newsletter posts
 └── uses/
@@ -103,6 +105,13 @@ absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
 
+There are two feeds from one builder, `src/feed.ts`, differing only in the
+footer appended to each item. `/rss.xml` is the public one, linked from the
+site, with a footer for feed readers. `/newsletter.xml` is unlinked and read by
+rss-to-email-worker, which emails each new item; its footer is written for
+email, and the worker adds the per-subscriber unsubscribe link below it. Guids
+match across the two.
+
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
 
@@ -120,13 +129,13 @@ The favicon is self-hosted: `public/favicon.svg` is the source and
 take SVG icons. Keep them in step. It carries a single letterform, not a
 monogram — at the 16px browsers actually draw, two letters turn to mush.
 
-## Newsletter embed
+## Newsletter signup
 
-Supascribe, loaded via the script tag in `Layout.astro` and mounted on the
-`data-supascribe-subscribe` div in its footer. Its default theme is a blue
-button; the layout's global style block overrides the `--csw-*` CSS variables
-to match the palette. Setting those colors in the Supascribe dashboard would
-let that block be deleted.
+The footer in `Layout.astro` holds a plain form that posts to
+`https://mail.nathanarthur.com/subscribe`, handled by rss-to-email-worker, which
+replies with its own confirmation page. Cloudflare Turnstile guards it; the
+widget uses `data-appearance="interaction-only"`, so it shows only when a
+visitor must interact. The worker checks the `subscribe` action.
 
 ## Build
 
