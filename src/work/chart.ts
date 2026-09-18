@@ -83,7 +83,7 @@ export function bar(span: Span, scale: TimeScale) {
 		// Where the label hangs: from the bar's start, or from the axis's right edge when it would
 		// otherwise run past it. A phone column fits less, so it switches over sooner.
 		// ponytail: fixed cutoffs, not measured label widths; measure if a long name still clips.
-		label: left > 80 ? 'right' : left > 50 ? 'right-on-narrow' : 'left'
+		labelAnchor: left > 80 ? 'right' : left > 50 ? 'right-on-narrow' : 'left'
 	} as const;
 }
 

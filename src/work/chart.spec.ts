@@ -52,9 +52,9 @@ describe('bar', () => {
 	});
 
 	it('hangs labels from the right edge only once they would run past it', () => {
-		expect(bar({ start: 2019, end: 'now' }, scale).label).toBe('left');
-		expect(bar({ start: 2022, end: 'now' }, scale).label).toBe('right-on-narrow');
-		expect(bar({ start: 2025, end: 'now' }, scale).label).toBe('right');
+		expect(bar({ start: 2019, end: 'now' }, scale).labelAnchor).toBe('left');
+		expect(bar({ start: 2022, end: 'now' }, scale).labelAnchor).toBe('right-on-narrow');
+		expect(bar({ start: 2025, end: 'now' }, scale).labelAnchor).toBe('right');
 	});
 });
 
