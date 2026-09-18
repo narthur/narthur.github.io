@@ -1,24 +1,27 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import discover from '../work/shots/audioverse/discover.jpg';
+import home from '../work/shots/audioverse/home.jpg';
+import sermon from '../work/shots/audioverse/sermon.jpg';
 
 // ponytail: screenshots, not the live site — audioverse.org has since diverged from what I built.
 const shots = [
 	{
-		src: '/audioverse/home.jpg',
+		src: home.src,
 		alt: 'AudioVerse home page: sidebar navigation, "Sound Doctrine" hero, latest content grid, blog posts, testimonials, and donation sections',
 		caption: 'Home',
 		width: 1400,
 		height: 4958
 	},
 	{
-		src: '/audioverse/discover.jpg',
+		src: discover.src,
 		alt: 'AudioVerse Discover page: recent, trending, and featured teachings in card grids, plus blog posts, stories, and conferences',
 		caption: 'Discover',
 		width: 1400,
 		height: 3806
 	},
 	{
-		src: '/audioverse/sermon.jpg',
+		src: sermon.src,
 		alt: 'AudioVerse recording page: video player with speed and download controls, description, series metadata, and a persistent bottom playback bar',
 		caption: 'Recording',
 		width: 1400,
@@ -37,7 +40,7 @@ const shots = [
 
 	<h1 class="text-4xl font-medium tracking-tight">AudioVerse</h1>
 	<p class="mt-2 font-mono text-xs text-faint">
-		technology director · 2019—2025 · next.js · graphql
+		technology director · 2018—2025 · next.js · graphql
 	</p>
 
 	<div class="mt-8 max-w-prose space-y-4 leading-relaxed text-mute">

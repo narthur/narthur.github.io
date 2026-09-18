@@ -69,17 +69,35 @@ src/
 │   ├── index.astro             # home: positioning, selected work, also built
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── audioverse.astro        # AudioVerse case study
+│   ├── work.astro              # every project, the stack over time, GitHub activity
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
 ├── content.config.ts           # the `posts` collection schema
 ├── content/posts/*.md          # newsletter posts
-└── uses/
-    ├── filter.ts               # tag/category logic, the only tested code
-    ├── filter.spec.ts
-    └── uses.yaml               # the list itself
+├── uses/
+│   ├── filter.ts               # tag/category logic
+│   ├── filter.spec.ts
+│   └── uses.yaml               # the list itself
+└── work/
+    ├── work.yaml               # projects and stack spans for /work
+    ├── activity.json           # monthly GitHub counts, written by `pnpm activity`
+    ├── chart.ts                # chart geometry (scale, bars, waveform path)
+    ├── chart.spec.ts
+    └── shots/<project>/        # screenshots; /work thumbnails them via astro:assets
 ```
+
+`/work` is the one page on the wider `max-w-4xl` column (`<Layout wide>`), because its
+charts need the room. The activity waveform and stack chart share a time scale from the
+first year in `activity.json` to its last month, and both sit `mx-5` inside the column
+so the dotted marks for spans running past either end of the axis fit. Each activity layer is scaled to its
+own peak. To refresh the activity data, run `pnpm activity` (needs `gh` logged in as
+narthur) and commit `activity.json`; the deploy has no GitHub token, so it is not fetched
+at build time. In `work.yaml`, `end: now` means ongoing, a year means ended that year,
+and no `end` means a single year. Screenshots named in `work.yaml` live under
+`src/work/shots/` (a missing one fails the build); `/audioverse` imports its images from
+there too.
 
 The newsletter lives here: this site is its primary home, having moved off
 Substack in September 2026. Each post is a Markdown file in

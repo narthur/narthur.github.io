@@ -1,0 +1,247 @@
+---
+import type { ImageMetadata } from 'astro';
+import yaml from 'js-yaml';
+import Layout from '../layouts/Layout.astro';
+import raw from '../work/work.yaml?raw';
+import activity from '../work/activity.json';
+import { getImage, Image } from 'astro:assets';
+import {
+	axis,
+	bar,
+	mirroredPath,
+	newestFirst,
+	oldestFirst,
+	rangeLabel,
+	smooth,
+	timeScale,
+	type Month,
+	type Span
+} from '../work/chart';
+
+interface Named extends Span {
+	name: string;
+}
+
+interface Project extends Named {
+	url?: string;
+	meta: string;
+	description: string;
+	shots?: { file: string; alt: string }[];
+}
+
+const { projects, stack } = yaml.load(raw) as { projects: Project[]; stack: Named[] };
+
+const months = activity as Month[];
+const firstYear = Number(months[0].month.slice(0, 4));
+const scale = timeScale(firstYear, months[months.length - 1].month);
+
+const layers = [
+	{ name: 'Commits', key: 'commits', class: 'fill-mute opacity-30', swatch: 'bg-mute opacity-30' },
+	{ name: 'PRs', key: 'prs', class: 'fill-ink opacity-[.35]', swatch: 'bg-ink opacity-[.35]' },
+	{
+		name: 'Reviews',
+		key: 'reviews',
+		class: 'fill-accent opacity-[.55]',
+		swatch: 'bg-accent opacity-[.55]'
+	}
+] as const;
+// Each layer is scaled to its own peak, so the shapes compare even though commits far outnumber
+// reviews.
+const paths = layers.map((layer) => ({
+	...layer,
+	d: mirroredPath(
+		smooth(
+			months.map((month) => month[layer.key]),
+			1.5
+		)
+	)
+}));
+
+const { grid, ticks } = axis(scale);
+
+// Oldest first so the bars cascade like a network waterfall.
+const stackRows = stack
+	.slice()
+	.sort(oldestFirst)
+	.map((item) => ({ ...item, range: rangeLabel(item), bar: bar(item, scale) }));
+
+const shotFiles = import.meta.glob<{ default: ImageMetadata }>(
+	'../work/shots/**/*.{jpg,png,webp}',
+	{
+		eager: true
+	}
+);
+function shot(file: string) {
+	const found = shotFiles[`../work/shots/${file}`];
+	if (!found) throw new Error(`work.yaml names a screenshot that isn't in src/work/shots: ${file}`);
+	return found.default;
+}
+
+// Thumbnails link to a copy sized for viewing, not the multi-megabyte original.
+const projectRows = await Promise.all(
+	projects
+		.slice()
+		.sort(newestFirst)
+		.map(async (project) => ({
+			...project,
+			range: rangeLabel(project),
+			shots: await Promise.all(
+				(project.shots ?? []).map(async (screenshot) => {
+					const image = shot(screenshot.file);
+					const full = await getImage({ src: image, width: Math.min(image.width, 1400) });
+					return { ...screenshot, image, fullSrc: full.src };
+				})
+			)
+		}))
+);
+---
+
+<Layout
+	title="Work — Nathan Arthur"
+	description={`Projects Nathan Arthur has built, the stack behind them, and his GitHub activity since ${firstYear}.`}
+	wide
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Work</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute sm:text-lg">
+		What I built and what I built it with, newest first. Activity and stack share one{' '}
+		{`${firstYear}–now`} scale.
+	</p>
+
+	<!-- Both charts sit inset from the column's edges (mx-5) so the dotted marks for a span that
+	     runs past either end of the axis stay inside the column. -->
+	<section class="mt-12 sm:mt-16" aria-labelledby="activity-heading">
+		<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+			<h2 id="activity-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+				GitHub activity
+			</h2>
+			<ul class="flex gap-4 font-mono text-[11px] uppercase tracking-widest text-faint">
+				{paths.map((layer) => (
+					<li class="flex items-center gap-1.5">
+						<span class:list={['h-2 w-3', layer.swatch]} />
+						{layer.name}
+					</li>
+				))}
+			</ul>
+		</div>
+		<div class="relative mx-5 mt-4 h-24 sm:mt-5 sm:h-32">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<svg
+				viewBox="0 0 1000 100"
+				preserveAspectRatio="none"
+				class="absolute inset-0 h-full w-full"
+				role="img"
+				aria-label={`Monthly commits, pull requests, and reviews on GitHub from ${firstYear} to now`}
+			>
+				{paths.map((layer) => (
+					<path d={layer.d} class={layer.class} />
+				))}
+			</svg>
+		</div>
+		<div class="relative mx-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+			{ticks.map((tick) => (
+				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
+					{tick.label}
+				</span>
+			))}
+		</div>
+	</section>
+
+	<section class="mt-12 sm:mt-16" aria-labelledby="stack-heading">
+		<h2 id="stack-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Stack
+		</h2>
+		<div class="relative mx-5 mt-4 pt-1">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<ul class="relative">
+				{stackRows.map((row) => (
+					<li class="relative h-[38px]">
+						<span
+							class:list={[
+								'absolute top-1 flex items-baseline gap-2 whitespace-nowrap',
+								{
+									'right-0': row.bar.labelAnchor === 'right',
+									'right-0 sm:right-auto sm:left-[var(--start)]':
+										row.bar.labelAnchor === 'right-on-narrow',
+									'left-[var(--start)]': row.bar.labelAnchor === 'left'
+								}
+							]}
+							style={`--start: ${row.bar.left}%`}
+						>
+							<span class="text-[13px] leading-4">{row.name}</span>
+							<span class="font-mono text-[11px] leading-4 text-faint">{row.range}</span>
+						</span>
+						<!-- The accent is a CSS variable, which Tailwind's /40 opacity shorthand can't
+						     reach, so the fade is opacity on the bar; the tail inherits it. -->
+						<span
+							class="absolute top-[25px] h-0.5 bg-accent opacity-40"
+							style={`left: ${row.bar.left}%; width: ${row.bar.width}%`}
+						>
+							{row.bar.clippedStart && (
+								<span class="absolute right-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
+							{row.bar.ongoing && (
+								<span class="absolute left-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
+						</span>
+					</li>
+				))}
+			</ul>
+		</div>
+		<div class="relative mx-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+			{ticks.map((tick) => (
+				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
+					{tick.label}
+				</span>
+			))}
+		</div>
+	</section>
+
+	<section class="mt-14 sm:mt-20" aria-labelledby="projects-heading">
+		<h2 id="projects-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Projects
+		</h2>
+		<div class="mt-5">
+			{projectRows.map((project) => (
+				<article class="border-t border-rule py-5 sm:py-6">
+					<div class="flex items-baseline justify-between gap-3">
+						<h3 class="text-[17px] font-medium tracking-tight sm:text-lg">
+							{project.url ? <a href={project.url}>{project.name}</a> : project.name}
+						</h3>
+						<span class="whitespace-nowrap font-mono text-xs text-faint">{project.range}</span>
+					</div>
+					<p class="mt-1 font-mono text-xs text-faint">{project.meta}</p>
+					<p class="mt-2.5 max-w-prose text-sm leading-relaxed text-mute">{project.description}</p>
+					{project.shots.length > 0 && (
+						<ul class="mt-3.5 flex flex-wrap gap-1.5 sm:gap-2">
+							{project.shots.map((screenshot) => (
+								<li>
+									<a href={screenshot.fullSrc} class="block">
+										<Image
+											src={screenshot.image}
+											alt={screenshot.alt}
+											width={192}
+											height={120}
+											fit="cover"
+											position="top"
+											class="h-12 w-[76px] border border-rule object-cover object-top sm:h-[60px] sm:w-24"
+										/>
+									</a>
+								</li>
+							))}
+						</ul>
+					)}
+				</article>
+			))}
+		</div>
+	</section>
+</Layout>
