@@ -2,8 +2,8 @@
 	"name": "nathanarthur-com",
 	"compatibility_date": "2025-06-26",
 	"assets": {
-		"directory": "./build",
-		// Serve the generated 404.html (from +error.svelte) for unmatched paths
+		"directory": "./dist",
+		// Serve the generated 404.html (from src/pages/404.astro) for unmatched paths
 		// instead of Cloudflare's generic one.
 		"not_found_handling": "404-page"
 	},

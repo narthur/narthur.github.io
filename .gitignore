@@ -6,8 +6,8 @@ package-lock.json
 .vercel
 .netlify
 .wrangler
-/.svelte-kit
-/build
+/.astro
+/dist
 
 # Local tooling scratch (playwright-cli sessions, static-analysis reports)
 .playwright-cli

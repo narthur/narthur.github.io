@@ -1,0 +1,136 @@
+---
+import yaml from 'js-yaml';
+import Layout from '../layouts/Layout.astro';
+import raw from '../uses/uses.yaml?raw';
+import { allTags, categoriesInOrder, itemsInCategory, type UsesData } from '../uses/filter';
+
+// Parsed at build time, so the full list is baked into the HTML. The tag filter below is the
+// only client JS: it hides what the build already rendered.
+const { items, meta } = yaml.load(raw) as UsesData;
+const tags = allTags(items);
+const groups = categoriesInOrder(items).map((category) => ({
+	category,
+	items: itemsInCategory(items, category, new Set())
+}));
+---
+
+<Layout
+	title="Uses — Nathan Arthur"
+	description="The hardware, software, and tools Nathan Arthur uses day to day."
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-4xl font-medium tracking-tight">Uses</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute">
+		Hardware, software, and tools I use day to day for work and personal projects. Inspired by{' '}
+		<a href="https://uses.tech/" class="text-ink underline decoration-rule underline-offset-4">
+			uses.tech
+		</a>
+		.
+	</p>
+
+	<details class="mt-12">
+		<summary class="flex cursor-pointer select-none list-none items-center gap-2 font-mono text-xs uppercase tracking-widest text-faint hover:text-ink [&::-webkit-details-marker]:hidden">
+			<span>Filter by tag</span>
+			<span class="text-accent" data-count hidden></span>
+		</summary>
+		<div class="mt-4 flex flex-wrap gap-2">
+			{tags.map((tag) => (
+				<button
+					data-tag={tag}
+					aria-pressed="false"
+					aria-label={`Filter by ${tag}`}
+					class="border border-rule px-2 py-0.5 text-xs text-mute transition-colors hover:border-faint aria-pressed:border-accent aria-pressed:text-accent"
+				>
+					{tag}
+				</button>
+			))}
+		</div>
+		<button
+			data-clear
+			hidden
+			class="mt-3 font-mono text-xs uppercase tracking-widest text-faint hover:text-ink"
+		>
+			Clear filters
+		</button>
+	</details>
+
+	<p class="mt-16 max-w-prose leading-relaxed text-mute" data-empty hidden>
+		Nothing matches those tags.
+		<button data-clear class="text-accent underline">
+			Clear filters
+		</button>
+		.
+	</p>
+
+	{groups.map((group) => (
+		<section class="mt-16" data-group>
+			<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">{group.category}</h2>
+			<ul>
+				{group.items.map((item) => (
+					<li class="mt-6 border-t border-rule pt-6" data-tags={JSON.stringify(item.tags ?? [])}>
+						<h3 class="font-medium tracking-tight">
+							<a href={item.url}>{item.name}</a>
+						</h3>
+						<p class="mt-2 max-w-prose text-sm leading-relaxed text-mute">{item.description}</p>
+						{item.tags?.length ? (
+							<div class="mt-3 flex flex-wrap gap-3">
+								{item.tags.map((tag) => (
+									<button
+										data-tag={tag}
+										aria-pressed="false"
+										aria-label={`Filter by ${tag}`}
+										class="font-mono text-xs text-faint transition-colors hover:text-mute aria-pressed:text-accent"
+									>
+										{tag}
+									</button>
+								))}
+							</div>
+						) : null}
+					</li>
+				))}
+			</ul>
+		</section>
+	))}
+
+	<div class="mt-16 space-y-1 border-t border-rule pt-6 text-xs text-faint">
+		<p>Last updated: {meta.lastUpdated}</p>
+		{meta.affiliateDisclaimer && <p class="max-w-prose">{meta.affiliateDisclaimer}</p>}
+	</div>
+</Layout>
+
+<script>
+	import { matchesTags } from '../uses/filter';
+
+	let selected = new Set<string>();
+
+	function render() {
+		for (const button of document.querySelectorAll<HTMLElement>('[data-tag]')) {
+			button.setAttribute('aria-pressed', String(selected.has(button.dataset.tag!)));
+		}
+		for (const li of document.querySelectorAll<HTMLElement>('[data-tags]')) {
+			const item = { name: '', description: '', url: '', tags: JSON.parse(li.dataset.tags!) };
+			li.hidden = !matchesTags(item, selected);
+		}
+		const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
+		for (const group of groups) group.hidden = !group.querySelector('[data-tags]:not([hidden])');
+		document.querySelector<HTMLElement>('[data-empty]')!.hidden = groups.some((g) => !g.hidden);
+
+		const count = document.querySelector<HTMLElement>('[data-count]')!;
+		count.textContent = `(${selected.size})`;
+		count.hidden = selected.size === 0;
+		// Only the one inside the filter panel hides; the empty-state one shows with its paragraph.
+		document.querySelector<HTMLElement>('details [data-clear]')!.hidden = selected.size === 0;
+	}
+
+	document.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement;
+		const tag = target.closest<HTMLElement>('[data-tag]')?.dataset.tag;
+		if (tag !== undefined && !selected.delete(tag)) selected.add(tag);
+		else if (target.closest('[data-clear]')) selected = new Set();
+		else return;
+		render();
+	});
+</script>
