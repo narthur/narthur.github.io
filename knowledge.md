@@ -32,6 +32,8 @@ ornament never.
   scroll effects, no entrance animations. Genuine controls (the `/uses` tag
   filter) may take a hover colour change and a `transition-colors`, because a
   control that gives no feedback is an accessibility problem, not restraint.
+  The section list on a project page is a control too: its marker for the
+  section being read changes colour with a `motion-safe:transition-colors`.
 - **Every link opens in the same tab.** No `target="_blank"` anywhere, external
   or not, and therefore no `rel="noopener noreferrer"`. "It's external" is not a
   reason to take the tab away from the reader; nothing here is a form, editor, or
@@ -68,24 +70,32 @@ src/
 ├── pages/
 │   ├── index.astro             # home: positioning, selected work, also built
 │   ├── 404.astro               # emitted as dist/404.html
-│   ├── audioverse.astro        # AudioVerse case study
+│   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
-├── content.config.ts           # the `posts` collection schema
+├── content.config.ts           # the `posts` and `projects` collection schemas
 ├── content/posts/*.md          # newsletter posts
+├── content/projects/*.mdx      # project pages: prose with charts and screenshots
 ├── uses/
 │   ├── filter.ts               # tag/category logic
 │   ├── filter.spec.ts
 │   └── uses.yaml               # the list itself
 └── work/
     ├── work.yaml               # projects and stack spans for /work
+    ├── work.ts                 # loads work.yaml
     ├── activity.json           # monthly GitHub counts, written by `pnpm activity`
     ├── chart.ts                # chart geometry (scale, bars, waveform path)
     ├── chart.spec.ts
-    └── shots/<project>/        # screenshots; /work thumbnails them via astro:assets
+    ├── commits.ts              # tallies and sums for the project commit charts
+    ├── commits.spec.ts
+    ├── commits/<project>.json  # monthly commits per repo, written by `pnpm project-stats`
+    ├── project.ts              # what a project page's charts share
+    ├── detail/                 # project page components: charts and <Shot>
+    ├── shots.ts                # screenshot lookup by path
+    └── shots/<project>/        # screenshots, for /work thumbnails and project pages
 ```
 
 `/work` is the one page on the wider `max-w-4xl` column (`<Layout wide>`), because its
@@ -96,8 +106,20 @@ own peak. To refresh the activity data, run `pnpm activity` (needs `gh` logged i
 narthur) and commit `activity.json`; the deploy has no GitHub token, so it is not fetched
 at build time. In `work.yaml`, `end: now` means ongoing, a year means ended that year,
 and no `end` means a single year. Screenshots named in `work.yaml` live under
-`src/work/shots/` (a missing one fails the build); `/audioverse` imports its images from
-there too.
+`src/work/shots/` (a missing one fails the build); project pages use them too.
+
+A project page is `src/content/projects/<name>.mdx`, served at `/<name>`. Its name,
+years, role line, and meta description come from the `work.yaml` entry whose `url` is
+`/<name>`, so they are never written twice. Each `##` heading starts a section and
+becomes an entry in the sticky "On this page" list, which marks the section being read.
+A section holds prose, a chart, or a `<Shot>`; put each chart inside the prose it
+illustrates rather than grouping them. The charts (`<CommitsPerMonth>`, `<Repositories>`,
+`<CommitShare>`, in `src/work/detail/`) read `src/work/commits/<name>.json`, and the
+page's `lanes` frontmatter groups its repositories into rows. That JSON comes from local
+clones, not GitHub, because client repos can become unreachable: run
+`pnpm project-stats <name> <repo dir>...` (archived clones work) and commit the result.
+It holds counts only, split into mine and everyone else's, never names or emails, so
+other contributors stay off the site.
 
 The newsletter lives here: this site is its primary home, having moved off
 Substack in September 2026. Each post is a Markdown file in
@@ -124,7 +146,8 @@ and its guid.
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
 
-There is no nav and no components directory. Subpages carry a "← Nathan Arthur"
+There is no site nav, and components live beside the data they draw (`src/work/detail/`)
+rather than in a components directory. Subpages carry a "← Nathan Arthur"
 link, and the footer lives in the layout — its only consumer.
 
 `Layout.astro` renders a dev-only accent picker (colour input, presets, and a

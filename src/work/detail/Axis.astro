@@ -1,0 +1,20 @@
+---
+import type { axis } from '../chart';
+
+interface Props {
+	ticks: ReturnType<typeof axis>['ticks'];
+}
+
+const { ticks } = Astro.props;
+---
+
+<div
+	class="relative mx-5 h-7 border-t border-rule font-mono text-[11px] text-faint"
+	aria-hidden="true"
+>
+	{ticks.map((tick) => (
+		<span class:list={['absolute top-2', tick.shift]} style={`left: ${tick.left}%`}>
+			{tick.label}
+		</span>
+	))}
+</div>

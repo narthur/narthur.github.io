@@ -1,0 +1,58 @@
+---
+import { perMonth } from '../commits';
+import { project } from '../project';
+import Axis from './Axis.astro';
+import Grid from './Grid.astro';
+import Legend from './Legend.astro';
+
+interface Props {
+	project: string;
+}
+
+const { commits, months, grid, ticks, scale } = await project(Astro.props.project);
+const { mine, others } = perMonth(commits, months);
+const peak = Math.max(...mine, ...others, 1);
+// One 10-unit slot per month in the viewBox; mine rise from the centre line, everyone else's hang.
+const bars = months.map((_, i) => ({
+	x: i * 10 + 1,
+	up: (mine[i] / peak) * 78,
+	down: (others[i] / peak) * 78
+}));
+const sum = (values: number[]) => values.reduce((a, b) => a + b, 0).toLocaleString('en-US');
+---
+
+<figure>
+	<div class="relative mx-5 h-40">
+		<Grid grid={grid} />
+		<svg
+			viewBox={`0 0 ${months.length * 10} 160`}
+			preserveAspectRatio="none"
+			class="absolute inset-0 h-full w-full"
+			role="img"
+			aria-label={`Commits per month from ${scale.firstYear}: ${sum(mine)} mine, ${sum(others)} by everyone else`}
+		>
+			{bars.map((bar) => (
+				<>
+					{bar.up > 0 && (
+						<rect
+							x={bar.x}
+							y={80 - bar.up}
+							width="8"
+							height={bar.up}
+							class="fill-accent opacity-70"
+						/>
+					)}
+					{bar.down > 0 && (
+						<rect x={bar.x} y="81" width="8" height={bar.down} class="fill-mute opacity-40" />
+					)}
+				</>
+			))}
+		</svg>
+	</div>
+	<Axis ticks={ticks} />
+	<Legend />
+	<figcaption>
+		Commits per month across every repository: mine above the line, everyone else's below.{' '}
+		{sum(mine)} and {sum(others)}.
+	</figcaption>
+</figure>

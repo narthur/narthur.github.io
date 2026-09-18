@@ -19,7 +19,7 @@ const lastYear = (s: Span) => (s.end === 'now' ? Infinity : (s.end ?? s.start));
 
 /** How the span reads in text: "2019", "2019—2025", or "2019—now". */
 export const rangeLabel = (s: Span) =>
-	s.end === undefined ? String(s.start) : `${s.start}—${s.end}`;
+	s.end === undefined || s.end === s.start ? String(s.start) : `${s.start}—${s.end}`;
 
 /** Sort comparator: latest start first, and of those the one that ran longest first. */
 export const newestFirst = (a: Span, b: Span) => b.start - a.start || lastYear(b) - lastYear(a);
@@ -43,11 +43,12 @@ export function timeScale(firstYear: number, last: string) {
 export type TimeScale = ReturnType<typeof timeScale>;
 
 /**
- * Gridline positions and tick labels, every two years from the first, plus "now" at the end.
+ * Gridline positions and tick labels, every two years from the first, plus `endLabel` at the
+ * end: "now" for an axis that runs to the present, a year for one that closes in the past.
  * The first and last labels sit inside the axis instead of centring past its ends, and a year
  * close enough to "now" to collide with it on a phone is hidden there.
  */
-export function axis(scale: TimeScale) {
+export function axis(scale: TimeScale, endLabel = 'now') {
 	const years = Array.from(
 		{ length: Math.ceil((scale.endT - scale.firstYear) / 2) },
 		(_, i) => scale.firstYear + i * 2
@@ -65,7 +66,7 @@ export function axis(scale: TimeScale) {
 							? 'hidden sm:inline -translate-x-1/2'
 							: '-translate-x-1/2'
 			})),
-			{ label: 'now', left: 100, shift: '-translate-x-full' }
+			{ label: endLabel, left: 100, shift: '-translate-x-full' }
 		]
 	};
 }
@@ -89,24 +90,27 @@ export function bar(span: Span, scale: TimeScale) {
 	} as const;
 }
 
+/** Gaussian-smooths a series over `sigma` months, keeping its units. */
+export function blur(values: number[], sigma: number): number[] {
+	if (sigma <= 0) return values;
+	const r = Math.ceil(sigma * 3);
+	return values.map((_, i) => {
+		let sum = 0;
+		let weights = 0;
+		for (let d = -r; d <= r; d++) {
+			const j = i + d;
+			if (j < 0 || j >= values.length) continue;
+			const w = Math.exp(-(d * d) / (2 * sigma * sigma));
+			sum += values[j] * w;
+			weights += w;
+		}
+		return sum / weights;
+	});
+}
+
 /** Gaussian-smooths a series over `sigma` months, then scales it so its peak is 1. */
 export function smooth(values: number[], sigma: number): number[] {
-	const r = Math.ceil(sigma * 3);
-	const out =
-		sigma > 0
-			? values.map((_, i) => {
-					let sum = 0;
-					let weights = 0;
-					for (let d = -r; d <= r; d++) {
-						const j = i + d;
-						if (j < 0 || j >= values.length) continue;
-						const w = Math.exp(-(d * d) / (2 * sigma * sigma));
-						sum += values[j] * w;
-						weights += w;
-					}
-					return sum / weights;
-				})
-			: values;
+	const out = blur(values, sigma);
 	const max = Math.max(...out);
 	return max > 0 ? out.map((v) => v / max) : out;
 }

@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import { shot } from '../shots';
+
+interface Props {
+	file: string;
+	alt: string;
+}
+
+const { file, alt } = Astro.props;
+---
+
+<!-- Full length, not cropped: the screenshot is the evidence. -->
+<Image
+	src={shot(file)}
+	alt={alt}
+	widths={[600, 1200]}
+	sizes="(min-width: 1024px) 552px, calc(100vw - 48px)"
+	class="w-full border border-rule"
+/>

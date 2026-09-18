@@ -1,9 +1,8 @@
 ---
-import type { ImageMetadata } from 'astro';
-import yaml from 'js-yaml';
 import Layout from '../layouts/Layout.astro';
-import raw from '../work/work.yaml?raw';
+import { projects, stack } from '../work/work';
 import activity from '../work/activity.json';
+import { shot } from '../work/shots';
 import { getImage, Image } from 'astro:assets';
 import {
 	axis,
@@ -14,22 +13,8 @@ import {
 	rangeLabel,
 	smooth,
 	timeScale,
-	type Month,
-	type Span
+	type Month
 } from '../work/chart';
-
-interface Named extends Span {
-	name: string;
-}
-
-interface Project extends Named {
-	url?: string;
-	meta: string;
-	description: string;
-	shots?: { file: string; alt: string }[];
-}
-
-const { projects, stack } = yaml.load(raw) as { projects: Project[]; stack: Named[] };
 
 const months = activity as Month[];
 const firstYear = Number(months[0].month.slice(0, 4));
@@ -64,18 +49,6 @@ const stackRows = stack
 	.slice()
 	.sort(oldestFirst)
 	.map((item) => ({ ...item, range: rangeLabel(item), bar: bar(item, scale) }));
-
-const shotFiles = import.meta.glob<{ default: ImageMetadata }>(
-	'../work/shots/**/*.{jpg,png,webp}',
-	{
-		eager: true
-	}
-);
-function shot(file: string) {
-	const found = shotFiles[`../work/shots/${file}`];
-	if (!found) throw new Error(`work.yaml names a screenshot that isn't in src/work/shots: ${file}`);
-	return found.default;
-}
 
 // Thumbnails link to a copy sized for viewing, not the multi-megabyte original.
 const projectRows = await Promise.all(
