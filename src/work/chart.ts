@@ -80,6 +80,8 @@ export function bar(span: Span, scale: TimeScale) {
 		left,
 		width: scale.x(endT) - left,
 		ongoing,
+		// Began before the axis, so the bar is cut off at the left edge.
+		clippedStart: span.start < scale.firstYear,
 		// Where the label hangs: from the bar's start, or from the axis's right edge when it would
 		// otherwise run past it. A phone column fits less, so it switches over sooner.
 		// ponytail: fixed cutoffs, not measured label widths; measure if a long name still clips.

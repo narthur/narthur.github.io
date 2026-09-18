@@ -111,8 +111,8 @@ const projectRows = await Promise.all(
 		{`${firstYear}–now`} scale.
 	</p>
 
-	<!-- Both charts stop short of the column's right edge (mr-5) so an ongoing bar's dotted tail
-	     can run past "now" without leaving the column. -->
+	<!-- Both charts sit inset from the column's edges (mx-5) so the dotted marks for a span that
+	     runs past either end of the axis stay inside the column. -->
 	<section class="mt-12 sm:mt-16" aria-labelledby="activity-heading">
 		<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
 			<h2 id="activity-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
@@ -127,7 +127,7 @@ const projectRows = await Promise.all(
 				))}
 			</ul>
 		</div>
-		<div class="relative mr-5 mt-4 h-24 sm:mt-5 sm:h-32">
+		<div class="relative mx-5 mt-4 h-24 sm:mt-5 sm:h-32">
 			{grid.map((left) => (
 				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
 			))}
@@ -144,7 +144,7 @@ const projectRows = await Promise.all(
 				))}
 			</svg>
 		</div>
-		<div class="relative mr-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+		<div class="relative mx-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
 			{ticks.map((tick) => (
 				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
 					{tick.label}
@@ -157,7 +157,7 @@ const projectRows = await Promise.all(
 		<h2 id="stack-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
 			Stack
 		</h2>
-		<div class="relative mr-5 mt-4 pt-1">
+		<div class="relative mx-5 mt-4 pt-1">
 			{grid.map((left) => (
 				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
 			))}
@@ -186,6 +186,9 @@ const projectRows = await Promise.all(
 							class="absolute top-[25px] h-0.5 bg-accent opacity-40"
 							style={`left: ${row.bar.left}%; width: ${row.bar.width}%`}
 						>
+							{row.bar.clippedStart && (
+								<span class="absolute right-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
 							{row.bar.ongoing && (
 								<span class="absolute left-full top-0 w-4 border-t-2 border-dotted border-accent" />
 							)}
@@ -194,7 +197,7 @@ const projectRows = await Promise.all(
 				))}
 			</ul>
 		</div>
-		<div class="relative mr-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+		<div class="relative mx-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
 			{ticks.map((tick) => (
 				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
 					{tick.label}

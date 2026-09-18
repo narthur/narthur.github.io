@@ -16,7 +16,7 @@ function ghToken() {
 		if (err.code === 'ENOENT') {
 			throw new Error('The GitHub CLI (gh) is not installed: https://cli.github.com/');
 		}
-		throw err; // gh's own message covers the logged-out case ("run gh auth login").
+		throw err; // Carries gh's own stderr, e.g. "no oauth token found" when logged out.
 	}
 }
 

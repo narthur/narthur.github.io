@@ -90,8 +90,8 @@ src/
 
 `/work` is the one page on the wider `max-w-4xl` column (`<Layout wide>`), because its
 charts need the room. The activity waveform and stack chart share a time scale from the
-first year in `activity.json` to its last month, and both stop `mr-5` short of the column
-so an ongoing bar's dotted tail can run past "now". Each activity layer is scaled to its
+first year in `activity.json` to its last month, and both sit `mx-5` inside the column
+so the dotted marks for spans running past either end of the axis fit. Each activity layer is scaled to its
 own peak. To refresh the activity data, run `pnpm activity` (needs `gh` logged in as
 narthur) and commit `activity.json`; the deploy has no GitHub token, so it is not fetched
 at build time. In `work.yaml`, `end: now` means ongoing, a year means ended that year,

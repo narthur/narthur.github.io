@@ -43,6 +43,8 @@ describe('bar', () => {
 		const b = bar({ start: 2008, end: 'now' }, scale);
 		expect(b.left).toBe(0);
 		expect(b.width).toBeCloseTo(100);
+		expect(b.clippedStart).toBe(true);
+		expect(bar({ start: 2014, end: 'now' }, scale).clippedStart).toBe(false);
 	});
 
 	it('treats a missing end as the start year alone', () => {
