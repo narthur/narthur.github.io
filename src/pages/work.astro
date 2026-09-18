@@ -197,12 +197,17 @@ const projectRows = await Promise.all(
 				))}
 			</ul>
 		</div>
-		<div class="relative mx-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
-			{ticks.map((tick) => (
-				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
-					{tick.label}
-				</span>
-			))}
+		<!-- The stack runs taller than a phone screen, so its year axis sticks to the bottom of the
+		     viewport while the chart scrolls past, then scrolls away with the end of the section.
+		     The background hides the bars passing underneath it. -->
+		<div class="sticky bottom-0 bg-bg pb-3" aria-hidden="true">
+			<div class="relative mx-5 h-7 border-t border-rule font-mono text-[11px] text-faint">
+				{ticks.map((tick) => (
+					<span class:list={['absolute top-2', tick.shift]} style={`left: ${tick.left}%`}>
+						{tick.label}
+					</span>
+				))}
+			</div>
 		</div>
 	</section>
 
