@@ -13,7 +13,12 @@ const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
 // Most posts have no subtitle, so fall back to the opening paragraph, markdown stripped.
-const opening = post.body?.split('\n\n').find((block) => /^[\p{L}"“‘]/u.test(block)) ?? title;
+// Code fences go first: a blank line inside one would otherwise split it into "paragraphs".
+const opening =
+	post.body
+		?.replace(/```[\s\S]*?```/g, '')
+		.split('\n\n')
+		.find((block) => /^[\p{L}"“‘]/u.test(block)) ?? title;
 const plain = opening.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '');
 const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…` : plain);
 ---

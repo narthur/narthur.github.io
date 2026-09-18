@@ -83,7 +83,10 @@ const posts = [
 					<a href={`/writing/${post.id}`} class="text-sm">
 						{post.data.title}
 					</a>
-					<time class="whitespace-nowrap font-mono text-xs text-faint">
+					<time
+						datetime={post.data.date.toISOString().slice(0, 10)}
+						class="whitespace-nowrap font-mono text-xs text-faint"
+					>
 						{post.data.date.toISOString().slice(0, 10)}
 					</time>
 				</li>

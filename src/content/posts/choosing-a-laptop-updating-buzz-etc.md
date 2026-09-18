@@ -36,7 +36,7 @@ So unfortunately it feels like the responsible decision is to purchase an Apple 
 I’ve been continuing to add features to [buzz](https://github.com/PinePeakDigital/buzz). In the last week:
 
 - Added support for piping values into the \`buzz add\` command.
-- Added \`—json\` and \`—datapoints\` args for the \`buzz view <slug>\` command.
+- Added \`—json\` and \`—datapoints\` args for the \`buzz view &lt;slug&gt;\` command.
 - Tried to improve the usefulness of the buzz update-available messages, though I’m not quite happy with them yet.
 
 ---
