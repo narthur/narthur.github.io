@@ -31,7 +31,13 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
 	{subtitle && <p class="mt-3 text-lg leading-relaxed text-mute">{subtitle}</p>}
 	<p class="mt-4 font-mono text-xs text-faint">
-		<time datetime={day}>{day}</time> · <a href={substack}>Originally on Substack</a>
+		<time datetime={day}>{day}</time>
+		{substack && (
+			<>
+				{' '}
+				· <a href={substack}>Originally on Substack</a>
+			</>
+		)}
 	</p>
 
 	<article class="post mt-12">

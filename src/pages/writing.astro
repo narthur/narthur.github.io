@@ -2,11 +2,11 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-const archive = (await getCollection('posts')).sort(
+const posts = (await getCollection('posts')).sort(
 	(a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
 
-const posts = [
+const beeminderPosts = [
 	{
 		title: 'Ex WordPress Ad Astro Per Narthurius',
 		url: 'https://blog.beeminder.com/astroblog/',
@@ -33,7 +33,7 @@ const posts = [
 
 <Layout
 	title="Writing — Nathan Arthur"
-	description="Articles by Nathan Arthur on the Beeminder blog, plus the Narthur Online newsletter."
+	description="Narthur Online, Nathan Arthur's mostly-weekly newsletter, plus articles on the Beeminder blog."
 >
 	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
 		<a href="/">&larr; Nathan Arthur</a>
@@ -41,44 +41,19 @@ const posts = [
 
 	<h1 class="text-4xl font-medium tracking-tight">Writing</h1>
 	<p class="mt-5 max-w-prose leading-relaxed text-mute">
-		I write a mostly-weekly newsletter, and I've written for the Beeminder blog.
+		Narthur Online is my mostly-weekly newsletter: tools I'm using, things I've built, and what I'm
+		figuring out about running a one-person software business. Subscribe by email at the bottom of
+		any page, or follow the{' '}
+		<a href="/rss.xml" class="text-ink underline decoration-rule underline-offset-4">
+			RSS feed
+		</a>
+		.
 	</p>
 
 	<section class="mt-20">
 		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Newsletter</h2>
-		<article class="mt-8 border-t border-rule pt-8">
-			<div class="flex items-baseline justify-between gap-4">
-				<h3 class="text-lg font-medium tracking-tight">
-					<a href="https://narthur.substack.com/">Narthur Online</a>
-				</h3>
-				<span class="whitespace-nowrap font-mono text-xs text-faint">weekly-ish</span>
-			</div>
-			<p class="mt-3 max-w-prose text-sm leading-relaxed text-mute">
-				Where most of my writing goes. Tools I'm using, things I've built, and what I'm figuring out
-				about running a one-person software business. Sign up at the bottom of any page, or read the
-				archive below.
-			</p>
-		</article>
-	</section>
-
-	<section class="mt-20">
-		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Beeminder blog</h2>
-		{posts.map((post) => (
-			<article class="mt-8 border-t border-rule pt-8">
-				<div class="flex items-baseline justify-between gap-4">
-					<h3 class="text-lg font-medium tracking-tight">
-						<a href={post.url}>{post.title}</a>
-					</h3>
-					<span class="whitespace-nowrap font-mono text-xs text-faint">{post.date}</span>
-				</div>
-				<p class="mt-3 max-w-prose text-sm leading-relaxed text-mute">{post.blurb}</p>
-			</article>
-		))}
-	</section>
-	<section class="mt-20">
-		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Newsletter archive</h2>
 		<ul class="mt-8 border-t border-rule">
-			{archive.map((post) => (
+			{posts.map((post) => (
 				<li class="flex items-baseline justify-between gap-4 border-b border-rule py-3">
 					<a href={`/writing/${post.id}`} class="text-sm">
 						{post.data.title}
@@ -92,5 +67,20 @@ const posts = [
 				</li>
 			))}
 		</ul>
+	</section>
+
+	<section class="mt-20">
+		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Beeminder blog</h2>
+		{beeminderPosts.map((post) => (
+			<article class="mt-8 border-t border-rule pt-8">
+				<div class="flex items-baseline justify-between gap-4">
+					<h3 class="text-lg font-medium tracking-tight">
+						<a href={post.url}>{post.title}</a>
+					</h3>
+					<span class="whitespace-nowrap font-mono text-xs text-faint">{post.date}</span>
+				</div>
+				<p class="mt-3 max-w-prose text-sm leading-relaxed text-mute">{post.blurb}</p>
+			</article>
+		))}
 	</section>
 </Layout>

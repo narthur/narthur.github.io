@@ -36,9 +36,10 @@ Astro needs Node >= 22.19.
   third-party script is the Supascribe newsletter loader in `Layout.astro`.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
-- Newsletter posts are Markdown in `src/content/posts/`, an Astro content
-  collection (`src/content.config.ts`) rendered by `src/pages/writing/[slug].astro`.
-  They were imported once from a Substack export; see `knowledge.md`.
+- The newsletter lives here. Posts are Markdown in `src/content/posts/`, an
+  Astro content collection (`src/content.config.ts`) rendered by
+  `src/pages/writing/[slug].astro` and fed by `src/pages/rss.xml.ts`. To
+  publish, add a file; see `knowledge.md`.
 
 ## Styling
 
