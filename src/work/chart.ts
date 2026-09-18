@@ -8,10 +8,24 @@ export interface Month {
 	reviews: number;
 }
 
+/** A run of years, as written in work.yaml. */
 export interface Span {
-	start: number; // year
-	end?: number | null; // last year, inclusive; null or missing = still going
+	start: number;
+	end?: number | 'now'; // last year, inclusive; 'now' = still going; missing = the start year only
 }
+
+/** The span's last year, with an ongoing one counting as later than any real year. */
+const lastYear = (s: Span) => (s.end === 'now' ? Infinity : (s.end ?? s.start));
+
+/** How the span reads in text: "2019", "2019—2025", or "2019—now". */
+export const rangeLabel = (s: Span) =>
+	s.end === undefined ? String(s.start) : `${s.start}—${s.end}`;
+
+/** Sort comparator: latest start first, and of those the one that ran longest first. */
+export const newestFirst = (a: Span, b: Span) => b.start - a.start || lastYear(b) - lastYear(a);
+
+/** Sort comparator: earliest start first, and of those the one that ran longest first. */
+export const oldestFirst = (a: Span, b: Span) => a.start - b.start || lastYear(b) - lastYear(a);
 
 /** A time axis from January of `firstYear` to the end of the month `last` (YYYY-MM). */
 export function timeScale(firstYear: number, last: string) {
@@ -28,10 +42,38 @@ export function timeScale(firstYear: number, last: string) {
 
 export type TimeScale = ReturnType<typeof timeScale>;
 
+/**
+ * Gridline positions and tick labels, every two years from the first, plus "now" at the end.
+ * The first and last labels sit inside the axis instead of centring past its ends, and a year
+ * close enough to "now" to collide with it on a phone is hidden there.
+ */
+export function axis(scale: TimeScale) {
+	const years = Array.from(
+		{ length: Math.ceil((scale.endT - scale.firstYear) / 2) },
+		(_, i) => scale.firstYear + i * 2
+	);
+	return {
+		grid: years.map((y) => scale.x(y)),
+		ticks: [
+			...years.map((y) => ({
+				label: String(y),
+				left: scale.x(y),
+				shift:
+					y === scale.firstYear
+						? ''
+						: scale.x(y) > 90
+							? 'hidden sm:inline -translate-x-1/2'
+							: '-translate-x-1/2'
+			})),
+			{ label: 'now', left: 100, shift: '-translate-x-full' }
+		]
+	};
+}
+
 /** Where a span's bar sits, as percentages of the axis. */
 export function bar(span: Span, scale: TimeScale) {
-	const ongoing = span.end == null;
-	const endT = ongoing ? scale.endT : Math.min((span.end as number) + 1, scale.endT);
+	const ongoing = span.end === 'now';
+	const endT = ongoing ? scale.endT : Math.min(lastYear(span) + 1, scale.endT);
 	// Spans that began before the axis start at its left edge; their labels keep the real year.
 	const left = scale.x(Math.max(span.start, scale.firstYear));
 	return {
@@ -47,22 +89,22 @@ export function bar(span: Span, scale: TimeScale) {
 
 /** Gaussian-smooths a series over `sigma` months, then scales it so its peak is 1. */
 export function smooth(values: number[], sigma: number): number[] {
-	let out = values;
-	if (sigma > 0) {
-		const r = Math.ceil(sigma * 3);
-		out = values.map((_, i) => {
-			let sum = 0;
-			let weights = 0;
-			for (let d = -r; d <= r; d++) {
-				const j = i + d;
-				if (j < 0 || j >= values.length) continue;
-				const w = Math.exp(-(d * d) / (2 * sigma * sigma));
-				sum += values[j] * w;
-				weights += w;
-			}
-			return sum / weights;
-		});
-	}
+	const r = Math.ceil(sigma * 3);
+	const out =
+		sigma > 0
+			? values.map((_, i) => {
+					let sum = 0;
+					let weights = 0;
+					for (let d = -r; d <= r; d++) {
+						const j = i + d;
+						if (j < 0 || j >= values.length) continue;
+						const w = Math.exp(-(d * d) / (2 * sigma * sigma));
+						sum += values[j] * w;
+						weights += w;
+					}
+					return sum / weights;
+				})
+			: values;
 	const max = Math.max(...out);
 	return max > 0 ? out.map((v) => v / max) : out;
 }

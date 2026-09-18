@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { bar, mirroredPath, smooth, timeScale } from './chart';
+import {
+	axis,
+	bar,
+	mirroredPath,
+	newestFirst,
+	oldestFirst,
+	rangeLabel,
+	smooth,
+	timeScale
+} from './chart';
 
 // 2014-01 through 2026-09: 12.75 years.
 const scale = timeScale(2014, '2026-09');
@@ -20,7 +29,7 @@ describe('bar', () => {
 	});
 
 	it('runs an ongoing span to the end of the axis', () => {
-		const b = bar({ start: 2023 }, scale);
+		const b = bar({ start: 2023, end: 'now' }, scale);
 		expect(b.left + b.width).toBeCloseTo(100);
 		expect(b.ongoing).toBe(true);
 	});
@@ -31,15 +40,87 @@ describe('bar', () => {
 	});
 
 	it('clamps a span that began before the axis to its left edge', () => {
-		const b = bar({ start: 2008 }, scale);
+		const b = bar({ start: 2008, end: 'now' }, scale);
 		expect(b.left).toBe(0);
 		expect(b.width).toBeCloseTo(100);
 	});
 
+	it('treats a missing end as the start year alone', () => {
+		const b = bar({ start: 2020 }, scale);
+		expect(b.width).toBeCloseTo((1 / 12.75) * 100);
+		expect(b.ongoing).toBe(false);
+	});
+
 	it('hangs labels from the right edge only once they would run past it', () => {
-		expect(bar({ start: 2019 }, scale).label).toBe('left');
-		expect(bar({ start: 2022 }, scale).label).toBe('right-on-narrow');
-		expect(bar({ start: 2025 }, scale).label).toBe('right');
+		expect(bar({ start: 2019, end: 'now' }, scale).label).toBe('left');
+		expect(bar({ start: 2022, end: 'now' }, scale).label).toBe('right-on-narrow');
+		expect(bar({ start: 2025, end: 'now' }, scale).label).toBe('right');
+	});
+});
+
+describe('rangeLabel', () => {
+	it('reads as a single year, a closed range, or an open one', () => {
+		expect(rangeLabel({ start: 2024 })).toBe('2024');
+		expect(rangeLabel({ start: 2019, end: 2025 })).toBe('2019—2025');
+		expect(rangeLabel({ start: 2019, end: 'now' })).toBe('2019—now');
+	});
+});
+
+describe('sorting', () => {
+	const spans = [
+		{ start: 2024, end: 2024 },
+		{ start: 2019, end: 2025 },
+		{ start: 2024 },
+		{ start: 2024, end: 'now' as const },
+		{ start: 2019, end: 'now' as const }
+	];
+
+	it('puts the latest start first, and the longest-running of a tie first', () => {
+		expect(spans.slice().sort(newestFirst)).toEqual([
+			{ start: 2024, end: 'now' },
+			{ start: 2024, end: 2024 },
+			{ start: 2024 },
+			{ start: 2019, end: 'now' },
+			{ start: 2019, end: 2025 }
+		]);
+	});
+
+	it('treats a missing end the same as an end in the start year', () => {
+		expect(newestFirst({ start: 2024 }, { start: 2024, end: 2024 })).toBe(0);
+	});
+
+	it('puts the earliest start first for the waterfall', () => {
+		expect(spans.slice().sort(oldestFirst)[0]).toEqual({ start: 2019, end: 'now' });
+	});
+});
+
+describe('axis', () => {
+	it('marks every other year from the first, then "now" at the end', () => {
+		const { grid, ticks } = axis(scale);
+		expect(ticks.map((t) => t.label)).toEqual([
+			'2014',
+			'2016',
+			'2018',
+			'2020',
+			'2022',
+			'2024',
+			'2026',
+			'now'
+		]);
+		expect(grid[0]).toBe(0);
+		expect(ticks.at(-1)?.left).toBe(100);
+	});
+
+	it('keeps the first label inside the axis and hides one crowding "now" on phones', () => {
+		const { ticks } = axis(scale);
+		expect(ticks[0].shift).toBe('');
+		expect(ticks.find((t) => t.label === '2026')?.shift).toContain('hidden sm:inline');
+		expect(ticks.find((t) => t.label === '2024')?.shift).not.toContain('hidden');
+	});
+
+	it('never places a tick past the end of a short axis', () => {
+		const { ticks } = axis(timeScale(2024, '2025-01'));
+		expect(ticks.map((t) => t.label)).toEqual(['2024', 'now']);
 	});
 });
 

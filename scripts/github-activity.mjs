@@ -1,4 +1,5 @@
-// Writes src/work/activity.json: monthly commit, PR, and review counts from GitHub.
+// Writes src/work/activity.json: monthly commit, PR, and review counts from GitHub, through the
+// last complete month.
 // Run with `pnpm activity`; needs the `gh` CLI logged in as the account being charted.
 // ponytail: refreshed by hand and committed, since the deploy has no GitHub token.
 // Move it into the deploy workflow if keeping it current by hand becomes a chore.
@@ -27,8 +28,9 @@ for (let year = FIRST_YEAR; year <= now.getUTCFullYear(); year++) {
 	const fields = [];
 	for (let m = 0; m < 12; m++) {
 		const from = new Date(Date.UTC(year, m, 1));
-		if (from > now) break;
 		const to = new Date(Date.UTC(year, m + 1, 1) - 1000);
+		// Stop before the month in progress: a partial month reads as a slump at the chart's end.
+		if (to > now) break;
 		fields.push(`m${m}: contributionsCollection(from: "${from.toISOString()}", to: "${to.toISOString()}") {
 			totalCommitContributions totalPullRequestContributions totalPullRequestReviewContributions
 		}`);
