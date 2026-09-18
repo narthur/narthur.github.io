@@ -7,7 +7,7 @@
 // "Mine" is any author whose name starts with this repo's `git config user.name`; set
 // PROJECT_STATS_AUTHOR to override. Paths that aren't git repositories are skipped with a warning.
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, realpathSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { tally } from '../src/work/commits.ts';
 
@@ -21,13 +21,17 @@ const git = (args, cwd) =>
 	execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 1 << 28, stdio: 'pipe' });
 const me = process.env.PROJECT_STATS_AUTHOR ?? git(['config', 'user.name']).trim();
 
-// Only a repository's own root counts: git answers ".git" there, "." at the root of a bare
-// clone, and the parent's path from a folder inside another repository, which would otherwise
-// be charted as that whole repository. Anything else is named on the way past, so a mistyped
-// path can't quietly leave a repository out.
+// Only a repository's own root counts: its working tree's top level (worktrees and submodule
+// checkouts included) or a bare clone's directory. A folder inside another repository would
+// otherwise be charted as that whole repository. Anything else is named on the way past, so a
+// mistyped path can't quietly leave a repository out.
 const isRepo = (dir) => {
 	try {
-		if (['.git', '.'].includes(git(['rev-parse', '--git-dir'], dir).trim())) return true;
+		const bare = git(['rev-parse', '--is-bare-repository'], dir).trim() === 'true';
+		const root = bare
+			? git(['rev-parse', '--git-dir'], dir).trim() === '.'
+			: realpathSync(git(['rev-parse', '--show-toplevel'], dir).trim()) === realpathSync(dir);
+		if (root) return true;
 	} catch {
 		// Not inside any repository, or not a directory.
 	}
