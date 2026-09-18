@@ -105,9 +105,9 @@ absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
 
-There are two feeds from one builder, `src/feed.ts`, differing only in the footer
-appended to each item. `/rss.xml` is the public one, linked from the site, with a
-footer for feed readers. `/newsletter.xml` is unlinked and read by
+There are two feeds from one builder, `src/feed.ts`, differing only in the
+footer appended to each item. `/rss.xml` is the public one, linked from the
+site, with a footer for feed readers. `/newsletter.xml` is unlinked and read by
 rss-to-email-worker, which emails each new item; its footer is written for
 email, and the worker adds the per-subscriber unsubscribe link below it. Guids
 match across the two.

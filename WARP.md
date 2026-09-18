@@ -38,8 +38,9 @@ Astro needs Node >= 22.19.
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an
   Astro content collection (`src/content.config.ts`) rendered by
-  `src/pages/writing/[slug].astro` and fed by `src/pages/rss.xml.ts` (feed readers) and `newsletter.xml.ts` (email), both built by `src/feed.ts`. To
-  publish, add a file; see `knowledge.md`.
+  `src/pages/writing/[slug].astro` and fed by two feeds built by
+  `src/feed.ts`: `rss.xml.ts` for feed readers, `newsletter.xml.ts` for email.
+  To publish, add a file; see `knowledge.md`.
 
 ## Styling
 
