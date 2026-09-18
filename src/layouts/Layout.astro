@@ -31,11 +31,10 @@ const footerLinks = [
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="alternate" type="application/rss+xml" title="Narthur Online" href="/rss.xml" />
-		<!-- defer, not async: the loader looks up the footer's embed target as soon as it runs
-		     and doesn't wait for the DOM, so it must run after the body is parsed. -->
 		<script
 			is:inline
-			src="https://js.supascribe.com/v1/loader/OBK1714YhYRDd0Lcjm40h5ph3a92.js"
+			src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+			async
 			defer
 		></script>
 	</head>
@@ -50,7 +49,34 @@ const footerLinks = [
 					I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news,
 					and the random thoughts of a web developer with ADHD.
 				</p>
-				<div class="mt-4" data-supascribe-embed-id="128744500344" data-supascribe-subscribe></div>
+				<!-- Handled by rss-to-email-worker; it replies with its own confirmation page. -->
+				<form
+					class="mt-4 flex flex-wrap gap-2"
+					method="post"
+					action="https://mail.nathanarthur.com/subscribe"
+				>
+					<label for="subscribe-email" class="sr-only">
+						Email address
+					</label>
+					<input
+						id="subscribe-email"
+						type="email"
+						name="email"
+						required
+						autocomplete="email"
+						placeholder="you@example.com"
+						class="min-w-0 flex-1 rounded border border-rule bg-transparent px-3 py-2 text-ink placeholder:text-faint"
+					/>
+					<button class="rounded bg-accent px-4 py-2 font-medium text-bg">Subscribe</button>
+					<!-- action="subscribe" is checked by the Worker. -->
+					<div
+						class="cf-turnstile w-full"
+						data-sitekey="0x4AAAAAAE8B6mITS1r7e6Zz"
+						data-action="subscribe"
+						data-theme="dark"
+						data-size="flexible"
+					></div>
+				</form>
 
 				<ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-faint">
 					{footerLinks.map((link) => (
@@ -94,20 +120,10 @@ const footerLinks = [
 	   being legible against it. */
 	a:focus-visible,
 	button:focus-visible,
+	input:focus-visible,
 	summary:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 3px;
 		border-radius: 1px;
-	}
-
-	/* Supascribe's theme ships a blue button, the only saturated thing on the page. It
-	   exposes its palette as CSS variables but sets them from a runtime-injected stylesheet,
-	   hence !important. ponytail: setting these colors in the Supascribe dashboard instead
-	   would let this whole block be deleted. */
-	[data-supascribe-subscribe] .custom-substack-widget {
-		--csw-primary-color: var(--accent) !important;
-		--csw-text-color: #0a0c10 !important;
-		--csw-input-color: transparent !important;
-		--csw-input-text-color: #e8e9ec !important;
 	}
 </style>
