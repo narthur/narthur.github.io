@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { allTags, categoriesInOrder, itemsInCategory, matchesTags, type UsesItem } from './filter';
+import {
+	allTags,
+	categoriesInOrder,
+	itemsInCategory,
+	matchesTags,
+	toggleTag,
+	type UsesItem
+} from './filter';
 
 const items: UsesItem[] = [
 	{ name: 'Zed', description: '', url: '', category: 'Editors', tags: ['terminal', 'ai'] },
@@ -31,6 +38,20 @@ describe('matchesTags', () => {
 
 	it('excludes an untagged item once a filter is active', () => {
 		expect(matchesTags(items[3], new Set(['terminal']))).toBe(false);
+	});
+});
+
+describe('toggleTag', () => {
+	it('adds an unselected tag and removes a selected one', () => {
+		const once = toggleTag(new Set(), 'ai');
+		expect([...once]).toEqual(['ai']);
+		expect([...toggleTag(once, 'ai')]).toEqual([]);
+	});
+
+	it('leaves the original set untouched', () => {
+		const selected = new Set(['ai']);
+		toggleTag(selected, 'cli');
+		expect([...selected]).toEqual(['ai']);
 	});
 });
 

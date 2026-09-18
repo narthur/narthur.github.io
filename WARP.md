@@ -68,3 +68,8 @@ harness. Use `pnpm test` (single run) rather than watch mode.
    generated CSS, so utility classes keep the old value while plain-CSS rules
    pick up the new one. Restart `pnpm dev`.
 4. **Dropped spaces before links**: see the Build section of `knowledge.md`.
+5. **`pnpm preview` does not reproduce production 404s.** For an unknown path it
+   serves Astro's generic "404: Not Found" page, not `dist/404.html`, and a plain
+   static file server won't serve `404.html` either. To check what Cloudflare
+   will actually serve, run `npx wrangler dev` after a build — it applies
+   `wrangler.jsonc`'s `not_found_handling` — or check the deployed site.

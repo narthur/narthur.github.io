@@ -58,7 +58,7 @@ const groups = categoriesInOrder(items).map((category) => ({
 	</details>
 
 	<p class="mt-16 max-w-prose leading-relaxed text-mute" data-empty hidden>
-		Nothing matches those tags.
+		Nothing matches those tags.{' '}
 		<button data-clear class="text-accent underline">
 			Clear filters
 		</button>
@@ -102,7 +102,7 @@ const groups = categoriesInOrder(items).map((category) => ({
 </Layout>
 
 <script>
-	import { matchesTags } from '../uses/filter';
+	import { matchesTags, toggleTag } from '../uses/filter';
 
 	let selected = new Set<string>();
 
@@ -111,8 +111,7 @@ const groups = categoriesInOrder(items).map((category) => ({
 			button.setAttribute('aria-pressed', String(selected.has(button.dataset.tag!)));
 		}
 		for (const li of document.querySelectorAll<HTMLElement>('[data-tags]')) {
-			const item = { name: '', description: '', url: '', tags: JSON.parse(li.dataset.tags!) };
-			li.hidden = !matchesTags(item, selected);
+			li.hidden = !matchesTags({ tags: JSON.parse(li.dataset.tags!) }, selected);
 		}
 		const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
 		for (const group of groups) group.hidden = !group.querySelector('[data-tags]:not([hidden])');
@@ -128,7 +127,7 @@ const groups = categoriesInOrder(items).map((category) => ({
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLElement;
 		const tag = target.closest<HTMLElement>('[data-tag]')?.dataset.tag;
-		if (tag !== undefined && !selected.delete(tag)) selected.add(tag);
+		if (tag !== undefined) selected = toggleTag(selected, tag);
 		else if (target.closest('[data-clear]')) selected = new Set();
 		else return;
 		render();
