@@ -4,5 +4,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	// Emit /uses.html, not /uses/index.html, as the SvelteKit build did. Cloudflare serves the
 	// latter at /uses/ and redirects /uses to it; this keeps every existing URL as-is.
-	build: { format: 'file' }
+	build: { format: 'file' },
+	// Shiki paints code blocks with its own theme colours, outside the site's six-token palette.
+	markdown: { syntaxHighlight: false }
 });

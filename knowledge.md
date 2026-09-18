@@ -69,13 +69,26 @@ src/
 │   ├── index.astro             # home: positioning, selected work, also built
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── audioverse.astro        # AudioVerse case study
-│   ├── writing.astro           # newsletter + individual Beeminder articles
+│   ├── writing.astro           # newsletter, Beeminder articles, newsletter archive
+│   ├── writing/[slug].astro    # one newsletter post
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+├── content.config.ts           # the `posts` collection schema
+├── content/posts/*.md          # newsletter posts, imported from Substack
 └── uses/
     ├── filter.ts               # tag/category logic, the only tested code
     ├── filter.spec.ts
     └── uses.yaml               # the list itself
 ```
+
+Newsletter posts were imported from a Substack export (2026-09-18): one
+Markdown file per post, named by its Substack slug, so `/writing/<slug>`
+mirrors `narthur.substack.com/p/<slug>`. Frontmatter is `title`, optional
+`subtitle`, `date`, and `substack` (the original URL). Images live in
+`public/writing/<slug>/` as downloaded WebP (GIFs kept as GIFs) and are
+written as raw `<figure><img width height>` HTML in the Markdown, so they keep
+explicit dimensions. Links between posts point at the local copies. Post body
+styles are in `writing/[slug].astro`, built from the palette tokens; syntax
+highlighting is off because Shiki brings its own colours.
 
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
