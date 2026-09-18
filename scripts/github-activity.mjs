@@ -9,7 +9,18 @@ import { writeFileSync } from 'node:fs';
 const FIRST_YEAR = 2014;
 const now = new Date();
 
-const token = execFileSync('gh', ['auth', 'token'], { encoding: 'utf8' }).trim();
+function ghToken() {
+	try {
+		return execFileSync('gh', ['auth', 'token'], { encoding: 'utf8' }).trim();
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			throw new Error('The GitHub CLI (gh) is not installed: https://cli.github.com/');
+		}
+		throw err; // gh's own message covers the logged-out case ("run gh auth login").
+	}
+}
+
+const token = ghToken();
 
 async function graphql(query) {
 	const res = await fetch('https://api.github.com/graphql', {
