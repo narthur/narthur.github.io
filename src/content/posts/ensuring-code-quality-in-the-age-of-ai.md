@@ -50,14 +50,6 @@ These types of tools have multiple advantages:
 
 I’m interested in exploring further how this class of tools can be expanded, improved, or better leveraged to cover the loss of the practices AI seems to threaten.
 
-#### Featured Project: _[Later](https://later.nathanarthur.com/?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=ensuring-code-quality-in-the-age-of-ai)_
+#### Featured Project: _[Later](https://later.nathanarthur.com/)_
 
-Back in the day there was a phone app called “Do It (Later)” that let you write down tasks you wanted to complete and postpone them until tomorrow. This is a super simple web clone of that, also adding some features I always wished the original had. I built it when I was first experimenting with what _[Codebuff](https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=ensuring-code-quality-in-the-age-of-ai)_ could do (one of the AI coding tools I’ve been loosely referring to).
-
-#### Enjoyed this issue?
-
-Consider doing one of the following:
-
-- 📬 Forward this email to someone you think would enjoy it
-- ✨ *[Check out](https://nathanarthur.com/?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=ensuring-code-quality-in-the-age-of-ai)* all the other things I’ve been working on
-- ☕ _[Join my Ko-fi](https://ko-fi.com/narthur?utm_source=narthur.beehiiv.com&utm_medium=referral&utm_campaign=ensuring-code-quality-in-the-age-of-ai)_ to provide ongoing support, or just leave a tip
+Back in the day there was a phone app called “Do It (Later)” that let you write down tasks you wanted to complete and postpone them until tomorrow. This is a super simple web clone of that, also adding some features I always wished the original had. I built it when I was first experimenting with what _[Codebuff](https://codebuff.com/referrals/ref-6d348d54-80f1-4155-903b-2cc6c57dd12f)_ could do (one of the AI coding tools I’ve been loosely referring to).
