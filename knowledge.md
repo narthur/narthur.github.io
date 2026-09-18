@@ -129,13 +129,13 @@ The favicon is self-hosted: `public/favicon.svg` is the source and
 take SVG icons. Keep them in step. It carries a single letterform, not a
 monogram — at the 16px browsers actually draw, two letters turn to mush.
 
-## Newsletter embed
+## Newsletter signup
 
-Supascribe, loaded via the script tag in `Layout.astro` and mounted on the
-`data-supascribe-subscribe` div in its footer. Its default theme is a blue
-button; the layout's global style block overrides the `--csw-*` CSS variables
-to match the palette. Setting those colors in the Supascribe dashboard would
-let that block be deleted.
+The footer in `Layout.astro` holds a plain form that posts to
+`https://mail.nathanarthur.com/subscribe`, handled by rss-to-email-worker, which
+replies with its own confirmation page. Cloudflare Turnstile guards it; the
+widget uses `data-appearance="interaction-only"`, so it shows only when a
+visitor must interact. The worker checks the `subscribe` action.
 
 ## Build
 
