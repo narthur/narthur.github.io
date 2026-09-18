@@ -1,0 +1,248 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import yaml from 'js-yaml';
+import Layout from '../layouts/Layout.astro';
+import raw from '../work/work.yaml?raw';
+import activity from '../work/activity.json';
+import { bar, mirroredPath, smooth, timeScale, type Month } from '../work/chart';
+
+interface Dated {
+	name: string;
+	start: number;
+	end?: number | 'now'; // missing = within the start year
+}
+
+interface Project extends Dated {
+	url?: string;
+	meta: string;
+	description: string;
+	shots?: { file: string; alt: string }[];
+}
+
+const { projects, stack } = yaml.load(raw) as { projects: Project[]; stack: Dated[] };
+
+const months = activity as Month[];
+const firstYear = Number(months[0].month.slice(0, 4));
+const scale = timeScale(firstYear, months[months.length - 1].month);
+
+const layers = [
+	{ name: 'Commits', key: 'commits', class: 'fill-mute opacity-30', swatch: 'bg-mute opacity-30' },
+	{ name: 'PRs', key: 'prs', class: 'fill-ink opacity-[.35]', swatch: 'bg-ink opacity-[.35]' },
+	{
+		name: 'Reviews',
+		key: 'reviews',
+		class: 'fill-accent opacity-[.55]',
+		swatch: 'bg-accent opacity-[.55]'
+	}
+] as const;
+// Each layer is scaled to its own peak, so the shapes compare even though commits far outnumber
+// reviews.
+const paths = layers.map((l) => ({
+	...l,
+	d: mirroredPath(
+		smooth(
+			months.map((m) => m[l.key]),
+			1.5
+		)
+	)
+}));
+
+const years = [];
+for (let y = firstYear; y < scale.endT; y += 2) years.push(y);
+const grid = years.map((y) => scale.x(y));
+// The first and last labels sit inside the axis instead of centring past its ends.
+const ticks = [
+	...years.map((y) => ({
+		label: String(y),
+		left: scale.x(y),
+		// A year this close to "now" collides with it on a phone, so it drops out there.
+		shift:
+			y === firstYear
+				? ''
+				: scale.x(y) > 90
+					? 'hidden sm:inline -translate-x-1/2'
+					: '-translate-x-1/2'
+	})),
+	{ label: 'now', left: 100, shift: '-translate-x-full' }
+];
+
+const range = (d: Dated) =>
+	d.end === undefined ? String(d.start) : `${d.start}—${d.end === 'now' ? 'now' : d.end}`;
+const span = (d: Dated) => ({ start: d.start, end: d.end === 'now' ? null : (d.end ?? d.start) });
+
+// Oldest first so the bars cascade like a network waterfall; ties put the longer span first.
+const stackRows = stack
+	.map((s) => ({ ...s, range: range(s), bar: bar(span(s), scale) }))
+	.sort((a, b) => a.start - b.start || b.bar.width - a.bar.width);
+
+const shotFiles = import.meta.glob<{ default: ImageMetadata }>(
+	'../work/shots/**/*.{jpg,png,webp}',
+	{
+		eager: true
+	}
+);
+function shot(file: string) {
+	const found = shotFiles[`../work/shots/${file}`];
+	if (!found) throw new Error(`work.yaml names a screenshot that isn't in src/work/shots: ${file}`);
+	return found.default;
+}
+
+const projectRows = projects
+	.map((p) => ({
+		...p,
+		range: range(p),
+		shots: (p.shots ?? []).map((s) => ({ ...s, image: shot(s.file) }))
+	}))
+	.sort(
+		(a, b) =>
+			b.start - a.start ||
+			(b.end === 'now' ? 1e4 : (b.end ?? 0)) - (a.end === 'now' ? 1e4 : (a.end ?? 0))
+	);
+---
+
+<Layout
+	title="Work — Nathan Arthur"
+	description="Projects Nathan Arthur has built, the stack behind them, and his GitHub activity since 2014."
+	wide
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Work</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute sm:text-lg">
+		What I built and what I built it with, newest first. Activity and stack share one {firstYear}
+		–now scale.
+	</p>
+
+	<!-- Both charts stop short of the column's right edge (mr-5) so an ongoing bar's dotted tail
+	     can run past "now" without leaving the column. -->
+	<section class="mt-12 sm:mt-16" aria-labelledby="activity-heading">
+		<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+			<h2 id="activity-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+				GitHub activity
+			</h2>
+			<ul class="flex gap-4 font-mono text-[11px] uppercase tracking-widest text-faint">
+				{paths.map((l) => (
+					<li class="flex items-center gap-1.5">
+						<span class:list={['h-2 w-3', l.swatch]} />
+						{l.name}
+					</li>
+				))}
+			</ul>
+		</div>
+		<div class="relative mr-5 mt-4 h-24 sm:mt-5 sm:h-32">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<svg
+				viewBox="0 0 1000 100"
+				preserveAspectRatio="none"
+				class="absolute inset-0 h-full w-full"
+				role="img"
+				aria-label={`Monthly commits, pull requests, and reviews on GitHub from ${firstYear} to now`}
+			>
+				{paths.map((l) => (
+					<path d={l.d} class={l.class} />
+				))}
+			</svg>
+		</div>
+		<div class="relative mr-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+			{ticks.map((t) => (
+				<span class:list={['absolute', t.shift]} style={`left: ${t.left}%`}>
+					{t.label}
+				</span>
+			))}
+		</div>
+	</section>
+
+	<section class="mt-12 sm:mt-16" aria-labelledby="stack-heading">
+		<h2 id="stack-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Stack
+		</h2>
+		<div class="relative mr-5 mt-4 pt-1">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<ul class="relative">
+				{stackRows.map((s) => (
+					<li class="relative h-[38px]">
+						<span
+							class:list={[
+								'absolute top-1 flex items-baseline gap-2 whitespace-nowrap',
+								{
+									'right-0': s.bar.label === 'right',
+									'right-0 sm:right-auto sm:left-[var(--start)]': s.bar.label === 'right-on-narrow',
+									'left-[var(--start)]': s.bar.label === 'left'
+								}
+							]}
+							style={`--start: ${s.bar.left}%`}
+						>
+							<span class="text-[13px] leading-4">{s.name}</span>
+							<span class="font-mono text-[11px] leading-4 text-faint">{s.range}</span>
+						</span>
+						<!-- The accent is a CSS variable, which Tailwind's /40 opacity shorthand can't
+						     reach, so the fade is opacity on the bar; the tail inherits it. -->
+						<span
+							class="absolute top-[25px] h-0.5 bg-accent opacity-40"
+							style={`left: ${s.bar.left}%; width: ${s.bar.width}%`}
+						>
+							{s.bar.ongoing && (
+								<span class="absolute left-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
+						</span>
+					</li>
+				))}
+			</ul>
+		</div>
+		<div class="relative mr-5 mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+			{ticks.map((t) => (
+				<span class:list={['absolute', t.shift]} style={`left: ${t.left}%`}>
+					{t.label}
+				</span>
+			))}
+		</div>
+	</section>
+
+	<section class="mt-14 sm:mt-20" aria-labelledby="projects-heading">
+		<h2 id="projects-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Projects
+		</h2>
+		<div class="mt-5">
+			{projectRows.map((p) => (
+				<article class="border-t border-rule py-5 sm:py-6">
+					<div class="flex items-baseline justify-between gap-3">
+						<h3 class="text-[17px] font-medium tracking-tight sm:text-lg">
+							{p.url ? <a href={p.url}>{p.name}</a> : p.name}
+						</h3>
+						<span class="whitespace-nowrap font-mono text-xs text-faint">{p.range}</span>
+					</div>
+					<p class="mt-1 font-mono text-xs text-faint">{p.meta}</p>
+					<p class="mt-2.5 max-w-prose text-sm leading-relaxed text-mute">{p.description}</p>
+					{p.shots.length > 0 && (
+						<ul class="mt-3.5 flex flex-wrap gap-1.5 sm:gap-2">
+							{p.shots.map((s) => (
+								<li>
+									<a href={s.image.src} class="block">
+										<Image
+											src={s.image}
+											alt={s.alt}
+											width={192}
+											height={120}
+											fit="cover"
+											position="top"
+											class="h-12 w-[76px] border border-rule object-cover object-top sm:h-[60px] sm:w-24"
+										/>
+									</a>
+								</li>
+							))}
+						</ul>
+					)}
+				</article>
+			))}
+		</div>
+	</section>
+</Layout>

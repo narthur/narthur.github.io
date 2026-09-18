@@ -7,9 +7,11 @@ import AccentPicker from './AccentPicker.astro';
 interface Props {
 	title: string;
 	description: string;
+	/** Widen the column for pages whose charts need the room. */
+	wide?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, wide = false } = Astro.props;
 
 const footerLinks = [
 	{ name: 'Uses', url: '/uses' },
@@ -39,7 +41,12 @@ const footerLinks = [
 		></script>
 	</head>
 	<body>
-		<div class="mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-16 sm:px-8 sm:py-24">
+		<div
+			class:list={[
+				'mx-auto flex min-h-screen flex-col px-6 py-16 sm:px-8 sm:py-24',
+				wide ? 'max-w-4xl' : 'max-w-2xl'
+			]}
+		>
 			<main class="flex-grow">
 				<slot />
 			</main>
