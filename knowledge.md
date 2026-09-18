@@ -71,8 +71,10 @@ src/
 │   ├── audioverse.astro        # AudioVerse case study
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
-│   ├── rss.xml.ts              # RSS feed of the newsletter, full content
+│   ├── rss.xml.ts              # public RSS feed, footer for feed readers
+│   ├── newsletter.xml.ts       # same feed, email footer; read by rss-to-email-worker
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+├── feed.ts                     # builds both feeds; each passes its own footer
 ├── content.config.ts           # the `posts` collection schema
 ├── content/posts/*.md          # newsletter posts
 └── uses/
@@ -102,6 +104,13 @@ The feed carries each post's full rendered HTML with root-relative URLs made
 absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
+
+There are two feeds from one builder, `src/feed.ts`, differing only in the footer
+appended to each item. `/rss.xml` is the public one, linked from the site, with a
+footer for feed readers. `/newsletter.xml` is unlinked and read by
+rss-to-email-worker, which emails each new item; its footer is written for
+email, and the worker adds the per-subscriber unsubscribe link below it. Guids
+match across the two.
 
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
