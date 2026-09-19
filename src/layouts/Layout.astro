@@ -52,14 +52,20 @@ const footerLinks = [
 		>
 			<main class="flex-grow">
 				{ai && (
-					<p class="mb-10 flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-faint">
+					<p class="mb-10 flex items-center justify-center gap-2 text-center font-mono text-[11px] uppercase tracking-widest text-faint">
 						<TriangleAlert
 							size={14}
 							stroke-width={1.5}
 							class="flex-none text-warn"
 							aria-hidden="true"
 						/>
-						Some of the writing on this page was drafted by Claude.
+						Some of the writing on this page was drafted by AI.
+						<TriangleAlert
+							size={14}
+							stroke-width={1.5}
+							class="flex-none text-warn"
+							aria-hidden="true"
+						/>
 					</p>
 				)}
 				<slot />
