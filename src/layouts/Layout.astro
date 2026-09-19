@@ -9,9 +9,11 @@ interface Props {
 	description: string;
 	/** Widen the column for pages whose charts need the room. */
 	wide?: boolean;
+	/** Set on any page whose prose Claude drafted, so the page says so. */
+	ai?: boolean;
 }
 
-const { title, description, wide = false } = Astro.props;
+const { title, description, wide = false, ai = false } = Astro.props;
 
 const footerLinks = [
 	{ name: 'Uses', url: '/uses' },
@@ -48,6 +50,11 @@ const footerLinks = [
 			]}
 		>
 			<main class="flex-grow">
+				{ai && (
+					<p class="mb-10 border-l-2 border-rule pl-3 font-mono text-[11px] uppercase tracking-widest text-faint">
+						Some of the writing on this page was drafted by Claude.
+					</p>
+				)}
 				<slot />
 			</main>
 

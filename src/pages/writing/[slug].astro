@@ -8,7 +8,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, subtitle, date, substack } = post.data;
+const { title, subtitle, date, substack, ai } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
@@ -23,7 +23,7 @@ const plain = opening.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, 
 const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…` : plain);
 ---
 
-<Layout title={`${title} — Nathan Arthur`} description={description}>
+<Layout title={`${title} — Nathan Arthur`} description={description} ai={ai}>
 	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
 		<a href="/writing">&larr; Writing</a>
 	</p>

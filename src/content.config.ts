@@ -10,7 +10,8 @@ const posts = defineCollection({
 		title: z.string(),
 		subtitle: z.string().optional(),
 		date: z.coerce.date(),
-		substack: z.url().optional()
+		substack: z.url().optional(),
+		ai: z.boolean().default(false)
 	})
 });
 
@@ -21,7 +22,9 @@ const posts = defineCollection({
 const projects = defineCollection({
 	loader: glob({ pattern: '*.mdx', base: './src/content/projects' }),
 	schema: z.object({
-		lanes: z.array(z.object({ name: z.string(), repos: z.array(z.string()).min(1) })).optional()
+		lanes: z.array(z.object({ name: z.string(), repos: z.array(z.string()).min(1) })).optional(),
+		// True where Claude drafted prose on the page; the layout then says so.
+		ai: z.boolean().default(false)
 	})
 });
 
