@@ -13,10 +13,13 @@ lanes:
 
 import CommitsPerMonth from '../../work/detail/CommitsPerMonth.astro';
 import Repositories from '../../work/detail/Repositories.astro';
+import TaskRatchetStats from '../../work/detail/TaskRatchetStats.astro';
 
 ## Overview
 
 [TaskRatchet](https://taskratchet.com) is a todo app that lets users pledge money on completing their tasks on time. It grew from a low-code MVP into a full web app with a Stripe billing pipeline and a public API. Apart from an iPhone app another developer built, since abandoned after repeated trouble with App Store review, TaskRatchet has been a solo project.
+
+<TaskRatchetStats />
 
 <CommitsPerMonth project="taskratchet" />
 

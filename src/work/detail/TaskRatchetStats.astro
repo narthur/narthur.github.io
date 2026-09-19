@@ -1,0 +1,40 @@
+---
+import { fetchStats, format } from '../taskratchet';
+
+// ponytail: a failed build-time fetch shows dashes until the browser's fetch fills them in.
+const stats = await fetchStats();
+const shown = stats ? format(stats) : { tasks: '—', stakes: '—', completion: '—' };
+const items = [
+	{ key: 'tasks', label: 'Tasks created' },
+	{ key: 'stakes', label: 'In active stakes' },
+	{ key: 'completion', label: 'Completed on time' }
+] as const;
+---
+
+<figure>
+	<dl class="grid grid-cols-3 gap-4 border-y border-rule py-4">
+		{items.map((item) => (
+			<div class="flex flex-col-reverse justify-end">
+				<dt class="mt-1 font-mono text-[11px] uppercase tracking-widest text-faint">
+					{item.label}
+				</dt>
+				<dd class="text-xl font-medium tracking-tight text-ink sm:text-2xl" data-stat={item.key}>
+					{shown[item.key]}
+				</dd>
+			</div>
+		))}
+	</dl>
+	<figcaption>Live from the TaskRatchet API, refreshed every six hours.</figcaption>
+</figure>
+
+<script>
+	import { fetchStats, format } from '../taskratchet';
+
+	const stats = await fetchStats();
+	if (stats) {
+		for (const [key, value] of Object.entries(format(stats))) {
+			const el = document.querySelector(`[data-stat="${key}"]`);
+			if (el) el.textContent = value;
+		}
+	}
+</script>
