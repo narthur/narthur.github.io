@@ -58,6 +58,8 @@ name="description">` — `index.astro` derives one from the other, so editing
   a real description. Everything else is a one-line "Also built" list.
 - No "open to work" banner — current clients read this site.
 - No hard-sell CTA. Contact is GitHub, LinkedIn, writing, and email, stated once.
+- Pages carrying AI-drafted prose say so, through `ai: true` in a project's or
+  post's frontmatter or the `ai` prop on `Layout`. See `CLAUDE.md`.
 
 ## Structure
 
