@@ -38,11 +38,13 @@ const signposts = [
      see CLAUDE.md before adding copy. -->
 <Layout title="Nathan Arthur" description={positioning} footer={false}>
 	<div class="flex min-h-[70vh] flex-col justify-center">
+		<!-- 62x61 source drawn at 124: the browser's upscale is the point, so no densities —
+		     sharp never enlarges past the source, and a 2x entry would just duplicate the file. -->
 		<Image
 			src={avatar}
 			alt="Pixel-art portrait of Nathan Arthur"
 			width={124}
-			densities={[1, 2]}
+			loading="eager"
 			class="mb-8 [image-rendering:pixelated]"
 		/>
 
@@ -69,11 +71,13 @@ const signposts = [
 			))}
 		</nav>
 
-		<p class="mt-10 font-mono text-xs uppercase tracking-widest text-faint">
-			Latest ·{' '}
-			<a href={`/writing/${latest.id}`} class="text-mute">
-				{latest.data.title}
-			</a>
-		</p>
+		{latest && (
+			<p class="mt-10 font-mono text-xs uppercase tracking-widest text-faint">
+				Latest ·{' '}
+				<a href={`/writing/${latest.id}`} class="text-mute">
+					{latest.data.title}
+				</a>
+			</p>
+		)}
 	</div>
 </Layout>
