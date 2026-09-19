@@ -12,6 +12,8 @@ export interface Project extends Named {
 	/** `featured` lifts an entry into the Selected work row at the top of /work. */
 	emphasis?: 'featured';
 	description: string;
+	/** Captured screenshots. Kept as a record of what exists — /work stopped showing
+	 *  thumbnails, and project pages name their own files in <Shot>. */
 	shots?: { file: string; alt: string }[];
 }
 
