@@ -16,7 +16,12 @@ const { Content, headings } = await render(page);
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
-<Layout title={`${work.name} — Nathan Arthur`} description={work.description} wide ai={page.data.ai}>
+<Layout
+	title={`${work.name} — Nathan Arthur`}
+	description={work.description}
+	wide
+	ai={page.data.ai}
+>
 	<div class="lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start lg:gap-12">
 		<!-- On wide screens this column stays put while the sections scroll past, so it holds only
 		     what fits a short viewport: the name, the role line, and the section list. -->
