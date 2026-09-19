@@ -12,9 +12,11 @@ interface Props {
 	wide?: boolean;
 	/** Set on any page whose prose Claude drafted, so the page says so. */
 	ai?: boolean;
+	/** The home page stands on its own, so it drops the newsletter footer. */
+	footer?: boolean;
 }
 
-const { title, description, wide = false, ai = false } = Astro.props;
+const { title, description, wide = false, ai = false, footer = true } = Astro.props;
 
 const footerLinks = [
 	{ name: 'Uses', url: '/uses' },
@@ -71,49 +73,51 @@ const footerLinks = [
 				<slot />
 			</main>
 
-			<footer class="mt-24 border-t border-rule pt-8 text-sm text-mute">
-				<p class="max-w-prose">
-					I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news,
-					and the random thoughts of a web developer with ADHD.
-				</p>
-				<!-- Handled by rss-to-email-worker; it replies with its own confirmation page. -->
-				<form
-					class="mt-4 flex flex-wrap gap-2"
-					method="post"
-					action="https://mail.nathanarthur.com/subscribe"
-				>
-					<label for="subscribe-email" class="sr-only">
-						Email address
-					</label>
-					<input
-						id="subscribe-email"
-						type="email"
-						name="email"
-						required
-						autocomplete="email"
-						placeholder="you@example.com"
-						class="min-w-0 flex-1 rounded border border-rule bg-transparent px-3 py-2 text-ink placeholder:text-faint"
-					/>
-					<button class="rounded bg-accent px-4 py-2 font-medium text-bg">Subscribe</button>
-					<!-- action="subscribe" is checked by the Worker. -->
-					<div
-						class="cf-turnstile w-full"
-						data-sitekey="0x4AAAAAAE8B6mITS1r7e6Zz"
-						data-action="subscribe"
-						data-appearance="interaction-only"
-						data-theme="dark"
-						data-size="flexible"
-					></div>
-				</form>
+			{footer && (
+				<footer class="mt-24 border-t border-rule pt-8 text-sm text-mute">
+					<p class="max-w-prose">
+						I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news,
+						and the random thoughts of a web developer with ADHD.
+					</p>
+					<!-- Handled by rss-to-email-worker; it replies with its own confirmation page. -->
+					<form
+						class="mt-4 flex flex-wrap gap-2"
+						method="post"
+						action="https://mail.nathanarthur.com/subscribe"
+					>
+						<label for="subscribe-email" class="sr-only">
+							Email address
+						</label>
+						<input
+							id="subscribe-email"
+							type="email"
+							name="email"
+							required
+							autocomplete="email"
+							placeholder="you@example.com"
+							class="min-w-0 flex-1 rounded border border-rule bg-transparent px-3 py-2 text-ink placeholder:text-faint"
+						/>
+						<button class="rounded bg-accent px-4 py-2 font-medium text-bg">Subscribe</button>
+						<!-- action="subscribe" is checked by the Worker. -->
+						<div
+							class="cf-turnstile w-full"
+							data-sitekey="0x4AAAAAAE8B6mITS1r7e6Zz"
+							data-action="subscribe"
+							data-appearance="interaction-only"
+							data-theme="dark"
+							data-size="flexible"
+						></div>
+					</form>
 
-				<ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-faint">
-					{footerLinks.map((link) => (
-						<li>
-							<a href={link.url}>{link.name}</a>
-						</li>
-					))}
-				</ul>
-			</footer>
+					<ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-faint">
+						{footerLinks.map((link) => (
+							<li>
+								<a href={link.url}>{link.name}</a>
+							</li>
+						))}
+					</ul>
+				</footer>
+			)}
 		</div>
 
 		{import.meta.env.DEV && <AccentPicker />}

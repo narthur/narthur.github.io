@@ -54,10 +54,12 @@ ornament never.
 - The positioning line under the name is also the home page's `<meta
 name="description">` — `index.astro` derives one from the other, so editing
   the constant changes the search result too.
-- Featured work is tiered: three entries get a role, a stack, a year range, and
-  a real description. Everything else is a one-line "Also built" list.
+- The home page is one screen and lists no projects: three signposts (Work,
+  Writing, Uses) point at the pages that do. `/work` carries the tiering —
+  `emphasis: featured` entries lead, the rest follow one line each.
 - No "open to work" banner — current clients read this site.
-- No hard-sell CTA. Contact is GitHub, LinkedIn, writing, and email, stated once.
+- No hard-sell CTA. Contact on the home page is GitHub, LinkedIn and email,
+  stated once; Writing is a signpost rather than a contact link.
 - Pages carrying AI-drafted prose say so, through `ai: true` in a project's or
   post's frontmatter or the `ai` prop on `Layout`. See `CLAUDE.md`.
 
@@ -70,7 +72,7 @@ src/
 │   ├── Layout.astro            # <head>, column, footer, global styles
 │   └── AccentPicker.astro      # dev-only accent picker
 ├── pages/
-│   ├── index.astro             # home: positioning, selected work, also built
+│   ├── index.astro             # home: avatar, positioning, contact, signposts, latest post
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
