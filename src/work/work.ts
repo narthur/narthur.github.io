@@ -9,6 +9,8 @@ export interface Named extends Span {
 export interface Project extends Named {
 	url?: string;
 	meta: string;
+	/** `featured` lifts an entry into the Selected work row at the top of /work. */
+	emphasis?: 'featured';
 	description: string;
 	shots?: { file: string; alt: string }[];
 }
