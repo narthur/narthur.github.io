@@ -36,7 +36,8 @@ Astro needs Node >= 22.19.
   public TaskRatchet API's counters at build time, then refetches them in the
   browser so they stay current between deploys. Two third-party scripts load:
   Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form, and
-  Disqus on newsletter posts, for comments.
+  giscus on newsletter posts, which backs comments with this repo's GitHub
+  Discussions.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an

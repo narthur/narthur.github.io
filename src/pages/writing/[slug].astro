@@ -74,32 +74,38 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		</nav>
 	)}
 
-	{/* Disqus keys threads off the URL and identifier, so both are pinned to the canonical post
-	    URL and the slug — otherwise a domain or path change orphans every existing thread. */}
+	{/* Comments are GitHub Discussions, via giscus. `specific` + the slug as the term keys each
+	    thread to the post rather than to its path, so moving a URL doesn't orphan the thread.
+	    `transparent_dark` lets the page background show through instead of laying a panel on it. */}
 	<section class="mt-20 border-t border-rule pt-8">
 		<h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">Comments</h2>
-		<div id="disqus_thread"></div>
+		<script
+			is:inline
+			src="https://giscus.app/client.js"
+			data-repo="narthur/narthur.github.io"
+			data-repo-id="MDEwOlJlcG9zaXRvcnk1NDY3MTM3Ng=="
+			data-category="Announcements"
+			data-category-id="DIC_kwDOA0I4EM4DGBYy"
+			data-mapping="specific"
+			data-term={post.id}
+			data-strict="1"
+			data-reactions-enabled="1"
+			data-emit-metadata="0"
+			data-input-position="top"
+			data-theme="transparent_dark"
+			data-lang="en"
+			data-loading="lazy"
+			crossorigin="anonymous"
+			async
+		></script>
 		<noscript>
 			<p class="text-mute">
-				Please enable JavaScript to view the{' '}
-				<a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+				Comments need JavaScript. They also live on{' '}
+				<a href="https://github.com/narthur/narthur.github.io/discussions">GitHub Discussions</a>,
+				which works without it.
 			</p>
 		</noscript>
 	</section>
-	<script
-		is:inline
-		define:vars={{ slug: post.id, url: new URL(`/writing/${post.id}`, Astro.site).href }}
-	>
-		// Disqus reads this off the window by name, so it can't be a module-scoped const.
-		window.disqus_config = function () {
-			this.page.url = url;
-			this.page.identifier = slug;
-		};
-		const s = document.createElement('script');
-		s.src = 'https://narthur.disqus.com/embed.js';
-		s.setAttribute('data-timestamp', +new Date());
-		document.head.appendChild(s);
-	</script>
 </Layout>
 
 <style>
