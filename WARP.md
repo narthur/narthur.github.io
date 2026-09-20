@@ -47,9 +47,10 @@ Astro needs Node >= 22.19.
 
 - **Tailwind first** — utility classes directly in markup.
 - **Dark only.** No light theme, no `dark:` variants, no toggle. The palette is
-  six tokens in `tailwind.config.js`: `bg`, `ink`, `mute`, `faint`, `rule`,
-  `accent`. `accent` resolves to `--accent`, declared on `:root` in
-  `Layout.astro` — change the accent there, not in the Tailwind config.
+  seven tokens in `tailwind.config.js`: `bg`, `ink`, `mute`, `faint`, `rule`,
+  `accent`, `warn`. `accent` resolves to `--accent`, declared on `:root` in
+  `Layout.astro` — change the accent there, not in the Tailwind config. Code
+  blocks are the one exception: they use a Shiki preset, see `knowledge.md`.
 - Global element styles live in the layout's `<style is:global>` block.
 
 ## Build and deployment

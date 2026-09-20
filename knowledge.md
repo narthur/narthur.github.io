@@ -144,10 +144,12 @@ as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
 in the Markdown so they keep explicit dimensions; follow the same pattern for
 new images. Post body styles are in `writing/[slug].astro`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki
-highlights them with the `plastic` preset, and `.post pre` drops the preset's panel
-background so the block keeps the hairline border the rest of the site uses.
-Real highlighting was judged worth more than a perfect palette match; tag
-every fence with a language or it renders unhighlighted.
+highlights them with the `one-dark-pro` preset, and `.post pre` drops the
+preset's panel background so the block keeps the hairline border the rest of
+the site uses. Real highlighting was judged worth more than a perfect palette
+match, but the contrast rule above still binds: only 20 of Shiki's 44 dark
+presets have every token clear 4.5:1 on `bg`, so measure before swapping the
+theme. Tag every fence with a language or it renders unhighlighted.
 
 The feed carries each post's full rendered HTML with root-relative URLs made
 absolute, and uses `trailingSlash: false` so item links (which double as
