@@ -118,8 +118,8 @@ mostly private client work, and it also carries the 2016-2019 SimpleUpdates work
 `su-narthur`, an account whose email is gone and which therefore can't be logged into; its
 contribution _calendar_ is public even so, which is the only reason those years register at
 all. Repositories in the script's `EXCLUDE` list are subtracted month by month — currently
-`tw-todo`, a taskwarrior-to-git sync whose 4,509 machine commits otherwise buried everything
-real in 2019. The committed file is also a **floor**: a finished month is never written lower
+`tw-todo`, a taskwarrior-to-git sync whose 4,509 machine commits, over five months of 2019,
+otherwise buried everything real that year. The committed file is also a **floor**: a finished month is never written lower
 than it already reads, because GitHub stops counting a deleted or newly-private repository and
 this file is the only record once that happens. `ACTIVITY_REBUILD=1` drops the floor, for when
 a field legitimately means something new. To refresh, run `pnpm activity` (needs `gh` logged in

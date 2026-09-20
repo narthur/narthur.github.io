@@ -162,6 +162,17 @@ let before = [];
 try {
 	if (existsSync(path)) before = JSON.parse(readFileSync(path, 'utf8'));
 	if (!Array.isArray(before)) throw new Error('not an array');
+	// Entry-level too, not just the array: a null or a stray value reaching the floor comparison
+	// below would throw there, outside this catch, and cost the whole refetch after all. Dropping
+	// one is said out loud, because a dropped entry is a month with no floor — silence there
+	// would lose exactly the history the floor exists to hold.
+	const kept = before.filter((month) => month && typeof month.month === 'string');
+	if (kept.length < before.length) {
+		console.warn(
+			`Ignoring ${before.length - kept.length} malformed entr${before.length - kept.length === 1 ? 'y' : 'ies'} in activity.json; those months get no floor this run.`
+		);
+	}
+	before = kept;
 } catch (err) {
 	// A corrupt or conflicted file must not cost a full refetch: warn and treat it as absent.
 	console.warn(`Ignoring the existing activity.json (${err.message}); writing without a floor.`);
