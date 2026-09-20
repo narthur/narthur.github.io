@@ -58,7 +58,7 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 			class="mt-20 grid gap-x-8 gap-y-6 border-t border-rule pt-8 sm:grid-cols-2"
 		>
 			{older && (
-				<a href={`/writing/${older.id}`} class="group block">
+				<a href={`/writing/${older.id}`} class="block">
 					<span class="font-mono text-xs uppercase tracking-widest text-faint">
 						&larr; Previous
 					</span>
@@ -66,7 +66,7 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 				</a>
 			)}
 			{newer && (
-				<a href={`/writing/${newer.id}`} class="group block sm:col-start-2 sm:text-right">
+				<a href={`/writing/${newer.id}`} class="block sm:col-start-2 sm:text-right">
 					<span class="font-mono text-xs uppercase tracking-widest text-faint">Next &rarr;</span>
 					<span class="mt-1.5 block text-ink">{newer.data.title}</span>
 				</a>
