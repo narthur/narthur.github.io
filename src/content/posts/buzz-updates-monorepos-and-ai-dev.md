@@ -32,7 +32,7 @@ The alias: `‘!gh-ic “$@”’`
 
 The script, stored as \`gh-ic\` in my bin:
 
-```
+```bash
 #!/bin/bash
 
 # GitHub CLI issue create script
@@ -59,7 +59,7 @@ gh issue comment “$issue_number” --body “@coderabbitai Please analyze this
 
 This setup allows me to quickly create new issues like this:
 
-```
+```bash
 gh ic The title of the new issue
 ```
 

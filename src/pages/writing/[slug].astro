@@ -137,12 +137,16 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		font-family: theme('fontFamily.mono');
 		font-size: 0.875em;
 	}
+	/* Shiki writes its theme's panel colour into the element's style attribute, so dropping it
+	   back to the page background takes !important. The hairline border frames the block, as it
+	   does every other framed element here. */
 	.post :global(pre) {
 		overflow-x: auto;
 		border: 1px solid theme('colors.rule');
 		padding: 1em;
 		font-size: 0.875rem;
 		line-height: 1.6;
+		background: transparent !important;
 	}
 	.post :global(hr) {
 		border-top: 1px solid theme('colors.rule');
