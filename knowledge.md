@@ -184,6 +184,14 @@ The footer form in `Layout.astro` posts to the rss-to-email Worker at
 `mail.nathanarthur.com/subscribe` (double opt-in), guarded by Cloudflare
 Turnstile with `data-action="subscribe"`, which the Worker checks.
 
+## Comments
+
+Newsletter posts carry a Disqus thread (shortname `narthur`), embedded inline
+at the foot of `writing/[slug].astro`. `disqus_config` pins each thread to the
+canonical post URL and the slug, so a domain or path change doesn't orphan the
+existing threads. There is no comment count on `/writing`: the list stays type
+and rules, and counts would mean loading Disqus on the index too.
+
 ## Build
 
 - `pnpm dev` / `pnpm build` / `pnpm preview`

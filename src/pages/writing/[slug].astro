@@ -73,6 +73,33 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 			)}
 		</nav>
 	)}
+
+	{/* Disqus keys threads off the URL and identifier, so both are pinned to the canonical post
+	    URL and the slug — otherwise a domain or path change orphans every existing thread. */}
+	<section class="mt-20 border-t border-rule pt-8">
+		<h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">Comments</h2>
+		<div id="disqus_thread"></div>
+		<noscript>
+			<p class="text-mute">
+				Please enable JavaScript to view the{' '}
+				<a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+			</p>
+		</noscript>
+	</section>
+	<script
+		is:inline
+		define:vars={{ slug: post.id, url: new URL(`/writing/${post.id}`, Astro.site).href }}
+	>
+		// Disqus reads this off the window by name, so it can't be a module-scoped const.
+		window.disqus_config = function () {
+			this.page.url = url;
+			this.page.identifier = slug;
+		};
+		const s = document.createElement('script');
+		s.src = 'https://narthur.disqus.com/embed.js';
+		s.setAttribute('data-timestamp', +new Date());
+		document.head.appendChild(s);
+	</script>
 </Layout>
 
 <style>

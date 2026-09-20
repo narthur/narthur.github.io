@@ -34,8 +34,9 @@ Astro needs Node >= 22.19.
   the HTML; its tag filter only hides what the build rendered. The one runtime
   fetch is `/taskratchet`'s live stats: `TaskRatchetStats.astro` renders the
   public TaskRatchet API's counters at build time, then refetches them in the
-  browser so they stay current between deploys. The one third-party script is
-  Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form.
+  browser so they stay current between deploys. Two third-party scripts load:
+  Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form, and
+  Disqus on newsletter posts, for comments.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an
