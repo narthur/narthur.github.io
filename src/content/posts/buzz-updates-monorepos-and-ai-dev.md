@@ -28,7 +28,7 @@ I’m continuing to use GitHub Copilot coding agents alongside CodeRabbit, and t
 
 I have the GitHub CLI installed locally. I’ve added an alias to it that runs a script to create new issues and immediately comment on them requesting CodeRabbit’s input.
 
-The alias: `‘!gh-ic “$@”’`
+The alias: `'!gh-ic "$@"'`
 
 The script, stored as \`gh-ic\` in my bin:
 
@@ -40,21 +40,21 @@ The script, stored as \`gh-ic\` in my bin:
 
 # Check if title argument is provided
 if [ $# -eq 0 ]; then
-    echo “Usage: gh-ic Issue title without quotes”
+    echo "Usage: gh-ic Issue title without quotes"
     exit 1
 fi
 
 # Get the issue title from all arguments
-title=”$*”
+title="$*"
 
 # Create the issue with empty body and capture the URL
-issue_url=$(gh issue create -b “” -t “$title”)
+issue_url=$(gh issue create -b "" -t "$title")
 
 # Extract issue number from URL (format: https://github.com/owner/repo/issues/123)
-issue_number=$(echo “$issue_url” | grep -o ‘[0-9]*$’)
+issue_number=$(echo "$issue_url" | grep -o '[0-9]*$')
 
 # Add a comment asking CodeRabbit AI to analyze and enhance the issue
-gh issue comment “$issue_number” --body “@coderabbitai Please analyze this issue and update the description with implementation details, suggested approach, and any relevant technical considerations.”
+gh issue comment "$issue_number" --body "@coderabbitai Please analyze this issue and update the description with implementation details, suggested approach, and any relevant technical considerations."
 ```
 
 This setup allows me to quickly create new issues like this:
