@@ -1,0 +1,242 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { projects, stack } from '../work/work';
+import activity from '../work/activity.json';
+import {
+	axis,
+	bar,
+	mirroredPath,
+	newestFirst,
+	oldestFirst,
+	rangeLabel,
+	smooth,
+	timeScale,
+	type Month
+} from '../work/chart';
+
+const months = activity as Month[];
+const firstYear = Number(months[0].month.slice(0, 4));
+const scale = timeScale(firstYear, months[months.length - 1].month);
+
+// One axis, four disjoint buckets that between them hold every contribution: the last is
+// defined as the remainder, so nothing can fall outside. The first three count public
+// repositories only, which is why they say so — leaving them as bare "Commits" and "Reviews"
+// next to "Private" reads as two different questions at once. The fourth is a monthly number
+// with no split by kind, mostly private work but issues and new repositories too.
+const layers = [
+	{
+		name: 'Public commits',
+		key: 'commits',
+		class: 'fill-mute opacity-30',
+		swatch: 'bg-mute opacity-30'
+	},
+	{
+		name: 'Public PRs',
+		key: 'prs',
+		class: 'fill-ink opacity-[.35]',
+		swatch: 'bg-ink opacity-[.35]'
+	},
+	{
+		name: 'Public reviews',
+		key: 'reviews',
+		class: 'fill-accent opacity-[.55]',
+		swatch: 'bg-accent opacity-[.55]'
+	},
+	{
+		name: 'Private & other',
+		key: 'private',
+		class: 'fill-warn opacity-30',
+		swatch: 'bg-warn opacity-30'
+	}
+] as const;
+// Each layer is scaled to its own peak, so the shapes compare even though commits far outnumber
+// reviews.
+const paths = layers.map((layer) => ({
+	...layer,
+	d: mirroredPath(
+		smooth(
+			months.map((month) => month[layer.key]),
+			1.5
+		)
+	)
+}));
+
+const { grid, ticks } = axis(scale);
+
+// Oldest first so the bars cascade like a network waterfall.
+const stackRows = stack
+	.slice()
+	.sort(oldestFirst)
+	.map((item) => ({ ...item, range: rangeLabel(item), bar: bar(item, scale) }));
+
+const projectRows = projects
+	.slice()
+	.sort(newestFirst)
+	.map((project) => ({ ...project, range: rangeLabel(project) }));
+const featured = projectRows.filter((project) => project.emphasis === 'featured');
+const rest = projectRows.filter((project) => project.emphasis !== 'featured');
+---
+
+<Layout
+	title="Work — Nathan Arthur"
+	description={`Projects Nathan Arthur has built, the stack behind them, and his GitHub activity since ${firstYear}.`}
+	wide
+	ai
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Work</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute sm:text-lg">
+		What I built and what I built it with, newest first.
+	</p>
+
+	<!-- Selected work leads, so a first-time reader knows where to look; everything else keeps
+	     the full record, one line each, newest first. `emphasis: featured` in work.yaml picks the
+	     first group. -->
+
+	<section class="mt-12 sm:mt-16" aria-labelledby="activity-heading">
+		<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+			<h2 id="activity-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+				GitHub activity
+			</h2>
+			<ul class="flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-[11px] uppercase tracking-widest text-faint">
+				{paths.map((layer) => (
+					<li class="flex items-center gap-1.5">
+						<span class:list={['h-2 w-3', layer.swatch]} />
+						{layer.name}
+					</li>
+				))}
+			</ul>
+		</div>
+		<div class="relative mt-4 h-24 sm:mt-5 sm:h-32">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<svg
+				viewBox="0 0 1000 100"
+				preserveAspectRatio="none"
+				class="absolute inset-0 h-full w-full"
+				role="img"
+				aria-label={`Monthly public commits, pull requests and reviews on GitHub, and all other contributions, from ${firstYear} to now`}
+			>
+				{paths.map((layer) => (
+					<path d={layer.d} class={layer.class} />
+				))}
+			</svg>
+		</div>
+		<div class="relative mt-2 h-4 font-mono text-[11px] text-faint" aria-hidden="true">
+			{ticks.map((tick) => (
+				<span class:list={['absolute', tick.shift]} style={`left: ${tick.left}%`}>
+					{tick.label}
+				</span>
+			))}
+		</div>
+		<p class="mt-4 max-w-prose text-sm leading-relaxed text-faint">
+			GitHub names the kind of a contribution only where the repository is public. Everything else —
+			client work, issues, and the 2016–2019 SimpleUpdates years — arrives as a monthly count.
+		</p>
+	</section>
+
+	<section class="mt-12 sm:mt-16" aria-labelledby="selected-heading">
+		<h2 id="selected-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Selected work
+		</h2>
+		<div class="mt-5 grid gap-x-7 gap-y-8 sm:grid-cols-3">
+			{featured.map((project) => (
+				<article class="border-t-2 border-accent pt-4">
+					<h3 class="text-xl font-medium tracking-tight">
+						{project.url ? <a href={project.url}>{project.name}</a> : project.name}
+					</h3>
+					<p class="mt-1.5 font-mono text-xs text-faint">{project.range}</p>
+					<p class="mt-3.5 text-[15px] leading-relaxed text-mute">{project.description}</p>
+					<p class="mt-3 font-mono text-xs leading-relaxed text-faint">{project.meta}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="mt-14 sm:mt-16" aria-labelledby="projects-heading">
+		<h2 id="projects-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Everything else, newest first
+		</h2>
+		<div class="mt-4">
+			{rest.map((project) => (
+				<article class="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 border-t border-rule py-3 sm:grid-cols-[13rem_minmax(0,1fr)_6rem]">
+					<h3 class="text-[15px]">
+						{project.url ? <a href={project.url}>{project.name}</a> : project.name}
+					</h3>
+					<p class="order-last col-span-2 mt-1 font-mono text-xs leading-relaxed text-faint sm:order-none sm:col-span-1 sm:mt-0">
+						{project.meta}
+					</p>
+					<span class="whitespace-nowrap text-right font-mono text-xs text-faint">
+						{project.range}
+					</span>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<!-- The stack sits inset from the column's edges (mx-5) so the dotted marks for a span that
+	     runs past either end of the axis stay inside the column. The activity chart above needs no
+	     inset: its axis labels are anchored inside its own box. -->
+	<section class="mt-12 sm:mt-16" aria-labelledby="stack-heading">
+		<h2 id="stack-heading" class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+			Stack
+		</h2>
+		<div class="relative mx-5 mt-4 pt-1">
+			{grid.map((left) => (
+				<div class="absolute inset-y-0 border-l border-rule" style={`left: ${left}%`} />
+			))}
+			<div class="absolute inset-y-0 right-0 border-l border-rule" />
+			<ul class="relative">
+				{stackRows.map((row) => (
+					<li class="relative h-[38px]">
+						<span
+							class:list={[
+								'absolute top-1 flex items-baseline gap-2 whitespace-nowrap',
+								{
+									'right-0': row.bar.labelAnchor === 'right',
+									'right-0 sm:right-auto sm:left-[var(--start)]':
+										row.bar.labelAnchor === 'right-on-narrow',
+									'left-[var(--start)]': row.bar.labelAnchor === 'left'
+								}
+							]}
+							style={`--start: ${row.bar.left}%`}
+						>
+							<span class="text-[13px] leading-4">{row.name}</span>
+							<span class="font-mono text-[11px] leading-4 text-faint">{row.range}</span>
+						</span>
+						<!-- The accent is a CSS variable, which Tailwind's /40 opacity shorthand can't
+						     reach, so the fade is opacity on the bar; the tail inherits it. -->
+						<span
+							class="absolute top-[25px] h-0.5 bg-accent opacity-40"
+							style={`left: ${row.bar.left}%; width: ${row.bar.width}%`}
+						>
+							{row.bar.clippedStart && (
+								<span class="absolute right-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
+							{row.bar.ongoing && (
+								<span class="absolute left-full top-0 w-4 border-t-2 border-dotted border-accent" />
+							)}
+						</span>
+					</li>
+				))}
+			</ul>
+		</div>
+		<!-- The stack runs taller than a phone screen, so its year axis sticks to the bottom of the
+		     viewport while the chart scrolls past, then scrolls away with the end of the section.
+		     The background hides the bars passing underneath it. -->
+		<div class="sticky bottom-0 bg-bg pb-3" aria-hidden="true">
+			<div class="relative mx-5 h-7 border-t border-rule font-mono text-[11px] text-faint">
+				{ticks.map((tick) => (
+					<span class:list={['absolute top-2', tick.shift]} style={`left: ${tick.left}%`}>
+						{tick.label}
+					</span>
+				))}
+			</div>
+		</div>
+	</section>
+</Layout>

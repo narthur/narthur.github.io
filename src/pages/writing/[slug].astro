@@ -3,12 +3,18 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
-	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
+	const posts = (await getCollection('posts')).sort(
+		(a, b) => b.data.date.getTime() - a.data.date.getTime()
+	);
+	return posts.map((post, i) => ({
+		params: { slug: post.id },
+		props: { post, newer: posts[i - 1], older: posts[i + 1] }
+	}));
 }
 
-const { post } = Astro.props;
-const { title, subtitle, date, substack } = post.data;
+const { post, newer, older } = Astro.props;
+const { title, subtitle, date, substack, ai } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
@@ -23,7 +29,7 @@ const plain = opening.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, 
 const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…` : plain);
 ---
 
-<Layout title={`${title} — Nathan Arthur`} description={description}>
+<Layout title={`${title} — Nathan Arthur`} description={description} ai={ai}>
 	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
 		<a href="/writing">&larr; Writing</a>
 	</p>
@@ -43,6 +49,63 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	<article class="post mt-12">
 		<Content />
 	</article>
+
+	{/* Older on the left, newer on the right, so the pair reads as the timeline does. Each side
+	    keeps its column when the other is missing, so the first and last posts don't shift. */}
+	{(older || newer) && (
+		<nav
+			aria-label="More posts"
+			class="mt-20 grid gap-x-8 gap-y-6 border-t border-rule pt-8 sm:grid-cols-2"
+		>
+			{older && (
+				<a href={`/writing/${older.id}`} class="block">
+					<span class="font-mono text-xs uppercase tracking-widest text-faint">
+						&larr; Previous
+					</span>
+					<span class="mt-1.5 block text-ink">{older.data.title}</span>
+				</a>
+			)}
+			{newer && (
+				<a href={`/writing/${newer.id}`} class="block sm:col-start-2 sm:text-right">
+					<span class="font-mono text-xs uppercase tracking-widest text-faint">Next &rarr;</span>
+					<span class="mt-1.5 block text-ink">{newer.data.title}</span>
+				</a>
+			)}
+		</nav>
+	)}
+
+	{/* Comments are GitHub Discussions, via giscus. `specific` + the slug as the term keys each
+	    thread to the post rather than to its path, so moving a URL doesn't orphan the thread.
+	    `transparent_dark` lets the page background show through instead of laying a panel on it. */}
+	<section class="mt-20 border-t border-rule pt-8">
+		<h2 class="mb-8 font-mono text-xs uppercase tracking-widest text-faint">Comments</h2>
+		<script
+			is:inline
+			src="https://giscus.app/client.js"
+			data-repo="narthur/narthur.github.io"
+			data-repo-id="MDEwOlJlcG9zaXRvcnk1NDY3MTM3Ng=="
+			data-category="Announcements"
+			data-category-id="DIC_kwDOA0I4EM4DGBYy"
+			data-mapping="specific"
+			data-term={post.id}
+			data-strict="1"
+			data-reactions-enabled="1"
+			data-emit-metadata="0"
+			data-input-position="top"
+			data-theme="transparent_dark"
+			data-lang="en"
+			data-loading="lazy"
+			crossorigin="anonymous"
+			async
+		></script>
+		<noscript>
+			<p class="text-mute">
+				Comments need JavaScript. They also live on{' '}
+				<a href="https://github.com/narthur/narthur.github.io/discussions">GitHub Discussions</a>,
+				which works without it.
+			</p>
+		</noscript>
+	</section>
 </Layout>
 
 <style>
@@ -73,9 +136,11 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	.post :global(strong) {
 		font-weight: 500;
 	}
+	/* Underlined in mute, not rule: a rule-coloured underline is all but invisible against the
+	   background, so a link in a paragraph read as plain text until you hovered it. */
 	.post :global(a) {
 		text-decoration: underline;
-		text-decoration-color: theme('colors.rule');
+		text-decoration-color: theme('colors.mute');
 		text-underline-offset: 0.25em;
 	}
 	.post :global(a:hover) {
@@ -105,12 +170,16 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		font-family: theme('fontFamily.mono');
 		font-size: 0.875em;
 	}
+	/* Shiki writes its theme's panel colour into the element's style attribute, so dropping it
+	   back to the page background takes !important. The hairline border frames the block, as it
+	   does every other framed element here. */
 	.post :global(pre) {
 		overflow-x: auto;
 		border: 1px solid theme('colors.rule');
 		padding: 1em;
 		font-size: 0.875rem;
 		line-height: 1.6;
+		background: transparent !important;
 	}
 	.post :global(hr) {
 		border-top: 1px solid theme('colors.rule');

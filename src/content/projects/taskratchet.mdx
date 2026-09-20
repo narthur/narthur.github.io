@@ -1,0 +1,73 @@
+---
+ai: true
+lanes:
+  - { name: Marketing site, repos: [TaskRatchet.com] }
+  - { name: Web app, repos: [taskratchet-web] }
+  - { name: API, repos: [taskratchet-api] }
+  - { name: Documentation, repos: [taskratchet-docs] }
+  - { name: Admin dashboard, repos: [taskratchet-dash] }
+  - { name: API clients, repos: [clients, taskratchet-python, taskratchet-sdk] }
+  - { name: Slack bots, repos: [taskratchet-bot, support-bot] }
+  - { name: Backend services, repos: [infrastructure, taskratchet-cloudflare] }
+  - { name: Monorepo, repos: [taskratchet] }
+---
+
+import CommitsPerMonth from '../../work/detail/CommitsPerMonth.astro';
+import Repositories from '../../work/detail/Repositories.astro';
+import TaskRatchetStats from '../../work/detail/TaskRatchetStats.astro';
+
+## Overview
+
+[TaskRatchet](https://taskratchet.com) is a todo app that lets users pledge money on completing their tasks on time. It grew from a low-code MVP into a full web app with a Stripe billing pipeline and a public API. Apart from an iPhone app another developer built, since abandoned after repeated trouble with App Store review, TaskRatchet has been a solo project.
+
+<TaskRatchetStats />
+
+<CommitsPerMonth project="taskratchet" />
+
+## Why it exists
+
+Beeminder is built for ongoing commitments, and its users kept asking for something that would do the same for one-off ones. Beeminder had built such a thing and wasn't maintaining it, so in March 2019 I [opened a thread on their forum](https://forum.beeminder.com/t/taskratchet-development-updates/5037) saying I intended to build it, and spent the next year building it in the open there. I chose to build it independently rather than on top of Beeminder: a separate product could pay for itself, which also made it less likely to die, and I didn't want to sell an app that then asks you for money.
+
+## Run by hand
+
+Before writing the backend I ran the service manually. A daily email asked each alpha user what was on their plate; they replied with tasks and stakes; I typed those into an AirTable base, sent the reminders from views, and created every charge by hand in Stripe. Joining cost a dollar, which existed to put a card on file. Five people joined the first week.
+
+It was deliberately underspecified. Deadlines, verification and cancellations were whatever a user asked for and I could manage, because I didn't yet know what the product needed to be. A week in I paused it, because doing it by hand wasn't sustainable, and reopened it two months later once the morning emails sent themselves. What I couldn't automate away I documented as constraints: for a while, tasks weren't charged on weekends, because I wasn't reading email on weekends.
+
+## Charging people
+
+The hard part was never the todo list. It was being trusted to take money.
+
+Automating the charges meant writing down rules that had been improvised: one email per late task, replying to it contests the charge, the charge is authorized automatically, and it is captured a day later only if nobody contested it. Alongside them went a promise that a wrongful charge would be cancelled and refunded in full.
+
+Then I shipped it, and an alpha user's card showed the authorization the moment his deadline passed. An authorization hold isn't a charge, but his bank didn't draw that distinction and neither did he. He told me I was running a business where trust is more or less everything. That day the timings moved out to authorize a day late and capture a day after that, which is the shape the flow still has.
+
+The numbers say it worked. As of September 2026, of the $614,738 users have staked on their own deadlines, $23,227 was ever captured: they kept 96.2% of it. Of 1,030 charges contested, 998 were settled before any money moved, so they never had to become refunds.
+
+## Stack
+
+<Repositories project="taskratchet" />
+
+## Where it runs
+
+The backend started on Google Cloud Functions in 2019 and stayed there for five years. Firestore was what finally pushed it off. It wouldn't let me write the queries I needed, so the filtering happened in memory instead, which meant reading documents I didn't need, which meant a single heavy API user could run up my bill. Render's pricing was predictable, which is what got me to actually do the move in early 2024.
+
+Predictable turned out not to mean cheap. A server plus a database is about $13 a month before anyone uses it, and I was building more projects than that arithmetic survives. In 2025 the backend moved onto Cloudflare Workers, where idle costs nothing. TaskRatchet also got faster, which I'd like to claim I planned.
+
+## What stores the data
+
+Cloudflare's own database, D1, was always where this was heading, but it couldn't be first: Firestore doesn't work well on Workers, and the Workers move was the thing that unblocked everything else. So the data went to Neon, a hosted Postgres, to get off Firestore, and then to D1 in 2026 once the backend had arrived. Neon's branching was the feature I expected to miss and didn't. Both adapters still sit behind one interface, and the Postgres one is kept working as a way back.
+
+## Who signs in
+
+Sessions were mine to build in 2019, moved to Firebase Auth in 2022, and moved again to Clerk in 2025, each time migrating existing users rather than asking them to re-register. Clerk brings its own login, registration and password-reset screens, which is that much less of the product I have to maintain. It is also the deepest lock-in in the stack, which I'd worry about more if I hadn't already climbed out of the same depth of it once.
+
+## One repo, then many, then one
+
+In 2023 I put the clients in a monorepo and left the backend outside it, splitting on what could be public rather than on what changed together. A feature that crossed the two still crossed two repositories, so I had a monorepo's overhead and none of its payoff, and in 2024 I pulled the web app back out.
+
+What made the second attempt different was working with AI coding tools, which do their best work when everything is in one place: a change to the frontend can check what the backend actually does, and a feature that spans both can be made in one pass. That was worth more than keeping half the code public, so since 2025 all of it lives in one private repository.
+
+## Now
+
+TaskRatchet is faster than it has ever been and easier for me to work on than it has ever been, and it is still the thing I set out to build in 2019: put money on a deadline, and it collects when you miss. The frontend is the part I'd point at next. It looks its age.

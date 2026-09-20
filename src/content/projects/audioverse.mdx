@@ -1,0 +1,61 @@
+---
+ai: true
+lanes:
+  - { name: WordPress plugin, repos: [wp-avorg-plugin, wp-avorg-dev] }
+  - { name: Gatsby prototype, repos: [audioverse-gatsby] }
+  - { name: Next.js frontend, repos: [audioverse-next] }
+  - { name: GraphQL API, repos: [audioverse-graphql] }
+  - { name: Mobile app, repos: [audioverse-mobile] }
+  - { name: Legacy website, repos: [audioverse-public-website] }
+  - { name: Admin dashboard, repos: [audioverse-dashboard] }
+  - { name: Zapier integration, repos: [audioverse-zapier] }
+  - { name: AWS infrastructure, repos: [audioverse-aws] }
+---
+
+import CommitShare from '../../work/detail/CommitShare.astro';
+import CommitsPerMonth from '../../work/detail/CommitsPerMonth.astro';
+import Repositories from '../../work/detail/Repositories.astro';
+import Shot from '../../work/detail/Shot.astro';
+
+## Overview
+
+AudioVerse is a non-profit media platform hosting a large library of audio and video recordings. I led the rebuild of its public frontend on Next.js, working from designs by an outside design firm, and directed the work on the GraphQL backend and admin dashboard behind it.
+
+<CommitsPerMonth project="audioverse" />
+
+## Stack
+
+<Repositories project="audioverse" />
+
+## Home
+
+These are captures from 2024. The live [audioverse.org](https://audioverse.org) has changed since, and no longer represents my work.
+
+<Shot
+	file="audioverse/home.jpg"
+	alt='AudioVerse home page: sidebar navigation, "Sound Doctrine" hero, latest content grid, blog posts, testimonials, and donation sections'
+/>
+
+## Discover
+
+<Shot
+	file="audioverse/discover.jpg"
+	alt="AudioVerse Discover page: recent, trending, and featured teachings in card grids, plus blog posts, stories, and conferences"
+/>
+
+## Recording
+
+<Shot
+	file="audioverse/sermon.jpg"
+	alt="AudioVerse recording page: video player with speed and download controls, description, series metadata, and a persistent bottom playback bar"
+/>
+
+## Built and directed
+
+I wrote most of the Next.js frontend and directed the work on the GraphQL backend and admin dashboard.
+
+<CommitShare project="audioverse" />
+
+## Accessibility
+
+The rebuild shipped with an accessibility backlog too large to clear in one pass, which is why I built [Pa11y Ratchet](https://github.com/marketplace/actions/pa11y-ratchet). The CI action only fails on an increase in the number of accessibility issues, allowing a team to whittle an existing backlog down over time.

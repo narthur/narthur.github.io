@@ -29,12 +29,15 @@ Astro needs Node >= 22.19.
 
 - **Astro**, static output, no UI framework. TypeScript, Tailwind CSS (no
   plugins, run through `postcss.config.js`), Vitest, ESLint + Prettier.
-- **No first-party runtime fetching.** `/uses` reads `src/uses/uses.yaml` at
+- **Content is rendered at build time.** `/uses` reads `src/uses/uses.yaml` at
   build time (Vite `?raw` import, parsed with js-yaml), so the whole list is in
-  the HTML. The tag filter is the site's only first-party client JS: a
-  `<script>` in `uses.astro` that hides what the build rendered. The one
-  third-party script is Cloudflare Turnstile, guarding the footer's subscribe
-  form in `Layout.astro`.
+  the HTML; its tag filter only hides what the build rendered. The one runtime
+  fetch is `/taskratchet`'s live stats: `TaskRatchetStats.astro` renders the
+  public TaskRatchet API's counters at build time, then refetches them in the
+  browser so they stay current between deploys. Two third-party scripts load:
+  Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form, and
+  giscus on newsletter posts, which backs comments with this repo's GitHub
+  Discussions.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an
@@ -47,9 +50,10 @@ Astro needs Node >= 22.19.
 
 - **Tailwind first** — utility classes directly in markup.
 - **Dark only.** No light theme, no `dark:` variants, no toggle. The palette is
-  six tokens in `tailwind.config.js`: `bg`, `ink`, `mute`, `faint`, `rule`,
-  `accent`. `accent` resolves to `--accent`, declared on `:root` in
-  `Layout.astro` — change the accent there, not in the Tailwind config.
+  seven tokens in `tailwind.config.js`: `bg`, `ink`, `mute`, `faint`, `rule`,
+  `accent`, `warn`. `accent` resolves to `--accent`, declared on `:root` in
+  `Layout.astro` — change the accent there, not in the Tailwind config. Code
+  blocks are the one exception: they use a Shiki preset, see `knowledge.md`.
 - Global element styles live in the layout's `<style is:global>` block.
 
 ## Build and deployment

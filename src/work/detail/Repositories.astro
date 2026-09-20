@@ -1,0 +1,70 @@
+---
+import { blur, mirroredPath, rangeLabel } from '../chart';
+import { perMonth, totals } from '../commits';
+import { project } from '../project';
+import Axis from './Axis.astro';
+import Grid from './Grid.astro';
+
+interface Props {
+	project: string;
+}
+
+const { commits, months, lanes, grid, ticks } = await project(Astro.props.project);
+// Square-rooted and on one shared scale, so a small repository reads small but stays visible.
+// A lane I never committed to has no line to draw, so it sits out this chart.
+const drawn = lanes.filter((lane) => totals(commits, lane.repos).first);
+const series = drawn.map((lane) =>
+	blur(perMonth(commits, months, lane.repos).mine.map(Math.sqrt), 1)
+);
+const peak = Math.max(...series.flat(), 1);
+const rows = drawn.map((lane, i) => {
+	const { mine: count, first = '', last = '' } = totals(commits, lane.repos);
+	return {
+		name: lane.name,
+		range: rangeLabel({ start: Number(first.slice(0, 4)), end: Number(last.slice(0, 4)) }),
+		mine: count.toLocaleString('en-US'),
+		d: mirroredPath(series[i].map((v) => v / peak))
+	};
+});
+---
+
+<!-- A table on wider screens: each name sits in its own column, level with its waveform. A
+     phone can't spare that column's width from the timeline, so there each name heads its row
+     instead, with a faint centre line tying the waveform to it. -->
+<figure>
+	<div class="relative mx-5">
+		<div class="absolute inset-y-0 left-0 right-0 sm:left-[10.5rem]">
+			<Grid grid={grid} />
+		</div>
+		<ul class="relative border-b border-rule">
+			{rows.map((row) => (
+				<li class="border-t border-rule pb-2 pt-2.5 sm:grid sm:h-[52px] sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-center sm:gap-x-4 sm:py-0">
+					<div class="flex items-baseline justify-between gap-3 sm:flex-col sm:items-start sm:gap-0.5">
+						<span class="text-[13px] leading-4">{row.name}</span>
+						<span class="font-mono text-[11px] leading-4 text-faint">
+							{row.range} · {row.mine}
+						</span>
+					</div>
+					<div class="relative mt-1 h-7 sm:mt-0 sm:h-full">
+						<div class="absolute inset-x-0 top-1/2 border-t border-rule sm:hidden" />
+						<svg
+							viewBox="0 0 1000 100"
+							preserveAspectRatio="none"
+							class="absolute inset-x-0 top-1/2 h-7 w-full -translate-y-1/2 sm:h-[30px]"
+							aria-hidden="true"
+						>
+							<path d={row.d} class="fill-accent opacity-[.55]" />
+						</svg>
+					</div>
+				</li>
+			))}
+		</ul>
+	</div>
+	<div class="sm:pl-[10.5rem]">
+		<Axis ticks={ticks} />
+	</div>
+	<figcaption>
+		My commits per month in each part of the system, with the years and total for each. Every row
+		shares one scale, square-rooted so the small ones stay visible.
+	</figcaption>
+</figure>

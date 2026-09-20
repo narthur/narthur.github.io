@@ -10,8 +10,22 @@ const posts = defineCollection({
 		title: z.string(),
 		subtitle: z.string().optional(),
 		date: z.coerce.date(),
-		substack: z.url().optional()
+		substack: z.url().optional(),
+		ai: z.boolean().default(false)
 	})
 });
 
-export const collections = { posts };
+// Project detail pages, served at /<file name>. The page's name, years, and role line come
+// from the work.yaml entry whose url is /<file name>; the body's ## headings are its sections.
+// `lanes` groups the repositories in src/work/commits/<file name>.json into the rows its
+// commit charts draw.
+const projects = defineCollection({
+	loader: glob({ pattern: '*.mdx', base: './src/content/projects' }),
+	schema: z.object({
+		lanes: z.array(z.object({ name: z.string(), repos: z.array(z.string()).min(1) })).optional(),
+		// True where Claude drafted prose on the page; the layout then says so.
+		ai: z.boolean().default(false)
+	})
+});
+
+export const collections = { posts, projects };

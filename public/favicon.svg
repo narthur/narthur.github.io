@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-	<rect width="64" height="64" rx="10" fill="#0a0c10" />
-	<!-- One letterform, not two: at the 16px browsers actually render, "na" collapses
-	     into an unreadable smudge while a single "n" stays legible. -->
-	<text
-		x="32"
-		y="47"
-		fill="#8ded51"
-		font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
-		font-size="46"
-		font-weight="700"
-		text-anchor="middle"
-	>
-		n
-	</text>
+	<rect width="64" height="64" rx="11" fill="#0a0c10" />
+	<!-- A shell prompt: chevron and cursor. Square caps and an 8px stroke on a 64 grid, so at the
+	     16px browsers actually render, every limb is 2px and nothing thins out to grey. -->
+	<path
+		d="M15 19 L30 32 L15 45"
+		fill="none"
+		stroke="#8ded51"
+		stroke-width="8"
+		stroke-linecap="square"
+	/>
+	<rect x="36" y="37" width="17" height="8" fill="#8ded51" />
 </svg>
