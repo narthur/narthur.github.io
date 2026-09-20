@@ -73,9 +73,11 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	.post :global(strong) {
 		font-weight: 500;
 	}
+	/* Underlined in mute, not rule: a rule-coloured underline is all but invisible against the
+	   background, so a link in a paragraph read as plain text until you hovered it. */
 	.post :global(a) {
 		text-decoration: underline;
-		text-decoration-color: theme('colors.rule');
+		text-decoration-color: theme('colors.mute');
 		text-underline-offset: 0.25em;
 	}
 	.post :global(a:hover) {
