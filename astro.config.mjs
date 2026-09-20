@@ -9,6 +9,9 @@ export default defineConfig({
 	// Emit /uses.html, not /uses/index.html, as the SvelteKit build did. Cloudflare serves the
 	// latter at /uses/ and redirects /uses to it; this keeps every existing URL as-is.
 	build: { format: 'file' },
-	// Shiki paints code blocks with its own theme colours, outside the site's six-token palette.
-	markdown: { syntaxHighlight: false }
+	// Real highlighting beats a perfect palette match for code, so Shiki uses a preset rather
+	// than the site's six tokens. vitesse-dark of the dark presets: its muted greens sit closest
+	// to the accent, so code reads as part of the page. Its panel background is dropped in
+	// Layout.astro, leaving the hairline border every other framed element here uses.
+	markdown: { syntaxHighlight: 'shiki', shikiConfig: { theme: 'vitesse-dark' } }
 });

@@ -16,7 +16,7 @@ I ended up adding a GitHub CLI alias built on top of [gh-poi](https://github.com
 
 With my alias set, I run `gh doi` in terminal, which runs the following commands:
 
-```
+```bash
 # Save default branch name, so it'll work if your
 # default branch is main or master or development
 # or whatever
@@ -34,7 +34,7 @@ gh poi
 
 Here’s how to install gh-poi and add the alias:
 
-```
+```bash
 gh extension install seachicken/gh-poi
 gh alias set doi '!DEFAULT=$(gh repo view --json defaultBranchRef --jq ".defaultBranchRef.name") && git checkout "$DEFAULT" && git pull && gh poi'
 ```
