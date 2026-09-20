@@ -18,11 +18,11 @@ const months = activity as Month[];
 const firstYear = Number(months[0].month.slice(0, 4));
 const scale = timeScale(firstYear, months[months.length - 1].month);
 
-// One axis, four disjoint buckets: every contribution lands in exactly one. The first three
-// count public repositories only, which is why they say so — leaving them as bare "Commits"
-// and "Reviews" next to "Private" reads as two different questions at once. The fourth is
-// everything else, and it is a monthly number with no split by kind: GitHub reports private
-// work as `restrictedContributionsCount`, and the su-narthur years arrive the same way.
+// One axis, four disjoint buckets that between them hold every contribution: the last is
+// defined as the remainder, so nothing can fall outside. The first three count public
+// repositories only, which is why they say so — leaving them as bare "Commits" and "Reviews"
+// next to "Private" reads as two different questions at once. The fourth is a monthly number
+// with no split by kind, mostly private work but issues and new repositories too.
 const layers = [
 	{
 		name: 'Public commits',
@@ -42,7 +42,12 @@ const layers = [
 		class: 'fill-accent opacity-[.55]',
 		swatch: 'bg-accent opacity-[.55]'
 	},
-	{ name: 'Private', key: 'private', class: 'fill-warn opacity-30', swatch: 'bg-warn opacity-30' }
+	{
+		name: 'Private & other',
+		key: 'private',
+		class: 'fill-warn opacity-30',
+		swatch: 'bg-warn opacity-30'
+	}
 ] as const;
 // Each layer is scaled to its own peak, so the shapes compare even though commits far outnumber
 // reviews.
@@ -115,7 +120,7 @@ const rest = projectRows.filter((project) => project.emphasis !== 'featured');
 				preserveAspectRatio="none"
 				class="absolute inset-0 h-full w-full"
 				role="img"
-				aria-label={`Monthly commits, pull requests, reviews, and private contributions on GitHub from ${firstYear} to now`}
+				aria-label={`Monthly public commits, pull requests and reviews on GitHub, and all other contributions, from ${firstYear} to now`}
 			>
 				{paths.map((layer) => (
 					<path d={layer.d} class={layer.class} />
@@ -130,8 +135,8 @@ const rest = projectRows.filter((project) => project.emphasis !== 'featured');
 			))}
 		</div>
 		<p class="mt-4 max-w-prose text-sm leading-relaxed text-faint">
-			Public work splits by kind; private work — clients, employers, and the 2016–2019 SimpleUpdates
-			years — arrives as a monthly count only.
+			GitHub names the kind of a contribution only where the repository is public. Everything else —
+			client work, issues, and the 2016–2019 SimpleUpdates years — arrives as a monthly count.
 		</p>
 	</section>
 
