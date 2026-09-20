@@ -155,7 +155,8 @@ const path = new URL('../src/work/activity.json', import.meta.url);
 // counting work when a repository is deleted or goes private (archiving is safe — an archived
 // repository still counts), and this file is the only record once that happens. Holding the
 // larger number keeps a decade of history from eroding one deleted client repository at a time.
-// ACTIVITY_REBUILD=1 drops the floor, for when a field legitimately means something new.
+// ACTIVITY_REBUILD=1 drops the floor, which is what a deliberate downward revision needs: a new
+// EXCLUDE entry lowers counts on purpose, and the floor would otherwise hold the old ones.
 const rebuild = process.env.ACTIVITY_REBUILD === '1';
 let before = [];
 try {
@@ -186,8 +187,9 @@ if (held.length) {
 		`\n${held.length} count(s) came back lower than the committed file:\n${held.join('\n')}\n\n` +
 			(rebuild
 				? 'ACTIVITY_REBUILD=1, so the lower numbers were written. Check the diff.'
-				: 'Held at the committed values. A past month falling means GitHub dropped work it used\n' +
-					'to count — a repository deleted or turned private. Re-run with ACTIVITY_REBUILD=1 only\n' +
-					'if the drop is intended.')
+				: 'Held at the committed values, so nothing above was written. Either GitHub dropped work\n' +
+					'it used to count (a repository deleted or turned private), or EXCLUDE grew — a new\n' +
+					'entry there is meant to bring counts down, and the floor will hold the old ones until\n' +
+					'you re-run with ACTIVITY_REBUILD=1.')
 	);
 }
