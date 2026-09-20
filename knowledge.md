@@ -20,8 +20,10 @@ ornament never.
 - **Typographic, not card-based.** Structure comes from type scale, hairline
   rules, and whitespace. No boxes, no shadows, no rounded corners.
 - **Dark only.** There is no light theme and no toggle. The full palette lives in
-  `tailwind.config.js` as six tokens: `bg`, `ink`, `mute`, `faint`, `rule`,
-  `accent`. Don't introduce colors outside those.
+  `tailwind.config.js` as seven tokens: `bg`, `ink`, `mute`, `faint`, `rule`,
+  `accent`, `warn`. Don't introduce colors outside those. The one exception is
+  syntax highlighting, which uses a Shiki preset — see the post body styles
+  below.
 - `accent` resolves to the CSS variable `--accent`, declared once on `:root` in
   `Layout.astro`. Change the accent there, not in the Tailwind config. Anything
   that needs the accent in plain CSS uses `var(--accent)` so it stays in step.
@@ -141,8 +143,11 @@ posts leave `substack` out. Imported images live in `public/writing/<slug>/`
 as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
 in the Markdown so they keep explicit dimensions; follow the same pattern for
 new images. Post body styles are in `writing/[slug].astro`, built from the
-palette tokens; syntax highlighting is off because Shiki brings its own
-colours.
+palette tokens. Code blocks are the one place outside the palette: Shiki
+highlights them with the `plastic` preset, and `.post pre` drops the preset's panel
+background so the block keeps the hairline border the rest of the site uses.
+Real highlighting was judged worth more than a perfect palette match; tag
+every fence with a language or it renders unhighlighted.
 
 The feed carries each post's full rendered HTML with root-relative URLs made
 absolute, and uses `trailingSlash: false` so item links (which double as
