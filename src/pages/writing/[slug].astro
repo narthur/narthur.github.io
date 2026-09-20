@@ -3,11 +3,17 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
-	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
+	const posts = (await getCollection('posts')).sort(
+		(a, b) => b.data.date.getTime() - a.data.date.getTime()
+	);
+	return posts.map((post, i) => ({
+		params: { slug: post.id },
+		props: { post, newer: posts[i - 1], older: posts[i + 1] }
+	}));
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { title, subtitle, date, substack, ai } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
@@ -43,6 +49,30 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	<article class="post mt-12">
 		<Content />
 	</article>
+
+	{/* Older on the left, newer on the right, so the pair reads as the timeline does. Each side
+	    keeps its column when the other is missing, so the first and last posts don't shift. */}
+	{(older || newer) && (
+		<nav
+			aria-label="More posts"
+			class="mt-20 grid gap-x-8 gap-y-6 border-t border-rule pt-8 sm:grid-cols-2"
+		>
+			{older && (
+				<a href={`/writing/${older.id}`} class="block">
+					<span class="font-mono text-xs uppercase tracking-widest text-faint">
+						&larr; Previous
+					</span>
+					<span class="mt-1.5 block text-ink">{older.data.title}</span>
+				</a>
+			)}
+			{newer && (
+				<a href={`/writing/${newer.id}`} class="block sm:col-start-2 sm:text-right">
+					<span class="font-mono text-xs uppercase tracking-widest text-faint">Next &rarr;</span>
+					<span class="mt-1.5 block text-ink">{newer.data.title}</span>
+				</a>
+			)}
+		</nav>
+	)}
 </Layout>
 
 <style>
