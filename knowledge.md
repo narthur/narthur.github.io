@@ -165,8 +165,11 @@ component renders.
 
 The favicon is self-hosted: `public/favicon.svg` is the source and
 `public/favicon.png` is rendered from it as the fallback for browsers that don't
-take SVG icons. Keep them in step. It carries a single letterform, not a
-monogram — at the 16px browsers actually draw, two letters turn to mush.
+take SVG icons. Keep them in step. The mark is a shell prompt — chevron and
+cursor — on an 8px stroke over a 64 grid, so every limb is 2px at the 16px
+browsers actually draw and nothing thins out to grey. It replaced an "n"
+monogram on 2026-09-19: a letterform was legible but said nothing the tab
+title doesn't.
 
 ## Newsletter form
 
