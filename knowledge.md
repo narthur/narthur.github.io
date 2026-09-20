@@ -109,9 +109,18 @@ charts need the room. The activity waveform and stack chart share a time scale f
 first year in `activity.json` to its last month. The stack chart sits `mx-5` inside the
 column so the dotted marks for spans running past either end of the axis fit; the
 waveform runs the column's full width, its end labels anchored inside its own box. Each activity layer is scaled to its
-own peak. To refresh the activity data, run `pnpm activity` (needs `gh` logged in as
-narthur) and commit `activity.json`; the deploy has no GitHub token, so it is not fetched
-at build time. In `work.yaml`, `end: now` means ongoing, a year means ended that year,
+own peak. Three of its four layers come from GitHub's per-type counts
+(`totalCommitContributions` and friends), which cover **public repositories only** — for 2019
+that was 1,004 of 5,491 contributions. The fourth, `private`, is the rest, and it is
+undifferentiated by design: GitHub reports it as `restrictedContributionsCount`, one number per
+month with no split by kind and no breakdown by repository. It also carries the 2016-2019
+SimpleUpdates work, made under `su-narthur`, an account whose email is gone and which therefore
+can't be logged into; its contribution _calendar_ is public even so, which is the only reason
+those years register at all. Repositories in the script's `EXCLUDE` list are subtracted from
+`private` month by month — currently `tw-todo`, a taskwarrior-to-git sync whose 4,509 machine
+commits otherwise buried everything real in 2019. To refresh, run `pnpm activity` (needs `gh`
+logged in as narthur) and commit `activity.json`; the deploy has no GitHub token, so it is not
+fetched at build time. In `work.yaml`, `end: now` means ongoing, a year means ended that year,
 and no `end` means a single year. Screenshots named in `work.yaml` live under
 `src/work/shots/` (a missing one fails the build); project pages use them too.
 

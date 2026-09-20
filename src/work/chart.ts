@@ -6,6 +6,7 @@ export interface Month {
 	commits: number;
 	prs: number;
 	reviews: number;
+	private: number; // everything GitHub won't break down by kind; see scripts/github-activity.mjs
 }
 
 /** A run of years, as written in work.yaml. */

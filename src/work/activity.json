@@ -3,912 +3,1064 @@
 		"month": "2014-01",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-02",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-03",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-04",
 		"commits": 4,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-05",
 		"commits": 3,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-06",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-07",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-08",
 		"commits": 5,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-09",
 		"commits": 3,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-10",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-11",
 		"commits": 4,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2014-12",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-01",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-02",
 		"commits": 5,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-03",
 		"commits": 5,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-04",
 		"commits": 30,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-05",
 		"commits": 137,
 		"prs": 8,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-06",
 		"commits": 29,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-07",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-08",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-09",
 		"commits": 114,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-10",
 		"commits": 80,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2015-11",
 		"commits": 4,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 1
 	},
 	{
 		"month": "2015-12",
 		"commits": 17,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2016-01",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2016-02",
 		"commits": 172,
 		"prs": 10,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2016-03",
 		"commits": 0,
 		"prs": 21,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2016-04",
 		"commits": 0,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2016-05",
 		"commits": 0,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 4
 	},
 	{
 		"month": "2016-06",
 		"commits": 0,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 5
 	},
 	{
 		"month": "2016-07",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 1
 	},
 	{
 		"month": "2016-08",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 8
 	},
 	{
 		"month": "2016-09",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 36
 	},
 	{
 		"month": "2016-10",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 31
 	},
 	{
 		"month": "2016-11",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 62
 	},
 	{
 		"month": "2016-12",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 59
 	},
 	{
 		"month": "2017-01",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 306
 	},
 	{
 		"month": "2017-02",
 		"commits": 34,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 128
 	},
 	{
 		"month": "2017-03",
 		"commits": 5,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 111
 	},
 	{
 		"month": "2017-04",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 87
 	},
 	{
 		"month": "2017-05",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 52
 	},
 	{
 		"month": "2017-06",
 		"commits": 3,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 319
 	},
 	{
 		"month": "2017-07",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 456
 	},
 	{
 		"month": "2017-08",
 		"commits": 7,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 225
 	},
 	{
 		"month": "2017-09",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 122
 	},
 	{
 		"month": "2017-10",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 42
 	},
 	{
 		"month": "2017-11",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 120
 	},
 	{
 		"month": "2017-12",
 		"commits": 6,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 82
 	},
 	{
 		"month": "2018-01",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 16
 	},
 	{
 		"month": "2018-02",
 		"commits": 10,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 101
 	},
 	{
 		"month": "2018-03",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 131
 	},
 	{
 		"month": "2018-04",
 		"commits": 0,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 98
 	},
 	{
 		"month": "2018-05",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 44
 	},
 	{
 		"month": "2018-06",
 		"commits": 12,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 80
 	},
 	{
 		"month": "2018-07",
 		"commits": 16,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 97
 	},
 	{
 		"month": "2018-08",
 		"commits": 11,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 217
 	},
 	{
 		"month": "2018-09",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 32
 	},
 	{
 		"month": "2018-10",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 73
 	},
 	{
 		"month": "2018-11",
 		"commits": 7,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 174
 	},
 	{
 		"month": "2018-12",
 		"commits": 37,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 149
 	},
 	{
 		"month": "2019-01",
 		"commits": 44,
 		"prs": 3,
-		"reviews": 0
+		"reviews": 0,
+		"private": 110
 	},
 	{
 		"month": "2019-02",
 		"commits": 19,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 0
 	},
 	{
 		"month": "2019-03",
 		"commits": 9,
 		"prs": 2,
-		"reviews": 1
+		"reviews": 1,
+		"private": 0
 	},
 	{
 		"month": "2019-04",
 		"commits": 140,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 123
 	},
 	{
 		"month": "2019-05",
 		"commits": 134,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 110
 	},
 	{
 		"month": "2019-06",
 		"commits": 164,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 80
 	},
 	{
 		"month": "2019-07",
 		"commits": 109,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 50
 	},
 	{
 		"month": "2019-08",
 		"commits": 79,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 32
 	},
 	{
 		"month": "2019-09",
 		"commits": 109,
 		"prs": 7,
-		"reviews": 0
+		"reviews": 0,
+		"private": 17
 	},
 	{
 		"month": "2019-10",
 		"commits": 61,
 		"prs": 10,
-		"reviews": 0
+		"reviews": 0,
+		"private": 29
 	},
 	{
 		"month": "2019-11",
 		"commits": 52,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 43
 	},
 	{
 		"month": "2019-12",
 		"commits": 51,
 		"prs": 2,
-		"reviews": 1
+		"reviews": 1,
+		"private": 37
 	},
 	{
 		"month": "2020-01",
 		"commits": 69,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 83
 	},
 	{
 		"month": "2020-02",
 		"commits": 51,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 97
 	},
 	{
 		"month": "2020-03",
 		"commits": 35,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 47
 	},
 	{
 		"month": "2020-04",
 		"commits": 84,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 52
 	},
 	{
 		"month": "2020-05",
 		"commits": 45,
 		"prs": 2,
-		"reviews": 1
+		"reviews": 1,
+		"private": 39
 	},
 	{
 		"month": "2020-06",
 		"commits": 1,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 13
 	},
 	{
 		"month": "2020-07",
 		"commits": 63,
 		"prs": 8,
-		"reviews": 0
+		"reviews": 0,
+		"private": 47
 	},
 	{
 		"month": "2020-08",
 		"commits": 75,
 		"prs": 5,
-		"reviews": 0
+		"reviews": 0,
+		"private": 81
 	},
 	{
 		"month": "2020-09",
 		"commits": 37,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 99
 	},
 	{
 		"month": "2020-10",
 		"commits": 71,
 		"prs": 1,
-		"reviews": 1
+		"reviews": 1,
+		"private": 71
 	},
 	{
 		"month": "2020-11",
 		"commits": 86,
 		"prs": 1,
-		"reviews": 2
+		"reviews": 2,
+		"private": 102
 	},
 	{
 		"month": "2020-12",
 		"commits": 121,
 		"prs": 4,
-		"reviews": 0
+		"reviews": 0,
+		"private": 107
 	},
 	{
 		"month": "2021-01",
 		"commits": 37,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 103
 	},
 	{
 		"month": "2021-02",
 		"commits": 25,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 64
 	},
 	{
 		"month": "2021-03",
 		"commits": 19,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 78
 	},
 	{
 		"month": "2021-04",
 		"commits": 50,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 121
 	},
 	{
 		"month": "2021-05",
 		"commits": 76,
 		"prs": 3,
-		"reviews": 1
+		"reviews": 1,
+		"private": 142
 	},
 	{
 		"month": "2021-06",
 		"commits": 80,
 		"prs": 4,
-		"reviews": 0
+		"reviews": 0,
+		"private": 61
 	},
 	{
 		"month": "2021-07",
 		"commits": 19,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 50
 	},
 	{
 		"month": "2021-08",
 		"commits": 10,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 36
 	},
 	{
 		"month": "2021-09",
 		"commits": 10,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 28
 	},
 	{
 		"month": "2021-10",
 		"commits": 25,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 33
 	},
 	{
 		"month": "2021-11",
 		"commits": 2,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 34
 	},
 	{
 		"month": "2021-12",
 		"commits": 58,
 		"prs": 18,
-		"reviews": 0
+		"reviews": 0,
+		"private": 44
 	},
 	{
 		"month": "2022-01",
 		"commits": 105,
 		"prs": 18,
-		"reviews": 0
+		"reviews": 0,
+		"private": 66
 	},
 	{
 		"month": "2022-02",
 		"commits": 21,
 		"prs": 9,
-		"reviews": 0
+		"reviews": 0,
+		"private": 69
 	},
 	{
 		"month": "2022-03",
 		"commits": 32,
 		"prs": 3,
-		"reviews": 1
+		"reviews": 1,
+		"private": 94
 	},
 	{
 		"month": "2022-04",
 		"commits": 22,
 		"prs": 6,
-		"reviews": 0
+		"reviews": 0,
+		"private": 41
 	},
 	{
 		"month": "2022-05",
 		"commits": 69,
 		"prs": 1,
-		"reviews": 1
+		"reviews": 1,
+		"private": 48
 	},
 	{
 		"month": "2022-06",
 		"commits": 41,
 		"prs": 6,
-		"reviews": 1
+		"reviews": 1,
+		"private": 56
 	},
 	{
 		"month": "2022-07",
 		"commits": 56,
 		"prs": 10,
-		"reviews": 2
+		"reviews": 2,
+		"private": 67
 	},
 	{
 		"month": "2022-08",
 		"commits": 79,
 		"prs": 9,
-		"reviews": 0
+		"reviews": 0,
+		"private": 85
 	},
 	{
 		"month": "2022-09",
 		"commits": 69,
 		"prs": 21,
-		"reviews": 0
+		"reviews": 0,
+		"private": 135
 	},
 	{
 		"month": "2022-10",
 		"commits": 115,
 		"prs": 20,
-		"reviews": 0
+		"reviews": 0,
+		"private": 107
 	},
 	{
 		"month": "2022-11",
 		"commits": 64,
 		"prs": 15,
-		"reviews": 0
+		"reviews": 0,
+		"private": 144
 	},
 	{
 		"month": "2022-12",
 		"commits": 112,
 		"prs": 23,
-		"reviews": 0
+		"reviews": 0,
+		"private": 87
 	},
 	{
 		"month": "2023-01",
 		"commits": 20,
 		"prs": 4,
-		"reviews": 0
+		"reviews": 0,
+		"private": 53
 	},
 	{
 		"month": "2023-02",
 		"commits": 414,
 		"prs": 5,
-		"reviews": 0
+		"reviews": 0,
+		"private": 55
 	},
 	{
 		"month": "2023-03",
 		"commits": 78,
 		"prs": 3,
-		"reviews": 1
+		"reviews": 1,
+		"private": 82
 	},
 	{
 		"month": "2023-04",
 		"commits": 65,
 		"prs": 0,
-		"reviews": 0
+		"reviews": 0,
+		"private": 31
 	},
 	{
 		"month": "2023-05",
 		"commits": 16,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 41
 	},
 	{
 		"month": "2023-06",
 		"commits": 347,
 		"prs": 2,
-		"reviews": 0
+		"reviews": 0,
+		"private": 88
 	},
 	{
 		"month": "2023-07",
 		"commits": 73,
 		"prs": 4,
-		"reviews": 0
+		"reviews": 0,
+		"private": 32
 	},
 	{
 		"month": "2023-08",
 		"commits": 302,
 		"prs": 17,
-		"reviews": 0
+		"reviews": 0,
+		"private": 101
 	},
 	{
 		"month": "2023-09",
 		"commits": 159,
 		"prs": 9,
-		"reviews": 0
+		"reviews": 0,
+		"private": 135
 	},
 	{
 		"month": "2023-10",
 		"commits": 210,
 		"prs": 22,
-		"reviews": 13
+		"reviews": 13,
+		"private": 38
 	},
 	{
 		"month": "2023-11",
 		"commits": 23,
 		"prs": 1,
-		"reviews": 2
+		"reviews": 2,
+		"private": 92
 	},
 	{
 		"month": "2023-12",
 		"commits": 51,
 		"prs": 2,
-		"reviews": 5
+		"reviews": 5,
+		"private": 20
 	},
 	{
 		"month": "2024-01",
 		"commits": 4,
 		"prs": 0,
-		"reviews": 4
+		"reviews": 4,
+		"private": 9
 	},
 	{
 		"month": "2024-02",
 		"commits": 56,
 		"prs": 7,
-		"reviews": 15
+		"reviews": 15,
+		"private": 94
 	},
 	{
 		"month": "2024-03",
 		"commits": 79,
 		"prs": 6,
-		"reviews": 7
+		"reviews": 7,
+		"private": 188
 	},
 	{
 		"month": "2024-04",
 		"commits": 99,
 		"prs": 32,
-		"reviews": 0
+		"reviews": 0,
+		"private": 138
 	},
 	{
 		"month": "2024-05",
 		"commits": 261,
 		"prs": 45,
-		"reviews": 5
+		"reviews": 5,
+		"private": 46
 	},
 	{
 		"month": "2024-06",
 		"commits": 92,
 		"prs": 12,
-		"reviews": 26
+		"reviews": 26,
+		"private": 79
 	},
 	{
 		"month": "2024-07",
 		"commits": 136,
 		"prs": 15,
-		"reviews": 11
+		"reviews": 11,
+		"private": 245
 	},
 	{
 		"month": "2024-08",
 		"commits": 81,
 		"prs": 10,
-		"reviews": 0
+		"reviews": 0,
+		"private": 201
 	},
 	{
 		"month": "2024-09",
 		"commits": 8,
 		"prs": 1,
-		"reviews": 3
+		"reviews": 3,
+		"private": 111
 	},
 	{
 		"month": "2024-10",
 		"commits": 96,
 		"prs": 10,
-		"reviews": 16
+		"reviews": 16,
+		"private": 69
 	},
 	{
 		"month": "2024-11",
 		"commits": 84,
 		"prs": 5,
-		"reviews": 0
+		"reviews": 0,
+		"private": 257
 	},
 	{
 		"month": "2024-12",
 		"commits": 80,
 		"prs": 5,
-		"reviews": 0
+		"reviews": 0,
+		"private": 268
 	},
 	{
 		"month": "2025-01",
 		"commits": 318,
 		"prs": 10,
-		"reviews": 0
+		"reviews": 0,
+		"private": 122
 	},
 	{
 		"month": "2025-02",
 		"commits": 27,
 		"prs": 1,
-		"reviews": 0
+		"reviews": 0,
+		"private": 35
 	},
 	{
 		"month": "2025-03",
 		"commits": 44,
 		"prs": 12,
-		"reviews": 0
+		"reviews": 0,
+		"private": 178
 	},
 	{
 		"month": "2025-04",
 		"commits": 171,
 		"prs": 24,
-		"reviews": 0
+		"reviews": 0,
+		"private": 540
 	},
 	{
 		"month": "2025-05",
 		"commits": 134,
 		"prs": 6,
-		"reviews": 1
+		"reviews": 1,
+		"private": 427
 	},
 	{
 		"month": "2025-06",
 		"commits": 72,
 		"prs": 12,
-		"reviews": 0
+		"reviews": 0,
+		"private": 274
 	},
 	{
 		"month": "2025-07",
 		"commits": 61,
 		"prs": 4,
-		"reviews": 0
+		"reviews": 0,
+		"private": 269
 	},
 	{
 		"month": "2025-08",
 		"commits": 152,
 		"prs": 16,
-		"reviews": 0
+		"reviews": 0,
+		"private": 368
 	},
 	{
 		"month": "2025-09",
 		"commits": 77,
 		"prs": 21,
-		"reviews": 2
+		"reviews": 2,
+		"private": 314
 	},
 	{
 		"month": "2025-10",
 		"commits": 330,
 		"prs": 23,
-		"reviews": 48
+		"reviews": 48,
+		"private": 872
 	},
 	{
 		"month": "2025-11",
 		"commits": 55,
 		"prs": 0,
-		"reviews": 15
+		"reviews": 15,
+		"private": 366
 	},
 	{
 		"month": "2025-12",
 		"commits": 135,
 		"prs": 1,
-		"reviews": 18
+		"reviews": 18,
+		"private": 258
 	},
 	{
 		"month": "2026-01",
 		"commits": 147,
 		"prs": 5,
-		"reviews": 11
+		"reviews": 11,
+		"private": 791
 	},
 	{
 		"month": "2026-02",
 		"commits": 110,
 		"prs": 1,
-		"reviews": 5
+		"reviews": 5,
+		"private": 456
 	},
 	{
 		"month": "2026-03",
 		"commits": 27,
 		"prs": 1,
-		"reviews": 2
+		"reviews": 2,
+		"private": 419
 	},
 	{
 		"month": "2026-04",
 		"commits": 425,
 		"prs": 26,
-		"reviews": 1
+		"reviews": 1,
+		"private": 458
 	},
 	{
 		"month": "2026-05",
 		"commits": 308,
 		"prs": 53,
-		"reviews": 0
+		"reviews": 0,
+		"private": 895
 	},
 	{
 		"month": "2026-06",
 		"commits": 377,
 		"prs": 103,
-		"reviews": 0
+		"reviews": 0,
+		"private": 682
 	},
 	{
 		"month": "2026-07",
 		"commits": 145,
 		"prs": 40,
-		"reviews": 0
+		"reviews": 0,
+		"private": 226
 	},
 	{
 		"month": "2026-08",
 		"commits": 76,
 		"prs": 25,
-		"reviews": 0
+		"reviews": 0,
+		"private": 274
 	}
 ]
