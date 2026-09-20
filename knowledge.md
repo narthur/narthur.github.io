@@ -184,6 +184,30 @@ The footer form in `Layout.astro` posts to the rss-to-email Worker at
 `mail.nathanarthur.com/subscribe` (double opt-in), guarded by Cloudflare
 Turnstile with `data-action="subscribe"`, which the Worker checks.
 
+## Comments
+
+Newsletter posts carry a giscus thread, which stores comments as GitHub
+Discussions in this repo under the Announcements category. The embed is a
+script tag at the foot of `writing/[slug].astro`; the repo and category IDs in
+its attributes are public identifiers, not secrets.
+
+`data-mapping="specific"` with the slug as the term keys each thread to the
+post rather than to its path, so moving a URL doesn't orphan the thread. The
+theme is `transparent_dark`, which lets the page background show through
+instead of laying a panel on it — the palette rule applies to the embed as much
+as to anything else, and giscus is themeable where a hosted widget usually
+isn't.
+
+Chosen over Disqus on 2026-09-20 after measuring what Disqus actually shipped:
+its free tier reported `can_disable_ads: ""` and in-thread ads every eight
+comments, and the ad network is where the tracking lives — removing it meant
+$12/mo. giscus has no ads, no tracking, and the comments stay in a repo Nathan
+controls. The cost is that commenting needs a GitHub account, which suits this
+audience and would not suit every site.
+
+There is no comment count on `/writing`: the list stays type and rules, and
+counts would mean loading the embed on the index too.
+
 ## Build
 
 - `pnpm dev` / `pnpm build` / `pnpm preview`
