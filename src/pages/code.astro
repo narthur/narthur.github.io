@@ -36,8 +36,11 @@ const gists = items.filter((item) => item.gist).length;
 				{year.year}
 			</h2>
 			<div>
+				<!-- A row is flex, not a two-column grid: a grid's `auto` track sizes to max-content and
+				     bleeds into the name beside it on a phone. Wrapping the metadata onto its own line is
+				     the graceful end of the same squeeze. -->
 				{year.items.map((item) => (
-					<article class="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 border-b border-rule py-3">
+					<article class="flex flex-wrap items-baseline gap-x-6 border-b border-rule py-3">
 						<h3 class="text-[15px]">
 							<a href={item.url}>{item.name}</a>
 							{item.owner !== 'narthur' && (
@@ -45,17 +48,16 @@ const gists = items.filter((item) => item.gist).length;
 							)}
 							{item.gist && <span class="ml-2 font-mono text-xs text-faint">gist</span>}
 						</h3>
-						<p class="whitespace-nowrap text-right font-mono text-xs text-faint">
-							{item.stars > 0 && <span class="text-mute">&#9733;{item.stars}</span>}
-							{item.stars > 0 && item.language && <span> · </span>}
-							{item.language}
+						<!-- Stars, language and date ride on one line, so a row is one line unless it has a
+						     description to carry — the year heading already supplies the date's year. -->
+						<p class="ml-auto text-right font-mono text-xs text-faint">
+							{item.stars > 0 && <span class="text-mute">&#9733;{item.stars} · </span>}
+							{item.language && <span>{item.language} · </span>}
+							{dayLabel(item.pushed)}
 						</p>
 						{item.description && (
-							<p class="col-span-2 mt-1 max-w-prose text-sm leading-relaxed text-faint">
-								{item.description}
-							</p>
+							<p class="mt-1 basis-full text-sm leading-relaxed text-faint">{item.description}</p>
 						)}
-						<p class="col-span-2 mt-1 font-mono text-xs text-faint">{dayLabel(item.pushed)}</p>
 					</article>
 				))}
 			</div>
