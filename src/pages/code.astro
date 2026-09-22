@@ -36,9 +36,10 @@ const gists = items.filter((item) => item.gist).length;
 				{year.year}
 			</h2>
 			<div>
-				<!-- A row is flex, not a two-column grid: a grid's `auto` track sizes to max-content and
-				     bleeds into the name beside it on a phone. Wrapping the metadata onto its own line is
-				     the graceful end of the same squeeze. -->
+				<!-- A row is flex, not a two-column grid: a grid's `auto` track sizes to max-content, so
+				     on a phone the metadata bled into the name beside it. Flex wraps it onto its own line
+				     instead, which is why a row is usually one line but not always — a long name, or a
+				     description, takes it to two. -->
 				{year.items.map((item) => (
 					<article class="flex flex-wrap items-baseline gap-x-6 border-b border-rule py-3">
 						<h3 class="text-[15px]">
@@ -48,15 +49,16 @@ const gists = items.filter((item) => item.gist).length;
 							)}
 							{item.gist && <span class="ml-2 font-mono text-xs text-faint">gist</span>}
 						</h3>
-						<!-- Stars, language and date ride on one line, so a row is one line unless it has a
-						     description to carry — the year heading already supplies the date's year. -->
+						<!-- The date needs no year: the heading above the group already supplies it. -->
 						<p class="ml-auto text-right font-mono text-xs text-faint">
 							{item.stars > 0 && <span class="text-mute">&#9733;{item.stars} · </span>}
 							{item.language && <span>{item.language} · </span>}
 							{dayLabel(item.pushed)}
 						</p>
 						{item.description && (
-							<p class="mt-1 basis-full text-sm leading-relaxed text-faint">{item.description}</p>
+							<p class="mt-1 max-w-prose basis-full text-sm leading-relaxed text-faint">
+								{item.description}
+							</p>
 						)}
 					</article>
 				))}
