@@ -80,8 +80,10 @@ src/
 │   ├── work.astro              # every project, the stack over time, GitHub activity
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
-│   ├── rss.xml.ts              # RSS feed of the newsletter, full content
+│   ├── rss.xml.ts              # public RSS feed, footer for feed readers
+│   ├── newsletter.xml.ts       # same feed, email footer; read by rss-to-email-worker
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
+├── feed.ts                     # builds both feeds; each passes its own footer
 ├── content.config.ts           # the `posts` and `projects` collection schemas
 ├── content/posts/*.md          # newsletter posts
 ├── content/projects/*.mdx      # project pages: prose with charts and screenshots
@@ -169,6 +171,13 @@ absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
 
+There are two feeds from one builder, `src/feed.ts`, differing only in the
+footer appended to each item. `/rss.xml` is the public one, linked from the
+site, with a footer for feed readers. `/newsletter.xml` is unlinked and read by
+rss-to-email-worker, which emails each new item; its footer is written for
+email, and the worker adds the per-subscriber unsubscribe link below it. Guids
+match across the two.
+
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
 
@@ -195,7 +204,9 @@ title doesn't.
 
 The footer form in `Layout.astro` posts to the rss-to-email Worker at
 `mail.nathanarthur.com/subscribe` (double opt-in), guarded by Cloudflare
-Turnstile with `data-action="subscribe"`, which the Worker checks.
+Turnstile with `data-action="subscribe"`, which the Worker checks. The widget
+uses `data-appearance="interaction-only"`, so it shows only when a visitor has
+to interact with it.
 
 ## Comments
 
