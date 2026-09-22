@@ -94,13 +94,15 @@ for (const login of ORGS) {
 }
 
 // A gist has no name of its own: GitHub titles it by its first file, so the page does too.
+// The gists connection takes no isFork argument, unlike repositories, so forks are filtered out
+// here instead — a forked gist would otherwise read as his own snippet on the page.
 for (const login of USERS) {
 	const nodes = await pages(
 		`query($login: String!, $cursor: String) {
 			user(login: $login) {
 				gists(first: 100, after: $cursor, privacy: PUBLIC) {
 					nodes {
-						name url description stargazerCount pushedAt
+						name url description stargazerCount pushedAt isFork
 						files(limit: 1) { name language { name } }
 					}
 					pageInfo { hasNextPage endCursor }
@@ -111,16 +113,18 @@ for (const login of USERS) {
 		(data) => data.user.gists
 	);
 	items.push(
-		...nodes.map((node) => ({
-			owner: login,
-			gist: true,
-			name: node.files?.[0]?.name ?? node.name,
-			url: node.url,
-			description: node.description ?? '',
-			stars: node.stargazerCount,
-			pushed: node.pushedAt.slice(0, 10),
-			language: node.files?.[0]?.language?.name ?? ''
-		}))
+		...nodes
+			.filter((node) => !node.isFork)
+			.map((node) => ({
+				owner: login,
+				gist: true,
+				name: node.files?.[0]?.name ?? node.name,
+				url: node.url,
+				description: node.description ?? '',
+				stars: node.stargazerCount,
+				pushed: node.pushedAt.slice(0, 10),
+				language: node.files?.[0]?.language?.name ?? ''
+			}))
 	);
 }
 

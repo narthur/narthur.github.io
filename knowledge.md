@@ -153,10 +153,12 @@ the full list to `src/code/code.json`, committed, because the deploy has no GitH
 The page lists an item only if it has a star or was pushed within `FRESH_MONTHS`
 (`src/code/code.ts`), which is the entire editorial rule — nothing is picked or suppressed
 by hand, and the page says so. That is deliberate: a hand-curated shelf would be a second
-`/work` to keep alive, and a page of all 151 would be noise. 59 of them clear the bar
-today. The committed file keeps everything so the count at the foot ("59 of 124 public
-repositories and 27 gists") stays true. The user and organization queries overlap, so
-entries are deduped by URL.
+`/work` to keep alive, and a page of every last one would be noise; roughly a third clear
+the bar. The committed file keeps the rest, which is what makes the count at the foot
+("N of M public repositories and K gists") true rather than asserted — so don't reduce it
+to just what the page shows. The user and organization queries overlap, so entries are
+deduped by URL; forked gists are dropped in the script, since the gists connection takes
+no `isFork` argument the way repositories do.
 
 The newsletter lives here: this site is its primary home, having moved off
 Substack in September 2026. Each post is a Markdown file in

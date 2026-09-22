@@ -1215,16 +1215,6 @@
 	{
 		"owner": "narthur",
 		"gist": true,
-		"name": ".gitconfig",
-		"url": "https://gist.github.com/7ec900f3d4b85bc3ec0b0f4a6d365f94",
-		"description": "Git diff and merge with p4merge (OSX)",
-		"stars": 0,
-		"pushed": "2016-04-04",
-		"language": "Git Config"
-	},
-	{
-		"owner": "narthur",
-		"gist": true,
 		"name": "enable_wp_debugging.php",
 		"url": "https://gist.github.com/30eabef57fd434739ed8",
 		"description": "Enable WordPress debugging",
