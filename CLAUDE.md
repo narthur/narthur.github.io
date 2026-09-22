@@ -27,7 +27,8 @@ both blame and the trailers credit AI for words it did not write.
 ## Pages currently flagged
 
 `/work` (work.yaml descriptions, activity-chart caption), `/audioverse`,
-`/taskratchet`. Unflagged and
+`/taskratchet`, `/code` (its one intro paragraph; the repository descriptions
+are GitHub's own). Unflagged and
 human-written: the home page (its copy is Nathan's, rewritten 2026-09-19),
 `/writing` (intro and Beeminder blurbs, rewritten 2026-09-20), the newsletter
 posts, `/uses`, and `/404`.

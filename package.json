@@ -17,6 +17,7 @@
 		"test:unit": "vitest",
 		"test": "vitest run",
 		"activity": "node scripts/github-activity.mjs",
+		"code": "node scripts/github-code.mjs",
 		"project-stats": "node scripts/project-stats.mjs"
 	},
 	"devDependencies": {
