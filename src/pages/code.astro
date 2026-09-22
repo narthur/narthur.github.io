@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import all from '../code/code.json';
+import { dayLabel, FRESH_MONTHS, shownByYear, type CodeItem } from '../code/code';
+
+// The JSON holds every public repository and gist; the rule in code.ts decides which reach the
+// page. Keeping the full list here is what lets the footer count the rest honestly.
+const items = all as CodeItem[];
+const years = shownByYear(items, new Date());
+const shown = years.reduce((count, year) => count + year.items.length, 0);
+const gists = items.filter((item) => item.gist).length;
+---
+
+<Layout
+	title="Code — Nathan Arthur"
+	description="Public repositories and gists by Nathan Arthur, newest first."
+	ai
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-4xl font-medium tracking-tight">Code</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute sm:text-lg">
+		Public repositories and gists, mine and the ones I work in, newest push first. Listed if it has
+		a star or has been touched in the last {FRESH_MONTHS} months — nothing is picked or hidden by
+		hand.
+	</p>
+
+	{years.map((year) => (
+		<section class="mt-12 sm:mt-14" aria-labelledby={`year-${year.year}`}>
+			<h2
+				id={`year-${year.year}`}
+				class="border-b border-rule pb-2 font-mono text-xs uppercase tracking-[0.2em] text-faint"
+			>
+				{year.year}
+			</h2>
+			<div>
+				<!-- A row is flex, not a two-column grid: a grid's `auto` track sizes to max-content, so
+				     on a phone the metadata bled into the name beside it. Flex wraps it onto its own line
+				     instead, which is why a row is usually one line but not always — a long name, or a
+				     description, takes it to two. -->
+				{year.items.map((item) => (
+					<article class="flex flex-wrap items-baseline gap-x-6 border-b border-rule py-3">
+						<h3 class="text-[15px]">
+							<a href={item.url}>{item.name}</a>
+							{item.owner !== 'narthur' && (
+								<span class="ml-2 font-mono text-xs text-faint">{item.owner}</span>
+							)}
+							{item.gist && <span class="ml-2 font-mono text-xs text-faint">gist</span>}
+						</h3>
+						<!-- The date needs no year: the heading above the group already supplies it. -->
+						<p class="ml-auto text-right font-mono text-xs text-faint">
+							{item.stars > 0 && <span class="text-mute">&#9733;{item.stars} · </span>}
+							{item.language && <span>{item.language} · </span>}
+							{dayLabel(item.pushed)}
+						</p>
+						{item.description && (
+							<p class="mt-1 max-w-prose basis-full text-sm leading-relaxed text-faint">
+								{item.description}
+							</p>
+						)}
+					</article>
+				))}
+			</div>
+		</section>
+	))}
+
+	<p class="mt-12 max-w-prose font-mono text-xs leading-relaxed text-faint">
+		{shown} of {items.length - gists} public repositories and {gists} gists.{' '}
+		<a href="https://github.com/narthur?tab=repositories">The rest is on GitHub &rarr;</a>
+	</p>
+</Layout>

@@ -77,6 +77,7 @@ src/
 │   ├── index.astro             # home: avatar, positioning, contact, signposts, latest post
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
+│   ├── code.astro              # every public repository and gist worth listing
 │   ├── work.astro              # every project, the stack over time, GitHub activity
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
@@ -85,6 +86,10 @@ src/
 ├── content.config.ts           # the `posts` and `projects` collection schemas
 ├── content/posts/*.md          # newsletter posts
 ├── content/projects/*.mdx      # project pages: prose with charts and screenshots
+├── code/
+│   ├── code.json               # every public repo and gist, written by `pnpm code`
+│   ├── code.ts                 # which of them the page lists, and how they group
+│   └── code.spec.ts
 ├── uses/
 │   ├── filter.ts               # tag/category logic
 │   ├── filter.spec.ts
@@ -141,6 +146,19 @@ clones, not GitHub, because client repos can become unreachable: run
 `pnpm project-stats <name> <repo dir>...` (archived clones work) and commit the result.
 It holds counts only, split into mine and everyone else's, never names or emails, so
 other contributors stay off the site.
+
+`/code` is the public source: every public repository under `narthur` or an organization
+he works in, plus every public gist. `pnpm code` (needs `gh` logged in as narthur) writes
+the full list to `src/code/code.json`, committed, because the deploy has no GitHub token.
+The page lists an item only if it has a star or was pushed within `FRESH_MONTHS`
+(`src/code/code.ts`), which is the entire editorial rule — nothing is picked or suppressed
+by hand, and the page says so. That is deliberate: a hand-curated shelf would be a second
+`/work` to keep alive, and a page of every last one would be noise; roughly a third clear
+the bar. The committed file keeps the rest, which is what makes the count at the foot
+("N of M public repositories and K gists") true rather than asserted — so don't reduce it
+to just what the page shows. The user and organization queries overlap, so entries are
+deduped by URL; forked gists are dropped in the script, since the gists connection takes
+no `isFork` argument the way repositories do.
 
 The newsletter lives here: this site is its primary home, having moved off
 Substack in September 2026. Each post is a Markdown file in
