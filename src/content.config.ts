@@ -13,7 +13,7 @@ const posts = defineCollection({
 		substack: z.url().optional(),
 		// Draws a generative band above the title in place of a cover image. Posts without one
 		// open on the title, as every imported post does.
-		banner: z.boolean().default(false),
+		band: z.boolean().default(false),
 		ai: z.boolean().default(false)
 	})
 });

@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Banner from '../../layouts/Banner.astro';
+import Band from '../../layouts/Band.astro';
 
 export async function getStaticPaths() {
 	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { post, newer, older } = Astro.props;
-const { title, subtitle, date, substack, ai, banner } = post.data;
+const { title, subtitle, date, substack, ai, band } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
@@ -35,15 +35,15 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		<a href="/writing">&larr; Writing</a>
 	</p>
 
-	{/* With a banner the heading sits bottom-aligned inside the band's height, and the band's
-	    canvas knocks itself out from behind `data-banner-text`. Without one the wrapper is inert
+	{/* With a band the heading sits bottom-aligned inside its height, and the band's
+	    canvas knocks itself out from behind `data-band-text`. Without one the wrapper is inert
 	    and the heading flows exactly as it always has. */}
-	<div class:list={['relative', banner && 'flex min-h-[15rem] flex-col justify-end']}>
-		{banner && <Banner />}
+	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
+		{band && <Band />}
 		{/* `relative` so the heading stacks above the absolutely-positioned canvas; `w-fit` so the
 		    box the band knocks itself out from is the width of the title, not of the whole column.
 		    fit-content still caps at the available width, so a long title wraps as it would. */}
-		<div data-banner-text class:list={[banner && 'relative w-fit']}>
+		<div data-band-text class:list={[band && 'relative w-fit']}>
 			<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
 			{subtitle && <p class="mt-3 text-lg leading-relaxed text-mute">{subtitle}</p>}
 			<p class="mt-4 font-mono text-xs text-faint">

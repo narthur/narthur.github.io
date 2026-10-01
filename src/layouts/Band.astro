@@ -13,17 +13,17 @@
 
 {/* Breaks out of the page column to full width: the column is `mx-auto`, so its centre is the
     page's centre and translating half its own width off that lands it flush to both edges. */}
-<div id="banner" aria-hidden="true" class="absolute bottom-0 left-1/2 h-60 -translate-x-1/2"></div>
+<div id="band" aria-hidden="true" class="absolute bottom-0 left-1/2 h-60 -translate-x-1/2"></div>
 
 {
 	/* Dev-only mode picker, alongside the accent picker and for the same reason: the algorithm is
 	   being chosen by looking at it against a real page. Goes when the exploration does. */
 	import.meta.env.DEV && (
 		<aside
-			id="banner-picker"
+			id="band-picker"
 			class="fixed bottom-4 left-4 z-50 rounded border border-rule bg-bg/95 p-3 font-mono text-xs text-mute shadow-lg backdrop-blur"
 		>
-			<div class="mb-2 text-faint">banner</div>
+			<div class="mb-2 text-faint">band</div>
 			<div class="flex gap-1">
 				{['trails', 'forage', 'scatter', 'lattice', 'flow'].map((mode) => (
 					<button data-mode={mode} class="border border-rule px-2 py-1 hover:text-ink">
@@ -51,18 +51,18 @@
 		// 'lattice' — a 4D grid under the same projection the post's own sketch uses
 		// 'flow'    — short strokes combed by a noise field
 		//
-		// The dev picker and `?banner=<mode>` both override this; the query form works against a
+		// The dev picker and `?band=<mode>` both override this; the query form works against a
 		// built preview too, where the picker is not rendered.
 		const MODES = ['trails', 'forage', 'scatter', 'lattice', 'flow'];
 		const DEFAULT_MODE = 'trails';
-		const asked = new URLSearchParams(location.search).get('banner');
-		let MODE = MODES.includes(asked) ? asked : (sessionStorage.getItem('banner') ?? DEFAULT_MODE);
+		const asked = new URLSearchParams(location.search).get('band');
+		let MODE = MODES.includes(asked) ? asked : (sessionStorage.getItem('band') ?? DEFAULT_MODE);
 		if (!MODES.includes(MODE)) MODE = DEFAULT_MODE;
 
-		const HOST = document.getElementById('banner');
-		// This script is inline inside the banner, which the heading follows, so the heading does
+		const HOST = document.getElementById('band');
+		// This script is inline inside the band, which the heading follows, so the heading does
 		// not exist yet at parse time — hence waiting for DOM ready below.
-		const TEXT = document.querySelector('[data-banner-text]');
+		const TEXT = document.querySelector('[data-band-text]');
 		if (!HOST || !TEXT || typeof p5 === 'undefined') return;
 
 		const HEIGHT = 240;
@@ -396,7 +396,7 @@
 
 			// Wire the dev picker, if it rendered. Every navigation is a full page load, so the
 			// choice is carried in sessionStorage the way the accent picker carries its colour.
-			const picker = document.getElementById('banner-picker');
+			const picker = document.getElementById('band-picker');
 			if (picker) {
 				const mark = () => {
 					for (const b of picker.querySelectorAll('[data-mode]')) {
@@ -409,7 +409,7 @@
 				for (const b of picker.querySelectorAll('[data-mode]')) {
 					b.addEventListener('click', () => {
 						MODE = b.dataset.mode;
-						sessionStorage.setItem('banner', MODE);
+						sessionStorage.setItem('band', MODE);
 						mark();
 						render();
 					});
