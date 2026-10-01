@@ -84,8 +84,9 @@
 				p = rot(p, 0, 1, t * 0.04); // xy, an ordinary turn about the up axis
 				const w = p[3];
 				p = rot(p, 1, 2, -0.9); // tilt so we look down onto the ground
-				// Two perspective divides, with the eye at w = 3 and then at y = 4. The world roams
-				// roughly ±1, so both cameras sit well clear of it and neither divide can approach zero.
+				// Two perspective divides, with the eye at w = 3 and then at y = 4. Nothing clamps the
+				// world — walk()'s pull-home term only grows with distance — but it keeps the wander
+				// inside a couple of units, so in practice neither divide gets near zero.
 				const k4 = 3 / (3 - w);
 				const [x, y, z] = p.map((v) => v * k4);
 				const k3 = 4 / (4 - y);
