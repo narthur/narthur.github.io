@@ -81,6 +81,6 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: node_modules/.cache/bands
-          key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/content/posts/**') }}
+          key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/theme.ts', 'src/pages/band-render.astro', 'src/content/posts/**') }}
           restore-keys: bands-${{ runner.os }}-
       - run: pnpm run build

@@ -50,7 +50,10 @@ async function bandedPosts() {
 	const out = [];
 	for (const file of await readdir(POSTS)) {
 		if (!file.endsWith('.md')) continue;
-		const text = await readFile(join(POSTS, file), 'utf8');
+		// Normalised first: `$` in a multiline regex matches before \n but not before \r\n, so a post
+		// saved with CRLF endings would not split, `front` would be undefined, and the post would be
+		// skipped in silence — the exact failure this stopped using a regex to avoid.
+		const text = (await readFile(join(POSTS, file), 'utf8')).replace(/\r\n/g, '\n');
 		const front = text.split(/^---$/m)[1];
 		if (!front) continue;
 		const { band } = load(front) ?? {};

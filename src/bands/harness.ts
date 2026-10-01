@@ -42,43 +42,53 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 	// silently would be indistinguishable from "nothing to redraw", and this Harness exists because
 	// ordering bugs here have already cost us twice.
 	let pending: { seed?: number } | null = null;
-	// Only the newest draw may claim the canvas or set the ready flag. A Sketch is allowed to be
-	// async (see types.ts), so a resize or a reseed can start a second draw while the first is still
-	// settling; without this the slower one wins and still reports ready.
+
+	// Draws run one at a time, and only the newest actually draws.
+	//
+	// A Sketch may be async and span frames (types.ts says so), so a resize or a reseed can arrive
+	// while one is still settling. Guarding only the tail is not enough: the superseded draw would
+	// resume after its own yield and keep painting onto the canvas the newer one had already
+	// cleared, leaving a blend of two seeds that still reported ready. Serialising means no two
+	// draws ever hold the canvas at once; the generation check means a draw that was superseded
+	// while it waited its turn skips the work entirely rather than rendering a frame nobody wants.
 	let generation = 0;
+	let queue: Promise<void> = Promise.resolve();
 
 	new window.p5((p: P5) => {
-		const draw = async () => {
+		const request = () => {
 			const mine = ++generation;
 			window.__bandReady = false;
+			queue = queue.then(async () => {
+				if (mine !== generation) return; // a newer request is waiting; let it draw instead
 
-			// clientWidth on the root element, not 100vw: vw includes the scrollbar, so a vw-wide
-			// band on a scrolling page overflows by its width and adds a horizontal scrollbar.
-			const cssWidth = opts.width ?? document.documentElement.clientWidth;
-			if (!cssWidth) return;
+				// clientWidth on the root element, not 100vw: vw includes the scrollbar, so a vw-wide
+				// band on a scrolling page overflows by its width and adds a horizontal scrollbar.
+				const cssWidth = opts.width ?? document.documentElement.clientWidth;
+				if (!cssWidth) return;
 
-			p.resizeCanvas(cssWidth, opts.height);
-			const density = p.pixelDensity();
+				p.resizeCanvas(cssWidth, opts.height);
+				const density = p.pixelDensity();
 
-			// Identity transform, so the Sketch works in device pixels throughout. p5 would
-			// otherwise scale drawing commands by the density while putImageData — which writes
-			// straight to the backing store — ignored it, and the two would disagree.
-			p.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
-			p.clear();
+				// Identity transform, so the Sketch works in device pixels throughout. p5 would
+				// otherwise scale drawing commands by the density while putImageData — which writes
+				// straight to the backing store — ignored it, and the two would disagree.
+				p.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
+				p.clear();
 
-			p.randomSeed(seed);
-			p.noiseSeed(seed);
+				p.randomSeed(seed);
+				p.noiseSeed(seed);
 
-			await sketch(p, {
-				width: Math.round(cssWidth * density),
-				height: Math.round(opts.height * density),
-				density,
-				seed
+				await sketch(p, {
+					width: Math.round(cssWidth * density),
+					height: Math.round(opts.height * density),
+					density,
+					seed
+				});
+
+				if (mine !== generation) return; // superseded; the newer draw will set the flag
+				opts.onRender?.(seed);
+				window.__bandReady = true;
 			});
-
-			if (mine !== generation) return; // superseded mid-flight; let the newer draw finish
-			opts.onRender?.(seed);
-			window.__bandReady = true;
 		};
 
 		p.setup = () => {
@@ -88,14 +98,13 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 			p.noLoop();
 			redraw = (next?: number) => {
 				if (next !== undefined) seed = next;
-				void draw();
+				request();
 			};
-			void draw();
-			if (pending) {
-				const queued = pending;
-				pending = null;
-				redraw(queued.seed);
-			}
+			// One draw either way: a render queued before setup supplies the seed for it rather than
+			// running a second simulation straight over the first.
+			const queued = pending;
+			pending = null;
+			redraw(queued?.seed);
 		};
 
 		// Only the live page resizes; the renderer pins a width and never does.
@@ -103,7 +112,7 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 		p.windowResized = () => {
 			if (opts.width !== undefined) return;
 			clearTimeout(settle);
-			settle = window.setTimeout(() => void draw(), 150);
+			settle = window.setTimeout(request, 150);
 		};
 	});
 
