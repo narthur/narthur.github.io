@@ -43,6 +43,13 @@ const names = Object.keys(sketches);
 			const host = document.getElementById('band')!;
 			const sketch = sketches[params.get('sketch') ?? ''];
 
+			// `|| 1` would turn a seed of 0 into 1, and the schema allows any integer — so a post
+			// written with `seed: 0` would ship a Band the dev picker never showed. That divergence
+			// between preview and shipped image is the one thing this page exists to prevent.
+			// Width and height keep `||`: unlike a seed, zero is not a size anyone meant.
+			const rawSeed = params.get('seed');
+			const seed = rawSeed && Number.isInteger(Number(rawSeed)) ? Number(rawSeed) : 1;
+
 			if (!sketch) {
 				// Fail loudly: a silent blank canvas here would be captured and shipped as a Band.
 				window.__bandError = `unknown sketch: ${params.get('sketch')}`;
@@ -51,7 +58,7 @@ const names = Object.keys(sketches);
 					host,
 					height: Number(params.get('h')) || 240,
 					width: Number(params.get('w')) || 1280,
-					seed: Number(params.get('seed')) || 1
+					seed
 				});
 			}
 		</script>
