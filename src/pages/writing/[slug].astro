@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Band from '../../layouts/Band.astro';
 
 export async function getStaticPaths() {
 	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { post, newer, older } = Astro.props;
-const { title, subtitle, date, substack, ai } = post.data;
+const { title, subtitle, date, substack, ai, band } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
@@ -34,17 +35,41 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		<a href="/writing">&larr; Writing</a>
 	</p>
 
-	<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
-	{subtitle && <p class="mt-3 text-lg leading-relaxed text-mute">{subtitle}</p>}
-	<p class="mt-4 font-mono text-xs text-faint">
-		<time datetime={day}>{day}</time>
-		{substack && (
-			<>
-				{' '}
-				· <a href={substack}>Originally on Substack</a>
-			</>
-		)}
-	</p>
+	{/* With a band the heading sits bottom-aligned inside its height, and the CSS at the foot of
+	    this file cuts a rectangle of page background out from behind `data-band-text`. Without one
+	    the wrapper is inert and the heading flows exactly as it always has. */}
+	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
+		{/* Dev runs the Sketch live so the picker can drive it; the shipped page gets the image
+		    scripts/bands.mjs rendered, as a background rather than an <img> so it can repeat-x. The
+		    field is a torus, so one asset tiles seamlessly at any viewport width — and the height is
+		    locked, so the reflection edges at top and bottom are never cropped away. */}
+		{band &&
+			(import.meta.env.DEV ? (
+				<Band sketch={band.sketch} seed={band.seed} />
+			) : (
+				<div
+					aria-hidden="true"
+					class="absolute bottom-0 left-1/2 z-0 h-60 w-screen -translate-x-1/2 bg-center bg-repeat-x"
+					style={`background-image:url(/writing/${post.id}/band.webp);background-size:auto 240px`}
+				/>
+			))}
+
+		{/* `w-fit` keeps the backdrop the width of the title rather than the whole column; fit-content
+		    still caps at the available width, so a long title wraps as it would. */}
+		<div data-band-text class:list={[band && 'relative z-10 w-fit']}>
+			<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
+			{subtitle && <p class="mt-3 text-lg leading-relaxed text-mute">{subtitle}</p>}
+			<p class="mt-4 font-mono text-xs text-faint">
+				<time datetime={day}>{day}</time>
+				{substack && (
+					<>
+						{' '}
+						· <a href={substack}>Originally on Substack</a>
+					</>
+				)}
+			</p>
+		</div>
+	</div>
 
 	<article class="post mt-12">
 		<Content />
@@ -108,7 +133,41 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	</section>
 </Layout>
 
+<script>
+	// Interactive embeds are written in posts as a linked still image, which is all the feed and
+	// the email get, since both strip iframes. On the site, swap each for the live page it links to.
+	for (const a of document.querySelectorAll<HTMLAnchorElement>('.post a[data-embed]')) {
+		const frame = document.createElement('iframe');
+		frame.src = a.href;
+		frame.title = a.querySelector('img')?.alt ?? '';
+		frame.loading = 'lazy';
+
+		// The still image was itself the way out to the full page; swapping it for an iframe would
+		// take that away, and an embed in a column this narrow is the one that most wants it.
+		const caption = document.createElement('figcaption');
+		const link = document.createElement('a');
+		link.href = a.href;
+		link.textContent = 'Open it full screen →';
+		caption.append(link);
+
+		a.replaceWith(frame, caption);
+	}
+</script>
+
 <style>
+	/* The heading sits in a hole cut out of the Band: a flat rectangle of page background, hard
+	   edged, so the field reads as stopping at a clean boundary rather than fading out behind the
+	   text. Pure CSS, so it tracks the real text box at any width — which a knock-out baked into a
+	   pre-rendered image could not. `z-10` on the heading puts it in its own stacking context, so
+	   `z-index: -1` here lands above the canvas (`z-0`) rather than behind the page. */
+	[data-band-text].z-10::before {
+		content: '';
+		position: absolute;
+		inset: -1.25rem -1.5rem -1.5rem;
+		z-index: -1;
+		background: theme('colors.bg');
+	}
+
 	/* Markdown output carries no classes, so the post body is styled here, from the palette
 	   tokens via theme(). ponytail: hand-rolled instead of @tailwindcss/typography, which
 	   would be a plugin plus a theme override to reach the same six colours. */

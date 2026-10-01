@@ -31,3 +31,19 @@ both blame and the trailers credit AI for words it did not write.
 human-written: the home page (its copy is Nathan's, rewritten 2026-09-19),
 `/writing` (intro and Beeminder blurbs, rewritten 2026-09-20), the newsletter
 posts, `/uses`, and `/404`.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `narthur/narthur.github.io`, via the `gh` CLI. See
+`docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, with no renaming. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See
+`docs/agents/domain.md`.

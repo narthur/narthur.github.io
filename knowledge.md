@@ -155,7 +155,27 @@ URL in `substack`, which the post page shows as "Originally on Substack". New
 posts leave `substack` out. Imported images live in `public/writing/<slug>/`
 as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
 in the Markdown so they keep explicit dimensions; follow the same pattern for
-new images. Post body styles are in `writing/[slug].astro`, built from the
+new images.
+
+A post can instead open on a **Band**: a generative strip behind its title, drawn
+by a p5 Sketch in `src/bands/` and named from frontmatter as
+`band: { sketch, seed }`. `pnpm build` renders it with headless Chromium and
+writes one tiling WebP per post, so the page carries a background-image and no
+JavaScript; `pnpm dev` runs the Sketch live instead, with a picker that chooses a
+Seed and copies the frontmatter line. `CONTEXT.md` defines the vocabulary and
+ADR 0001 says why a browser is in the deploy.
+
+A post can also carry an **Embed**: an interactive piece (a p5.js sketch, say) the reader
+actually runs. It is a standalone HTML
+page in the same folder, written in the Markdown as that figure pattern with the
+image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
+iframes, so they get the still image linking to the live page; on the site, a
+script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe, plus a
+caption link back to the standalone page so the way out survives the swap. The
+still is PNG rather than WebP because it is what the email shows, and Outlook
+does not render WebP. The other post images are WebP and have the same problem;
+the still gets the workaround because it is the only thing an email reader sees
+of the sketch. Post body styles are in `writing/[slug].astro`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki
 highlights them with the `one-dark-pro` preset, and `.post pre` drops the
 preset's panel background so the block keeps the hairline border the rest of

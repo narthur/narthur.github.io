@@ -9,9 +9,11 @@ package-lock.json
 /.astro
 /dist
 
-# Local tooling scratch (playwright-cli sessions, static-analysis reports)
+# Local tooling scratch (playwright-cli sessions, analysis reports; the analysis
+# skill wrote to .static-analysis before it was renamed)
 .playwright-cli
 .static-analysis
+.code-analysis
 
 # OS
 .DS_Store

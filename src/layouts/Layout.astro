@@ -16,6 +16,8 @@ interface Props {
 	footer?: boolean;
 }
 
+import { ACCENT } from '../theme';
+
 const { title, description, wide = false, ai = false, footer = true } = Astro.props;
 
 const footerLinks = [
@@ -35,6 +37,9 @@ const footerLinks = [
 		<link rel="alternate icon" href="/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="dark" />
+		{/* The one declaration of --accent, from src/theme.ts, so the Band render target can use the
+		    same source. A <style> block cannot interpolate, hence set:html. */}
+		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="alternate" type="application/rss+xml" title="Narthur Online" href="/rss.xml" />
@@ -125,10 +130,6 @@ const footerLinks = [
 </html>
 
 <style is:global>
-	:root {
-		--accent: #8ded51;
-	}
-
 	body {
 		margin: 0;
 		background: #0a0c10;

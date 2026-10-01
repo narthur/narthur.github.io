@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<!-- The canvas is windowWidth x windowHeight. Without this a phone lays the page out at
+		     ~980px and scales it down to fit, so the canvas is drawn at desktop size and shrunk —
+		     and the 12px legend lands at about a third of that. This page's one job is the
+		     full-screen link from the post, which is mostly followed on a phone. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>nart / 4D ant</title>
+		<script
+			src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"
+			integrity="sha384-mNoDMsj3qyJxOkfse1kNjhDVbbYTNnpuSEL68aRVPnNERG3lHoGH+4FHEQSHJhYV"
+			crossorigin="anonymous"
+		></script>
+		<style>
+			body {
+				margin: 0;
+				background: #0a0c10;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			// A small 4D ant wandering its 3D ground (x, y, w; z is up), leaving a trail.
+			// The world slowly rotates through 4D and is projected 4D -> 3D -> 2D, so the
+			// trail bends and folds as w swings in and out of view.
+			// Ant model: x = length, z = up, y and w = the two sideways directions; its six
+			// legs radiate around the y-w circle. Color shows w: amber = ana, green = kata.
+			const A = 0.045; // ant size in world units (world roams roughly ±1)
+			const SPEED = 0.0035;
+			const TRAIL = 6000;
+			let BG, GREEN, AMBER, clouds, pos, fwd, side, trail, dist;
+
+			// body segments as 4D ellipsoids: center, radii, dot count
+			const SEGS = [
+				{ c: [1.45, 0, 0.15, 0], r: [0.32, 0.28, 0.26, 0.28], n: 90 }, // head
+				{ c: [0.45, 0, 0.05, 0], r: [0.5, 0.22, 0.22, 0.22], n: 110 }, // thorax
+				{ c: [-1.05, 0, 0.2, 0], r: [0.8, 0.5, 0.45, 0.5], n: 240 } // abdomen
+			];
+
+			function setup() {
+				createCanvas(windowWidth, windowHeight);
+				textFont('monospace');
+				BG = color('#0a0c10');
+				GREEN = color('#8ded51');
+				AMBER = color('#ffaa3c');
+				// points on each segment's 3-sphere surface: normalized 4D gaussian, scaled by radii
+				clouds = SEGS.map((s) =>
+					Array.from({ length: s.n }, () => {
+						const g = [0, 0, 0, 0].map(() => randomGaussian());
+						const m = Math.hypot(...g);
+						return g.map((v, i) => s.c[i] + (v / m) * s.r[i]);
+					})
+				);
+				// heading and one sideways axis live in the ground's (x, y, w) space, stored as 3-vectors
+				pos = [0, 0, 0];
+				fwd = [1, 0, 0];
+				side = [0, 1, 0];
+				trail = [];
+				dist = 0;
+			}
+
+			const add = (a, b) => a.map((v, i) => v + b[i]);
+			const mul = (a, k) => a.map((v) => v * k);
+			const dot = (a, b) => a.reduce((s, v, i) => s + v * b[i], 0);
+			const norm = (a) => mul(a, 1 / Math.hypot(...a));
+			const cross = (a, b) => [
+				a[1] * b[2] - a[2] * b[1],
+				a[2] * b[0] - a[0] * b[2],
+				a[0] * b[1] - a[1] * b[0]
+			];
+			const to4 = (g) => [g[0], g[1], 0, g[2]]; // ground (x, y, w) -> 4D (x, y, z=0, w)
+
+			function rot(p, i, j, a) {
+				const q = p.slice(),
+					c = cos(a),
+					s = sin(a);
+				q[i] = p[i] * c - p[j] * s;
+				q[j] = p[i] * s + p[j] * c;
+				return q;
+			}
+
+			// rotate the world through 4D, tilt to look down on the ground, project -> [sx, sy, w, scale]
+			function project(p, t) {
+				p = rot(p, 0, 3, t * 0.07); // xw
+				p = rot(p, 1, 3, t * 0.05); // yw
+				p = rot(p, 0, 1, t * 0.04); // xy, an ordinary turn about the up axis
+				const w = p[3];
+				p = rot(p, 1, 2, -0.9); // tilt so we look down onto the ground
+				// Two perspective divides, with the eye at w = 3 and then at y = 4. Nothing clamps the
+				// world — walk()'s pull-home term only grows with distance — but it keeps the wander
+				// inside a couple of units, so in practice neither divide gets near zero.
+				const k4 = 3 / (3 - w);
+				const [x, y, z] = p.map((v) => v * k4);
+				const k3 = 4 / (4 - y);
+				const S = min(width, height) * 0.38; // fit that ±1 world inside the shorter screen edge
+				return [width / 2 + x * k3 * S, height / 2 - z * k3 * S, w, k3 * k4];
+			}
+
+			const wColor = (w) => lerpColor(AMBER, GREEN, constrain((w + 1) / 2, 0, 1));
+
+			function walk(t) {
+				// wander: turn along a slowly varying direction, plus a pull home when far out
+				const turn = [noise(t * 0.3, 1), noise(t * 0.3, 2), noise(t * 0.3, 3)].map(
+					(v) => (v - 0.5) * 0.12
+				);
+				const home = mul(pos, -0.06 * max(0, Math.hypot(...pos) - 0.4));
+				fwd = norm(add(fwd, add(turn, home)));
+				// parallel-transport the sideways axis so the body doesn't spin about its own length
+				side = norm(add(side, mul(fwd, -dot(side, fwd))));
+				pos = add(pos, mul(fwd, SPEED));
+				dist += SPEED;
+				trail.push(pos);
+				if (trail.length > TRAIL) trail.shift();
+			}
+
+			// ant-local 4D point -> world 4D point
+			function place(p) {
+				const s2 = cross(fwd, side);
+				const g = add(pos, add(mul(fwd, p[0] * A), add(mul(side, p[1] * A), mul(s2, p[3] * A))));
+				const w4 = to4(g);
+				w4[2] = (p[2] + 0.75) * A; // feet rest on the ground
+				return w4;
+			}
+
+			function limbs() {
+				const out = [];
+				const thorax = SEGS[1].c;
+				const phase0 = (dist / A) * 1.6; // leg cycle tied to distance walked
+				// six legs spaced around the y-w circle; alternating tripods swing in x
+				for (let k = 0; k < 6; k++) {
+					const a = (k * TAU) / 6 + TAU / 12;
+					const dir = [0, cos(a), 0, sin(a)];
+					const phase = phase0 + (k % 2) * PI;
+					const swing = sin(phase) * 0.3,
+						lift = max(0, cos(phase)) * 0.25;
+					const hip = add(add(thorax, [((k % 3) - 1) * 0.3, 0, 0, 0]), mul(dir, 0.18));
+					const knee = add(
+						add(thorax, [((k % 3) - 1) * 0.45 + swing * 0.5, 0, 0.45 + lift, 0]),
+						mul(dir, 0.75)
+					);
+					const foot = add(
+						add(thorax, [((k % 3) - 1) * 0.7 + swing, 0, -0.75 + lift, 0]),
+						mul(dir, 1.35)
+					);
+					out.push([hip, knee, foot]);
+				}
+				// two antennae, splayed across the y-w plane
+				const head = SEGS[0].c;
+				for (const a of [PI / 4, (3 * PI) / 4]) {
+					const dir = [0, cos(a), 0, sin(a)];
+					out.push([
+						add(head, [0.2, 0, 0.2, 0]),
+						add(add(head, [0.55, 0, 0.75, 0]), mul(dir, 0.3)),
+						add(add(head, [1.05, 0, 0.85, 0]), mul(dir, 0.65))
+					]);
+				}
+				return out;
+			}
+
+			function draw() {
+				background(BG);
+				const t = millis() / 1000;
+				// Two sub-steps, not one at double SPEED: each walk() lays one trail point, so halving
+				// the step count would move the ant just as fast on a visibly more angular trail.
+				for (let i = 0; i < 2; i++) walk(t);
+
+				// trail: re-projected every frame so it moves with the rotating world; older = fainter
+				strokeWeight(1.5);
+				let prev = null;
+				trail.forEach((g, i) => {
+					const pr = project(to4(g), t);
+					if (prev) {
+						stroke(lerpColor(BG, wColor(pr[2]), 0.15 + (0.6 * i) / trail.length));
+						line(prev[0], prev[1], pr[0], pr[1]);
+					}
+					prev = pr;
+				});
+
+				// limbs first so the body's dots sit on top
+				strokeCap(ROUND);
+				for (const chain of limbs()) {
+					const pr = chain.map((p) => project(place(p), t));
+					for (let i = 0; i < pr.length - 1; i++) {
+						stroke(wColor((pr[i][2] + pr[i + 1][2]) / 2));
+						strokeWeight(1.2 * pr[i][3]);
+						line(pr[i][0], pr[i][1], pr[i + 1][0], pr[i + 1][1]);
+					}
+				}
+				for (const cloud of clouds)
+					for (const p of cloud) {
+						const [x, y, w, k] = project(place(p), t);
+						stroke(wColor(w));
+						strokeWeight(1.3 * k);
+						point(x, y);
+					}
+
+				noStroke();
+				fill(lerpColor(BG, GREEN, 0.5));
+				textSize(12);
+				textAlign(LEFT, BOTTOM);
+				text('4D ant  //  color = w  (amber: ana, green: kata)', 16, height - 14);
+			}
+
+			function windowResized() {
+				resizeCanvas(windowWidth, windowHeight);
+			}
+		</script>
+	</body>
+</html>
