@@ -37,7 +37,8 @@ Astro needs Node >= 22.19.
   browser so they stay current between deploys. Two third-party scripts load:
   Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form, and
   giscus on newsletter posts, which backs comments with this repo's GitHub
-  Discussions.
+  Discussions. Embedded sketches in `public/writing/<slug>/` load p5.js
+  from jsDelivr inside their own iframe.
 - Page content — the positioning line, featured work, "also built" — is plain
   data in each page's frontmatter. There is no CMS.
 - The newsletter lives here. Posts are Markdown in `src/content/posts/`, an

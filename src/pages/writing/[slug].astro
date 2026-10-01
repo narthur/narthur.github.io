@@ -108,6 +108,27 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	</section>
 </Layout>
 
+<script>
+	// Interactive embeds are written in posts as a linked still image, which is all the feed and
+	// the email get, since both strip iframes. On the site, swap each for the live page it links to.
+	for (const a of document.querySelectorAll<HTMLAnchorElement>('.post a[data-embed]')) {
+		const frame = document.createElement('iframe');
+		frame.src = a.href;
+		frame.title = a.querySelector('img')?.alt ?? '';
+		frame.loading = 'lazy';
+
+		// The still image was itself the way out to the full page; swapping it for an iframe would
+		// take that away, and an embed in a column this narrow is the one that most wants it.
+		const caption = document.createElement('figcaption');
+		const link = document.createElement('a');
+		link.href = a.href;
+		link.textContent = 'Open it full screen →';
+		caption.append(link);
+
+		a.replaceWith(frame, caption);
+	}
+</script>
+
 <style>
 	/* Markdown output carries no classes, so the post body is styled here, from the palette
 	   tokens via theme(). ponytail: hand-rolled instead of @tailwindcss/typography, which

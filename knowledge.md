@@ -155,7 +155,13 @@ URL in `substack`, which the post page shows as "Originally on Substack". New
 posts leave `substack` out. Imported images live in `public/writing/<slug>/`
 as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
 in the Markdown so they keep explicit dimensions; follow the same pattern for
-new images. Post body styles are in `writing/[slug].astro`, built from the
+new images. An interactive piece (a p5.js sketch, say) is a standalone HTML
+page in the same folder, written in the Markdown as that figure pattern with the
+image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
+iframes, so they get the still image linking to the live page; on the site, a
+script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe. The
+still is PNG rather than WebP because it is what the email shows, and Outlook
+does not render WebP. Post body styles are in `writing/[slug].astro`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki
 highlights them with the `one-dark-pro` preset, and `.post pre` drops the
 preset's panel background so the block keeps the hairline border the rest of
