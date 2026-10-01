@@ -1,13 +1,12 @@
 ---
 title: Small Treasures
 date: 2026-10-01
+banner: true
 ---
-
-<figure><img src="/writing/4d-ant/1.webp" alt="" width="1024" height="608" loading="eager"></figure>
 
 I built a visualization of an ant walking through four dimensions. Or, more accurately, Claude did, in about 5 minutes.
 
-<figure><a href="/writing/4d-ant/ant4d.html" data-embed><img src="/writing/4d-ant/ant4d.png" width="1344" height="756" loading="lazy" alt="A small four-dimensional ant and the looping trail of its path, drawn in amber and green on a dark background"></a></figure>
+<figure><a href="/writing/4d-ant/ant4d.html" data-embed><img src="/writing/4d-ant/ant4d.png" width="1344" height="756" loading="eager" alt="A small four-dimensional ant and the looping trail of its path, drawn in amber and green on a dark background"></a></figure>
 
 I remember back in 2006, browsing the web. I used StumbleUpon. Every click was the potential to discover a new treasure, something incredibly unique and special on the web that someone had put a lot of time and effort into, something I couldn't imagine making myself, but that I loved and I experienced and I bookmarked.
 

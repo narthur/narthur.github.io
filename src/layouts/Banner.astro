@@ -1,0 +1,96 @@
+---
+// A generative band behind a post's title, in place of a cover image.
+//
+// The field is the argument: every mark is the same size and costs the same to draw, there are
+// far more of them than anyone would look at, and a handful happen to catch the light. It is
+// redrawn on every load, so no two readers see the same arrangement — which is the point, and
+// is the one thing a flat cover image cannot do.
+//
+// Plain canvas rather than p5: this runs on the post page itself, not sandboxed in an iframe
+// like the sketch in the body does, and a megabyte of CDN library for a dim decorative band
+// would be the most expensive thing on the page.
+//
+// Positioned by the wrapper in `writing/[slug].astro`, which bottom-aligns the title over it.
+---
+
+{/* Breaks out of the page column to full width: the column is `mx-auto`, so its centre is the
+    page's centre and translating half its own width off that lands it flush to both edges. Hidden
+    until the script draws, so a reader without JS gets the title rather than a blank gap. */}
+<canvas
+	id="banner"
+	hidden
+	aria-hidden="true"
+	class="absolute bottom-0 left-1/2 -translate-x-1/2"
+></canvas>
+
+<script>
+	const canvas = document.querySelector<HTMLCanvasElement>('#banner');
+	const ctx = canvas?.getContext('2d');
+	// The heading block the band sits behind. Measured rather than hardcoded so the knock-out
+	// tracks the real text box at any width, however the title wraps.
+	const text = document.querySelector<HTMLElement>('[data-banner-text]');
+
+	if (canvas && ctx && text) {
+		// Read the palette off the page rather than repeating hex here, so a change to --accent or
+		// to the Tailwind tokens carries into the band instead of silently drifting from it.
+		const styles = getComputedStyle(document.documentElement);
+		const accent = styles.getPropertyValue('--accent').trim() || '#8ded51';
+
+		const HEIGHT = 240;
+		const DENSITY = 1 / 420; // marks per square pixel, held constant across widths
+		const LIT = 0.04; // the fraction that catches light
+		const GUTTER = 16; // clear space around the heading block, in CSS pixels
+
+		const draw = () => {
+			canvas.hidden = false;
+
+			// clientWidth on the root element, not 100vw: vw includes the scrollbar, so a vw-wide
+			// band on a scrolling page overflows by its width and adds a horizontal scrollbar.
+			const width = document.documentElement.clientWidth;
+			if (!width) return;
+			canvas.style.width = `${width}px`;
+
+			// Back the canvas at device resolution; a 1px mark on a 2x screen is otherwise a smear.
+			const dpr = window.devicePixelRatio || 1;
+			canvas.width = width * dpr;
+			canvas.height = HEIGHT * dpr;
+			canvas.style.height = `${HEIGHT}px`;
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			ctx.clearRect(0, 0, width, HEIGHT);
+
+			for (let i = 0; i < width * HEIGHT * DENSITY; i++) {
+				const lit = Math.random() < LIT;
+				ctx.fillStyle = lit ? accent : '#e8e9ec';
+				ctx.globalAlpha = lit ? 0.5 + Math.random() * 0.4 : 0.12 + Math.random() * 0.16;
+				ctx.beginPath();
+				ctx.arc(Math.random() * width, Math.random() * HEIGHT, 1.6, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			// Knock the field out from behind the title and date. Clearing after the fact beats
+			// testing every mark against the box: one rect op instead of a few hundred rejections,
+			// and the edge lands on the pixel rather than on whichever marks happened to straddle it.
+			const box = text.getBoundingClientRect();
+			const band = canvas.getBoundingClientRect();
+			ctx.clearRect(
+				box.left - band.left - GUTTER,
+				box.top - band.top - GUTTER,
+				box.width + GUTTER * 2,
+				box.height + GUTTER * 2
+			);
+		};
+
+		// Web fonts land after first paint and reflow the heading, which moves the box the knock-out
+		// is cut from. Redraw once they are ready; on a browser without the API the first draw stands.
+		draw();
+		document.fonts?.ready.then(draw);
+
+		// Re-run on resize so the density holds and the knock-out follows the text, but only once
+		// the drag settles — redrawing a few hundred marks per resize event is wasted work.
+		let settle: number;
+		window.addEventListener('resize', () => {
+			clearTimeout(settle);
+			settle = window.setTimeout(draw, 150);
+		});
+	}
+</script>
