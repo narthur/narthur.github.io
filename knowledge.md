@@ -159,7 +159,8 @@ new images. An interactive piece (a p5.js sketch, say) is a standalone HTML
 page in the same folder, written in the Markdown as that figure pattern with the
 image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
 iframes, so they get the still image linking to the live page; on the site, a
-script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe. The
+script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe, plus a
+caption link back to the standalone page so the way out survives the swap. The
 still is PNG rather than WebP because it is what the email shows, and Outlook
 does not render WebP. Post body styles are in `writing/[slug].astro`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki

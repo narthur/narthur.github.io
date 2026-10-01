@@ -3,7 +3,11 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>nart / 4D ant</title>
-		<script src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"
+			integrity="sha384-mNoDMsj3qyJxOkfse1kNjhDVbbYTNnpuSEL68aRVPnNERG3lHoGH+4FHEQSHJhYV"
+			crossorigin="anonymous"
+		></script>
 		<style>
 			body {
 				margin: 0;
@@ -80,10 +84,12 @@
 				p = rot(p, 0, 1, t * 0.04); // xy, an ordinary turn about the up axis
 				const w = p[3];
 				p = rot(p, 1, 2, -0.9); // tilt so we look down onto the ground
+				// Two perspective divides, with the eye at w = 3 and then at y = 4. The world roams
+				// roughly ±1, so both cameras sit well clear of it and neither divide can approach zero.
 				const k4 = 3 / (3 - w);
 				const [x, y, z] = p.map((v) => v * k4);
 				const k3 = 4 / (4 - y);
-				const S = min(width, height) * 0.38;
+				const S = min(width, height) * 0.38; // fit that ±1 world inside the shorter screen edge
 				return [width / 2 + x * k3 * S, height / 2 - z * k3 * S, w, k3 * k4];
 			}
 
@@ -151,6 +157,8 @@
 			function draw() {
 				background(BG);
 				const t = millis() / 1000;
+				// Two sub-steps, not one at double SPEED: each walk() lays one trail point, so halving
+				// the step count would move the ant just as fast on a visibly more angular trail.
 				for (let i = 0; i < 2; i++) walk(t);
 
 				// trail: re-projected every frame so it moves with the rotating world; older = fainter
