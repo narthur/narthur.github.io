@@ -43,7 +43,8 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 	// ordering bugs here have already cost us twice.
 	let pending: { seed?: number } | null = null;
 
-	// Draws run one at a time, and only the newest actually draws.
+	// Draws run one at a time, and a draw already superseded when its turn comes does nothing. A
+	// draw that has started is not cancellable — it finishes, it just doesn't report ready.
 	//
 	// A Sketch may be async and span frames (types.ts says so), so a resize or a reseed can arrive
 	// while one is still settling. Guarding only the tail is not enough: the superseded draw would
@@ -88,6 +89,14 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 				if (mine !== generation) return; // superseded; the newer draw will set the flag
 				opts.onRender?.(seed);
 				window.__bandReady = true;
+			});
+			// The catch is what keeps the chain alive. `queue` is the chain, so a rejection left
+			// unhandled makes every later `.then` a no-op: one throwing draw would brick the Band
+			// until reload, each subsequent reseed adding an unhandled rejection and nothing else.
+			// Recording it on `__bandError` also gives a draw failure the same channel an unknown
+			// sketch name already uses, so the renderer reports it instead of timing out blind.
+			queue = queue.catch((e) => {
+				window.__bandError = String(e);
 			});
 		};
 

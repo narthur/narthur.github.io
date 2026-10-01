@@ -50,10 +50,12 @@ async function bandedPosts() {
 	const out = [];
 	for (const file of await readdir(POSTS)) {
 		if (!file.endsWith('.md')) continue;
-		// Normalised first: `$` in a multiline regex matches before \n but not before \r\n, so a post
-		// saved with CRLF endings would not split, `front` would be undefined, and the post would be
-		// skipped in silence — the exact failure this stopped using a regex to avoid.
-		const text = (await readFile(join(POSTS, file), 'utf8')).replace(/\r\n/g, '\n');
+		// The BOM is stripped because `^---$` would not match a first line carrying one, so the split
+		// would hand the post *body* to the YAML parser — which either throws on prose or returns a
+		// string with no `band` on it, skipping the post in silence. Exactly the failure this parses
+		// rather than regex-matches to avoid, one character upstream of the parse.
+		const raw = await readFile(join(POSTS, file), 'utf8');
+		const text = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
 		const front = text.split(/^---$/m)[1];
 		if (!front) continue;
 		const { band } = load(front) ?? {};
@@ -77,12 +79,17 @@ async function bandedPosts() {
  * p5's random() and noise() have changed across releases, so a version bump that did not bust the
  * cache would silently keep serving an image the current code would no longer produce.
  *
+ * The registry is in there for the same reason. The Sketch is hashed by path, but the path is
+ * derived from a name the registry resolves, so pointing `trails` at a different module would
+ * change every pixel without changing any file this otherwise reads.
+ *
  * Editing only a comment in any of these re-renders to identical bytes, which is harmless.
  */
 async function fingerprint(sketch, seed) {
 	const parts = await Promise.all(
 		[
 			`src/bands/${sketch}.ts`,
+			'src/bands/index.ts',
 			'src/bands/harness.ts',
 			'src/bands/cdn.ts',
 			'src/theme.ts',
@@ -125,12 +132,16 @@ async function capture(page, { sketch, seed }) {
 	const url = `http://127.0.0.1:4178/band-render?sketch=${sketch}&seed=${seed}&w=${WIDTH}&h=${HEIGHT}`;
 	await page.goto(url, { waitUntil: 'load' });
 
-	const failed = await page.evaluate(() => window.__bandError);
-	if (failed) throw new Error(failed);
+	// The Harness sets `__bandReady` once the Sketch resolves, and `__bandError` if it throws.
+	// Screenshotting on a timer instead would capture whatever had been drawn by then, which for a
+	// 320-step simulation is a half-grown one. Waiting on either means a Sketch that throws fails in
+	// the second it takes rather than burning the full timeout to say nothing useful.
+	await page.waitForFunction(() => window.__bandReady === true || window.__bandError, null, {
+		timeout: 120_000
+	});
 
-	// The Harness sets this once the Sketch resolves. Screenshotting on a timer instead would
-	// capture whatever had been drawn by then, which for a 320-step simulation is a half-grown one.
-	await page.waitForFunction(() => window.__bandReady === true, null, { timeout: 120_000 });
+	const failed = await page.evaluate(() => window.__bandError);
+	if (failed) throw new Error(`${sketch}/${seed}: ${failed}`);
 
 	const dataUrl = await page.evaluate(() =>
 		document.querySelector('canvas').toDataURL('image/png')

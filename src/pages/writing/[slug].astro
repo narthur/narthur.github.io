@@ -35,9 +35,9 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		<a href="/writing">&larr; Writing</a>
 	</p>
 
-	{/* With a band the heading sits bottom-aligned inside its height, and the band's
-	    canvas knocks itself out from behind `data-band-text`. Without one the wrapper is inert
-	    and the heading flows exactly as it always has. */}
+	{/* With a band the heading sits bottom-aligned inside its height, and the CSS at the foot of
+	    this file cuts a rectangle of page background out from behind `data-band-text`. Without one
+	    the wrapper is inert and the heading flows exactly as it always has. */}
 	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
 		{/* Dev runs the Sketch live so the picker can drive it; the shipped page gets the image
 		    scripts/bands.mjs rendered, as a background rather than an <img> so it can repeat-x. The
