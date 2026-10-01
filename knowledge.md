@@ -162,7 +162,9 @@ iframes, so they get the still image linking to the live page; on the site, a
 script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe, plus a
 caption link back to the standalone page so the way out survives the swap. The
 still is PNG rather than WebP because it is what the email shows, and Outlook
-does not render WebP. Post body styles are in `writing/[slug].astro`, built from the
+does not render WebP. The other post images are WebP and have the same problem;
+the still gets the workaround because it is the only thing an email reader sees
+of the sketch. Post body styles are in `writing/[slug].astro`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki
 highlights them with the `one-dark-pro` preset, and `.post pre` drops the
 preset's panel background so the block keeps the hairline border the rest of
