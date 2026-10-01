@@ -1,0 +1,58 @@
+---
+// The render target for scripts/bands.mjs. Deliberately bare: no Layout, no fonts, no chrome —
+// just a canvas running one Sketch at a pinned size, so the capture is the Band and nothing else.
+//
+// It lives in src/pages so Astro bundles the Sketch modules for it, and scripts/bands.mjs deletes
+// it from dist once the Bands are rendered, so it never ships. It cannot be named with a leading
+// underscore: Astro treats that as "ignore", which excludes it from the build as well as the route
+// table, leaving the renderer with nothing to load.
+import { sketches } from '../bands';
+
+const names = Object.keys(sketches);
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>band render target</title>
+		<meta name="robots" content="noindex" />
+		<style>
+			html,
+			body {
+				margin: 0;
+				background: #0a0c10;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="band" data-sketches={names.join(',')}></div>
+
+		<script
+			is:inline
+			src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"
+			integrity="sha384-mNoDMsj3qyJxOkfse1kNjhDVbbYTNnpuSEL68aRVPnNERG3lHoGH+4FHEQSHJhYV"
+			crossorigin="anonymous"
+		></script>
+		<script>
+			import { mountBand } from '../bands/harness';
+			import { sketches } from '../bands';
+
+			const params = new URLSearchParams(location.search);
+			const host = document.getElementById('band')!;
+			const sketch = sketches[params.get('sketch') ?? ''];
+
+			if (!sketch) {
+				// Fail loudly: a silent blank canvas here would be captured and shipped as a Band.
+				window.__bandError = `unknown sketch: ${params.get('sketch')}`;
+			} else {
+				mountBand(sketch, {
+					host,
+					height: Number(params.get('h')) || 240,
+					width: Number(params.get('w')) || 1280,
+					seed: Number(params.get('seed')) || 1
+				});
+			}
+		</script>
+	</body>
+</html>

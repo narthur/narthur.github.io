@@ -39,7 +39,21 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	    canvas knocks itself out from behind `data-band-text`. Without one the wrapper is inert
 	    and the heading flows exactly as it always has. */}
 	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
-		{band && <Band sketch={band.sketch} seed={band.seed} />}
+		{/* Dev runs the Sketch live so the picker can drive it; the shipped page gets the image
+		    scripts/bands.mjs rendered, as a background rather than an <img> so it can repeat-x. The
+		    field is a torus, so one asset tiles seamlessly at any viewport width — and the height is
+		    locked, so the reflection edges at top and bottom are never cropped away. */}
+		{band &&
+			(import.meta.env.DEV ? (
+				<Band sketch={band.sketch} seed={band.seed} />
+			) : (
+				<div
+					aria-hidden="true"
+					class="absolute bottom-0 left-1/2 z-0 h-60 w-screen -translate-x-1/2 bg-center bg-repeat-x"
+					style={`background-image:url(/writing/${post.id}/band.webp);background-size:auto 240px`}
+				/>
+			))}
+
 		{/* `w-fit` keeps the backdrop the width of the title rather than the whole column; fit-content
 		    still caps at the available width, so a long title wraps as it would. */}
 		<div data-band-text class:list={[band && 'relative z-10 w-fit']}>

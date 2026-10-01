@@ -14,6 +14,8 @@ declare global {
 		p5: P5;
 		/** Set once a render settles. The build-time renderer waits on this before capturing. */
 		__bandReady?: boolean;
+		/** Set when a Band cannot be drawn at all, so the renderer fails instead of shipping a blank. */
+		__bandError?: string;
 	}
 }
 
