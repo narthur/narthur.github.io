@@ -59,6 +59,7 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 		const request = () => {
 			const mine = ++generation;
 			window.__bandReady = false;
+			window.__bandError = undefined;
 			queue = queue.then(async () => {
 				if (mine !== generation) return; // a newer request is waiting; let it draw instead
 
@@ -95,8 +96,13 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 			// until reload, each subsequent reseed adding an unhandled rejection and nothing else.
 			// Recording it on `__bandError` also gives a draw failure the same channel an unknown
 			// sketch name already uses, so the renderer reports it instead of timing out blind.
+			//
+			// Logged as well as recorded, because catching it is what takes it out of the console,
+			// and the console is where a Sketch author working in `astro dev` finds out they broke
+			// something — nothing on the page reads `__bandError`.
 			queue = queue.catch((e) => {
 				window.__bandError = String(e);
+				console.error(e);
 			});
 		};
 

@@ -76,8 +76,9 @@ jobs:
           key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
       - run: pnpm exec playwright install --with-deps chromium
       # Bands are keyed on a hash of everything that can change their pixels — Sketch, registry,
-      # Harness, render page, pinned p5 build, theme and Seed — so an unchanged Band is never
-      # re-simulated. Without this the cache is empty every run and every banded post is
+      # Harness, render page, pinned p5 build, theme and Seed. The hash is conservative, so some
+      # edits re-render to identical bytes; what it rules out is shipping an image the current
+      # code would no longer produce. Without this the cache is empty every run and every banded post is
       # re-rendered on every push, however unrelated the change.
       - uses: actions/cache@v4
         with:
