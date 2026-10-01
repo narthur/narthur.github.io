@@ -1,7 +1,7 @@
 ---
 title: Small Treasures
 date: 2026-10-01
-band: true
+band: { sketch: 'trails', seed: 4817 }
 ---
 
 I built a visualization of an ant walking through four dimensions. Or, more accurately, Claude did, in about 5 minutes.

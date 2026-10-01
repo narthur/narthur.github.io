@@ -11,9 +11,10 @@ const posts = defineCollection({
 		subtitle: z.string().optional(),
 		date: z.coerce.date(),
 		substack: z.url().optional(),
-		// Draws a generative band above the title in place of a cover image. Posts without one
-		// open on the title, as every imported post does.
-		band: z.boolean().default(false),
+		// Draws a Band behind the title in place of a cover image: `sketch` names a module in
+		// src/bands/, `seed` fixes its arrangement. Posts without one open on the title, as every
+		// imported post does. The dev picker writes this line for you — see docs/adr/0001.
+		band: z.object({ sketch: z.string(), seed: z.number().int() }).optional(),
 		ai: z.boolean().default(false)
 	})
 });

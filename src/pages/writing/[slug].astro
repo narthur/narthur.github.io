@@ -39,11 +39,10 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	    canvas knocks itself out from behind `data-band-text`. Without one the wrapper is inert
 	    and the heading flows exactly as it always has. */}
 	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
-		{band && <Band />}
-		{/* `relative` so the heading stacks above the absolutely-positioned canvas; `w-fit` so the
-		    box the band knocks itself out from is the width of the title, not of the whole column.
-		    fit-content still caps at the available width, so a long title wraps as it would. */}
-		<div data-band-text class:list={[band && 'relative w-fit']}>
+		{band && <Band sketch={band.sketch} seed={band.seed} />}
+		{/* `w-fit` keeps the backdrop the width of the title rather than the whole column; fit-content
+		    still caps at the available width, so a long title wraps as it would. */}
+		<div data-band-text class:list={[band && 'relative z-10 w-fit']}>
 			<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
 			{subtitle && <p class="mt-3 text-lg leading-relaxed text-mute">{subtitle}</p>}
 			<p class="mt-4 font-mono text-xs text-faint">
@@ -142,6 +141,25 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 </script>
 
 <style>
+	/* The heading sits on the Band rather than in a hole cut out of it. A soft radial wash of the
+	   page background reads as the field thinning out where the text is, where the hard rectangle
+	   the live version used to clear read as a notch stamped into it. Pure CSS, so it tracks the
+	   real text box at any width — which a knock-out baked into a pre-rendered image could not.
+	   `z-10` on the heading puts it in its own stacking context, so `z-index: -1` here lands above
+	   the canvas (`z-0`) rather than behind the page. */
+	[data-band-text].z-10::before {
+		content: '';
+		position: absolute;
+		inset: -2.5rem -4.5rem -3rem;
+		z-index: -1;
+		background: radial-gradient(
+			ellipse at 38% 55%,
+			theme('colors.bg') 42%,
+			color-mix(in srgb, theme('colors.bg') 80%, transparent) 62%,
+			transparent 78%
+		);
+	}
+
 	/* Markdown output carries no classes, so the post body is styled here, from the palette
 	   tokens via theme(). ponytail: hand-rolled instead of @tailwindcss/typography, which
 	   would be a plugin plus a theme override to reach the same six colours. */
