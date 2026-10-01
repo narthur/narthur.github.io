@@ -155,7 +155,17 @@ URL in `substack`, which the post page shows as "Originally on Substack". New
 posts leave `substack` out. Imported images live in `public/writing/<slug>/`
 as WebP (GIFs kept as GIFs), written as raw `<figure><img width height>` HTML
 in the Markdown so they keep explicit dimensions; follow the same pattern for
-new images. An interactive piece (a p5.js sketch, say) is a standalone HTML
+new images.
+
+A post can instead open on a **Band**: a generative strip behind its title, drawn
+by a p5 Sketch in `src/bands/` and named from frontmatter as
+`band: { sketch, seed }`. `pnpm build` renders it with headless Chromium and
+writes one tiling WebP per post, so the page carries a background-image and no
+JavaScript; `pnpm dev` runs the Sketch live instead, with a picker that chooses a
+Seed and copies the frontmatter line. `CONTEXT.md` defines the vocabulary and
+ADR 0001 says why a browser is in the deploy.
+
+An interactive piece (a p5.js sketch, say) is a standalone HTML
 page in the same folder, written in the Markdown as that figure pattern with the
 image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
 iframes, so they get the still image linking to the live page; on the site, a

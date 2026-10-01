@@ -100,9 +100,22 @@ is where the record lives. Keeping them distinct is deliberate — _inferred fro
 reading both, and from the AI-disclosure rule below, which exists to protect the
 posts specifically._
 
-## Illustration
+## Illustration and Bands
 
-Posts carry a generated illustration as the first figure. The workflow is
+A post's opening image is either an Illustration or a Band; `CONTEXT.md` defines
+both. An Illustration is the AI-generated painting described below. A Band is a
+generative strip drawn behind the title by a p5 Sketch written for that post,
+pre-rendered at build time so the reader gets an image rather than running the
+code (ADR 0001). Posts opt into a Band one at a time, each with its own Sketch —
+the first is "Small Treasures", whose Sketch simulates ant navigation because
+that is what the post argues about.
+
+The rule that governs both is the same one below: **check the image against the
+article's argument, not just its subject matter.**
+
+### Illustrations
+
+Posts without a Band carry a generated illustration as the first figure. The workflow is
 documented publicly in the `my-ai-illustration-workflow` post and runs from
 `~/bin/generate-illustrations`: an LLM extracts themes and a symbol bank from
 the article, writes image prompts across four abstractness tiers, and a hosted

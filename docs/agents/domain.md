@@ -10,8 +10,6 @@ How the engineering skills should consume this repo's domain documentation when 
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
-**Temporary, as of 2026-10-01.** This repo does have a `CONTEXT.md` — it defines the public code record and its vocabulary — but it sits on the unmerged `feat/code-page` branch rather than on `master`. The rule above would therefore have a skill proceed silently past a glossary that exists. Until that branch lands, read it with `git show feat/code-page:CONTEXT.md`. Delete this note once it merges.
-
 ## File structure
 
 Single-context repo (most repos):
