@@ -155,23 +155,17 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 </script>
 
 <style>
-	/* The heading sits on the Band rather than in a hole cut out of it. A soft radial wash of the
-	   page background reads as the field thinning out where the text is, where the hard rectangle
-	   the live version used to clear read as a notch stamped into it. Pure CSS, so it tracks the
-	   real text box at any width — which a knock-out baked into a pre-rendered image could not.
-	   `z-10` on the heading puts it in its own stacking context, so `z-index: -1` here lands above
-	   the canvas (`z-0`) rather than behind the page. */
+	/* The heading sits in a hole cut out of the Band: a flat rectangle of page background, hard
+	   edged, so the field reads as stopping at a clean boundary rather than fading out behind the
+	   text. Pure CSS, so it tracks the real text box at any width — which a knock-out baked into a
+	   pre-rendered image could not. `z-10` on the heading puts it in its own stacking context, so
+	   `z-index: -1` here lands above the canvas (`z-0`) rather than behind the page. */
 	[data-band-text].z-10::before {
 		content: '';
 		position: absolute;
-		inset: -2.5rem -4.5rem -3rem;
+		inset: -1.25rem -1.5rem -1.5rem;
 		z-index: -1;
-		background: radial-gradient(
-			ellipse at 38% 55%,
-			theme('colors.bg') 42%,
-			color-mix(in srgb, theme('colors.bg') 80%, transparent) 62%,
-			transparent 78%
-		);
+		background: theme('colors.bg');
 	}
 
 	/* Markdown output carries no classes, so the post body is styled here, from the palette
