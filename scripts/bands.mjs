@@ -13,6 +13,7 @@ import { createServer } from 'node:http';
 import { readFile, writeFile, mkdir, readdir, rm, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import { load } from 'js-yaml';
 import { chromium } from 'playwright';
 import sharp from 'sharp';
 
@@ -37,35 +38,57 @@ const HEIGHT = 240;
 // Rendered at 2x and resized down, so the 1x asset is supersampled rather than aliased.
 const SCALE = 2;
 
-/** Posts whose frontmatter asks for a Band. */
+/**
+ * Posts whose frontmatter asks for a Band.
+ *
+ * Parsed as YAML, not matched with a regex. A regex here is a second, weaker copy of the contract
+ * `src/content.config.ts` already states: it would silently skip a post that reordered the keys or
+ * used double quotes, and the page would still emit a background-image pointing at an asset this
+ * never rendered. A missing Band would reach the reader as a 404 with nothing in the build log.
+ */
 async function bandedPosts() {
 	const out = [];
 	for (const file of await readdir(POSTS)) {
 		if (!file.endsWith('.md')) continue;
-		const body = await readFile(join(POSTS, file), 'utf8');
-		const front = body.split('---')[1] ?? '';
-		const match = front.match(/^band:\s*\{\s*sketch:\s*'([^']+)',\s*seed:\s*(-?\d+)\s*\}/m);
-		if (match)
-			out.push({ slug: file.replace(/\.md$/, ''), sketch: match[1], seed: Number(match[2]) });
+		const text = await readFile(join(POSTS, file), 'utf8');
+		const front = text.split(/^---$/m)[1];
+		if (!front) continue;
+		const { band } = load(front) ?? {};
+		if (!band) continue;
+		if (typeof band.sketch !== 'string' || !Number.isInteger(band.seed)) {
+			throw new Error(
+				`${file}: band needs a string sketch and an integer seed, got ${JSON.stringify(band)}`
+			);
+		}
+		out.push({ slug: file.replace(/\.md$/, ''), sketch: band.sketch, seed: band.seed });
 	}
 	return out;
 }
 
 /**
- * Identity of a rendered Band. Determinism is what makes this a valid cache key — same Sketch,
- * same Seed, same pixels — and it is also why determinism is load-bearing rather than incidental
- * (ADR 0001). The Sketch's source is hashed, so editing it invalidates; editing only its comments
- * invalidates too and re-renders to identical bytes, which is harmless.
+ * Identity of a rendered Band: everything that can legitimately change the pixels.
+ *
+ * Determinism is what makes this a valid key — same Sketch, same Seed, same output — and ADR 0001
+ * says so explicitly, which is the standard this has to meet. So the hash covers the Sketch, the
+ * Harness, the render page being screenshotted, and the pinned p5 build, not just the first two:
+ * p5's random() and noise() have changed across releases, so a version bump that did not bust the
+ * cache would silently keep serving an image the current code would no longer produce.
+ *
+ * Editing only a comment in any of these re-renders to identical bytes, which is harmless.
  */
 async function fingerprint(sketch, seed) {
-	const source = await readFile(`src/bands/${sketch}.ts`, 'utf8');
-	const harness = await readFile('src/bands/harness.ts', 'utf8');
-	return createHash('sha256')
-		.update(source)
-		.update(harness)
-		.update(JSON.stringify({ seed, WIDTH, HEIGHT, SCALE }))
-		.digest('hex')
-		.slice(0, 16);
+	const parts = await Promise.all(
+		[
+			`src/bands/${sketch}.ts`,
+			'src/bands/harness.ts',
+			'src/bands/cdn.ts',
+			'src/theme.ts',
+			'src/pages/band-render.astro'
+		].map((f) => readFile(f, 'utf8'))
+	);
+	const hash = createHash('sha256');
+	for (const part of parts) hash.update(part);
+	return hash.update(JSON.stringify({ seed, WIDTH, HEIGHT, SCALE })).digest('hex').slice(0, 16);
 }
 
 /** Serves dist/ so the render target can be loaded over http rather than file://. */

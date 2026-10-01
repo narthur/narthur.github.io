@@ -3,8 +3,15 @@
 A Band is a generative strip drawn behind a post's title by a p5 Sketch. Running
 that Sketch in the reader's browser cost about 1.4 seconds of main thread per
 page load, on a site whose stated job is a 30-second skim. Bands are therefore
-rendered during `pnpm build` by headless Chromium, sliced to the `srcset` widths,
-and shipped as WebP; the page carries an `<img>` and no JavaScript at all.
+rendered during `pnpm build` by headless Chromium and shipped as a single WebP;
+the page carries a CSS `background-image` and no JavaScript at all.
+
+One image, not a set: the Sketch's field wraps in x, so the full-width render is
+a seamless loop and `repeat-x` covers any viewport. `srcset` is wrong here — a
+full-bleed fixed-height band has a viewport-dependent aspect ratio, so `w`
+descriptors would not be the same image at different sizes and `object-fit`
+would crop vertically, discarding the reflection edges the Sketch is built
+around.
 
 Decided 2026-10-01 by Nathan.
 
@@ -37,11 +44,22 @@ browser at all; this is the decision that costs the most and was made knowingly.
 
 ## Consequences
 
-Playwright is a devDependency and `pnpm build` downloads Chromium. Build time
-grows with the number of posts carrying a Band, so renders are cached on a
-content hash of `(sketch, seed, dimensions)` and skipped when unchanged; in CI
-that cache is an `actions/cache` keyed the same way.
+Playwright is a devDependency, but it ships no postinstall, so **CI must install
+the browser explicitly** — `pnpm exec playwright install --with-deps chromium`
+before the build, in both `ci.yml` and `deploy.yml`. Without it `chromium.launch()`
+fails on every clean runner. This is easy to miss on a developer machine that
+already has a browser cached from unrelated Playwright use, which is exactly how
+it was missed here.
+
+Build time grows with the number of posts carrying a Band, so renders are cached
+on a content hash of the Sketch, the Harness, the render page, the pinned p5
+build and the Seed, and skipped when unchanged. That cache lives in
+`node_modules/.cache/bands`, which CI rebuilds from scratch every run, so both
+workflows carry an `actions/cache` for it as well as for the browser download.
 
 Determinism is load-bearing rather than incidental. The same Sketch and Seed must
 produce the same Band, or the cache key is a lie and every deploy churns the
-images.
+images. That is why the key covers the p5 version and the render page too, and
+why the accent is a shared constant rather than a token read off whatever page
+happens to be rendering: a Sketch that silently reads nothing would freeze every
+Band at the old colour after a re-theme.

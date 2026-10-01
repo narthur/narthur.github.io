@@ -64,8 +64,8 @@ whose comment says exactly this.)
 
 The implication worth recording: **the accent is a parameter, not an asset.**
 Nothing in the brand depends on it being `#8ded51` lime in particular. The
-presets in the picker span lime, teal, periwinkle, sky, coral, gold and plain
-mono, and the site is designed to survive any of them. What is fixed is the
+presets in the picker span lime, teal, periwinkle, green, sky, coral, gold and
+plain mono, and the site is designed to survive any of them. What is fixed is the
 _structure_ — one accent, used sparingly, against a near-black ground.
 
 Every text token clears WCAG AA against `bg`. This is a brand commitment and not

@@ -65,4 +65,22 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Rendering a Band needs a real browser (docs/adr/0001). Playwright ships no postinstall, so
+      # nothing above downloads one and chromium.launch() would fail on every clean runner.
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('./node_modules/playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - run: pnpm exec playwright install --with-deps chromium
+      # Bands are keyed on a hash of their Sketch, the Harness and the Seed, so an unchanged Band is
+      # never re-simulated. Without this the cache is empty every run and every banded post is
+      # re-rendered on every push, however unrelated the change.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/bands
+          key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/content/posts/**') }}
+          restore-keys: bands-${{ runner.os }}-
       - run: pnpm run build

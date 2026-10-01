@@ -8,6 +8,11 @@ designed for a 30-second skim by that reader.
 
 ### The public code record
 
+_The `/code` page these terms describe is still on the unmerged `feat/code-page`
+branch. They are recorded here because the glossary was stranded there, where
+nothing on `master` could read it; the vocabulary is settled even though the page
+has not landed._
+
 **Public code record**:
 The set of public repositories and gists this site claims as Nathan's work,
 gathered across every account and organization he writes under. Its value is

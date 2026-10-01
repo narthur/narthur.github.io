@@ -7,6 +7,8 @@
 // underscore: Astro treats that as "ignore", which excludes it from the build as well as the route
 // table, leaving the renderer with nothing to load.
 import { sketches } from '../bands';
+import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
+import { ACCENT } from '../theme';
 
 const names = Object.keys(sketches);
 ---
@@ -16,6 +18,10 @@ const names = Object.keys(sketches);
 		<meta charset="utf-8" />
 		<title>band render target</title>
 		<meta name="robots" content="noindex" />
+		{/* A Sketch may read --accent (trails does). Without it this bare page resolves the token to
+		    nothing, the Sketch falls back to a literal, and every Band keeps shipping in the old
+		    colour after a re-theme with no error to notice it by. */}
+		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
 		<style>
 			html,
 			body {
@@ -28,12 +34,7 @@ const names = Object.keys(sketches);
 	<body>
 		<div id="band" data-sketches={names.join(',')}></div>
 
-		<script
-			is:inline
-			src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"
-			integrity="sha384-mNoDMsj3qyJxOkfse1kNjhDVbbYTNnpuSEL68aRVPnNERG3lHoGH+4FHEQSHJhYV"
-			crossorigin="anonymous"
-		></script>
+		<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
 		<script>
 			import { mountBand } from '../bands/harness';
 			import { sketches } from '../bands';

@@ -37,10 +37,19 @@ export type MountedBand = {
 
 export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 	let seed = opts.seed;
-	let redraw: (next?: number) => void = () => {};
+	let redraw: ((next?: number) => void) | null = null;
+	// A render asked for before p5's setup has run. Queued rather than dropped: `render()` returning
+	// silently would be indistinguishable from "nothing to redraw", and this Harness exists because
+	// ordering bugs here have already cost us twice.
+	let pending: { seed?: number } | null = null;
+	// Only the newest draw may claim the canvas or set the ready flag. A Sketch is allowed to be
+	// async (see types.ts), so a resize or a reseed can start a second draw while the first is still
+	// settling; without this the slower one wins and still reports ready.
+	let generation = 0;
 
 	new window.p5((p: P5) => {
 		const draw = async () => {
+			const mine = ++generation;
 			window.__bandReady = false;
 
 			// clientWidth on the root element, not 100vw: vw includes the scrollbar, so a vw-wide
@@ -67,6 +76,7 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 				seed
 			});
 
+			if (mine !== generation) return; // superseded mid-flight; let the newer draw finish
 			opts.onRender?.(seed);
 			window.__bandReady = true;
 		};
@@ -81,6 +91,11 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 				void draw();
 			};
 			void draw();
+			if (pending) {
+				const queued = pending;
+				pending = null;
+				redraw(queued.seed);
+			}
 		};
 
 		// Only the live page resizes; the renderer pins a width and never does.
@@ -92,5 +107,10 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 		};
 	});
 
-	return { render: (next?: number) => redraw(next) };
+	return {
+		render: (next?: number) => {
+			if (redraw) redraw(next);
+			else pending = { seed: next };
+		}
+	};
 }

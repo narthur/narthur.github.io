@@ -7,6 +7,8 @@
 // the dev picker drives, and what the build-time renderer screenshots.
 //
 // Positioned by the wrapper in `writing/[slug].astro`, which bottom-aligns the title over it.
+import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
+
 export type Props = { sketch: string; seed: number };
 const { sketch, seed } = Astro.props;
 ---
@@ -48,12 +50,7 @@ const { sketch, seed } = Astro.props;
 	)
 }
 
-<script
-	is:inline
-	src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"
-	integrity="sha384-mNoDMsj3qyJxOkfse1kNjhDVbbYTNnpuSEL68aRVPnNERG3lHoGH+4FHEQSHJhYV"
-	crossorigin="anonymous"
-></script>
+<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
 
 <script>
 	import { mountBand } from '../bands/harness';

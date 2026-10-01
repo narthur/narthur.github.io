@@ -165,7 +165,8 @@ JavaScript; `pnpm dev` runs the Sketch live instead, with a picker that chooses 
 Seed and copies the frontmatter line. `CONTEXT.md` defines the vocabulary and
 ADR 0001 says why a browser is in the deploy.
 
-An interactive piece (a p5.js sketch, say) is a standalone HTML
+A post can also carry an **Embed**: an interactive piece (a p5.js sketch, say) the reader
+actually runs. It is a standalone HTML
 page in the same folder, written in the Markdown as that figure pattern with the
 image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
 iframes, so they get the still image linking to the live page; on the site, a
