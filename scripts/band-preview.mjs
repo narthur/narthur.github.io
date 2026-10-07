@@ -51,9 +51,10 @@ for (const [flag, v] of [
 
 const seeds = values.seeds.split(',').map((s) => {
 	const n = Number(s);
-	// The emptiness check has to come first: `Number('')` is 0, which IS an integer, so a stray
-	// comma in `--seeds=1,,2` would otherwise pass the check below and quietly render seed 0.
-	// That is the same silent-wrong-seed failure the integer check exists to stop.
+	// Emptiness is checked separately because `Number('')` is 0, which IS an integer: a stray comma
+	// in `--seeds=1,,2` satisfies the integer test on its own and quietly renders seed 0, which is
+	// the same silent-wrong-seed failure that test exists to stop. Order of the two is immaterial —
+	// both are pure and neither throws.
 	if (s.trim() === '' || !Number.isInteger(n)) {
 		throw new Error(`band-preview: --seeds takes integers; ${JSON.stringify(s)} is not one`);
 	}
