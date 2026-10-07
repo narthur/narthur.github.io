@@ -21,6 +21,12 @@ pnpm check         # astro check
 pnpm test          # vitest, single run
 pnpm lint          # prettier --check + eslint
 pnpm format        # prettier --write
+
+# Renders a Band Sketch to .band-preview.png without a browser, for writing one.
+# Its arrangement differs from the page (own PRNG), so tune parameters with it and
+# still pick the Seed in the dev picker.
+# No `--` before the flags: pnpm 10 forwards them as-is and treats `--` as a positional.
+pnpm band-preview --sketch=hopfield --seeds=1,2,3
 ```
 
 Astro needs Node >= 22.19.

@@ -18,7 +18,8 @@
 		"test": "vitest run",
 		"activity": "node scripts/github-activity.mjs",
 		"project-stats": "node scripts/project-stats.mjs",
-		"bands": "node scripts/bands.mjs"
+		"bands": "node scripts/bands.mjs",
+		"band-preview": "node scripts/band-preview.mjs"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
