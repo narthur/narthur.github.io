@@ -72,9 +72,15 @@ Astro needs Node >= 22.19.
 
 ## Testing
 
-The only tested code is `src/uses/filter.ts` — pure tag/category functions.
-Everything else is markup, and there is deliberately no component-test or e2e
-harness. Use `pnpm test` (single run) rather than watch mode.
+Pure logic modules are tested; markup is not, and there is deliberately no
+component-test or e2e harness. Currently that means `src/uses/filter.ts`
+(tag/category functions), `src/work/*` (chart, commits, taskratchet) and
+`src/bands/hopfield.ts` (the Band simulation). Use `pnpm test` (single run)
+rather than watch mode.
+
+A Band Sketch is worth testing despite drawing pixels: its failures are silent —
+a net that never settles still renders a plausible-looking wash — so the suite
+asserts the invariants instead of relying on someone glancing at the strip.
 
 ## Common gotchas
 

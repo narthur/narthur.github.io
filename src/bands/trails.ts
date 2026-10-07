@@ -1,3 +1,7 @@
+// The `.ts` extension is required, not stylistic: scripts/band-preview.mjs imports this Sketch
+// into plain Node, which strips types but will not resolve an extensionless specifier. Dropping it
+// typechecks and builds fine and breaks only the preview tool, silently.
+import { ACCENT } from '../theme.ts';
 import type { P5, SketchArgs } from './types';
 
 /**
@@ -33,7 +37,7 @@ export default function trails(p: P5, { width: W, height: H, density }: SketchAr
 	const STEPS = 320; // long enough for routes to consolidate; at 80 it is still a search
 
 	const accent =
-		getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8ded51';
+		getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || ACCENT;
 
 	// The field is a cylinder: it wraps in x and is walled in y. Ants wrap, and so must the
 	// pheromone — sampling and diffusion included. Wrapping only the ants leaves the seam with no

@@ -1,3 +1,7 @@
+// The `.ts` extension is required, not stylistic: scripts/band-preview.mjs imports this Sketch
+// into plain Node, which strips types but will not resolve an extensionless specifier. Dropping it
+// typechecks and builds fine and breaks only the preview tool, silently.
+import { ACCENT } from '../theme.ts';
 import type { P5, SketchArgs } from './types';
 
 /**
@@ -165,8 +169,12 @@ export function sweepAt(
 		let field = 0;
 		for (let j = 0; j < n; j++) field += w[row + j] * state[j];
 		sumSq += field * field;
-		// Guarding t: at t→0 the exponent overflows to ±Infinity and the probability goes NaN,
-		// which silently blanks the canvas rather than giving a cold, sharp net.
+		// Guarding t against exactly 0, which only an external caller can pass — `simulate` uses
+		// 1e-6 for its cold sweeps. A large exponent needs no guard: Math.exp saturates to Infinity
+		// or 0, so pUp resolves cleanly to 0 or 1, which is the right cold-net decision. The case
+		// this catches is field === 0 at t === 0, where 0/0 makes pUp NaN; `rnd() < NaN` is false,
+		// so the cell would silently always take -1 instead of the coin flip a tied field deserves.
+		// Small, but it is the difference between a tie being broken fairly and being broken one way.
 		const pUp = 1 / (1 + Math.exp((-2 * field) / Math.max(1e-6, t)));
 		state[i] = rnd() < pUp ? 1 : -1;
 	}
@@ -192,10 +200,13 @@ function shuffled(n: number, rnd: () => number): Int32Array {
 }
 
 /**
- * Every knob the image has, and `simulate`/`paint` are split apart, so this Sketch can be rendered
- * to a PNG outside the browser (feed `paint`'s buffer to sharp) and looked at. Tuning it by
- * reloading a page and squinting produced two bad versions before that; every value below was then
- * chosen by rendering it.
+ * Every knob the image has. Each value below was chosen by rendering the Sketch to a PNG and
+ * looking at it (`pnpm band-preview`), not by reloading a page and squinting — which produced two
+ * bad versions first. That tool captures the default export's buffer through a fake p5; it does
+ * not call `simulate` or `paint`, so nothing here needs to stay exported on its account.
+ *
+ * The split between `simulate` and `paint` earns its place on its own terms: the simulation is
+ * what the tests can assert about, and the two have been rewritten independently of each other.
  */
 export const PARAMS = {
 	/**
@@ -219,7 +230,10 @@ export const PARAMS = {
 	FREQ: [12, 36] as [number, number],
 	STORED: 6,
 	RUNS: 4, // "listens" — each a fresh corruption of the same memory
-	SETTLE: 3, // cold sweeps, to fall into a basin before sampling it
+	// Cold iterations, to fall into a basin before sampling it. Each one runs BOTH `sweep` and a
+	// near-zero-temperature `sweepAt`, so this is 2×SETTLE full-lattice passes — not parallel to
+	// SWEEPS below, which is one pass per iteration.
+	SETTLE: 3,
 	SWEEPS: 16, // warm sweeps, each one accumulated
 	CORRUPT: 0.4,
 	// As a fraction of the RMS local field, so it scales with net size and load. This is the knob
@@ -358,14 +372,15 @@ export function paint(
 // `density` is unused: the Harness has already folded it into width/height, and the cell size is
 // derived from those, so every mark scales with the canvas without consulting it.
 export default function hopfield(p: P5, { width: W, height: H }: SketchArgs) {
-	// Fixed cell count across the width, so the pattern's frequency reads the same at any render
-	// width; the cell grows instead. GH follows from square-ish cells.
+	// Both cell dimensions are just the canvas spread over a FIXED lattice, so the pattern reads the
+	// same at any render size and the cells grow instead. Neither GW nor GH is derived from the
+	// canvas — deriving the row count from the width is the bug PARAMS.GH describes.
 	const CELLX = W / PARAMS.GW;
 	const CELLY = H / PARAMS.GH;
 
 	const ink = simulate(PARAMS.GW, PARAMS.GH, () => p.random());
 	const accent =
-		getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8ded51';
+		getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || ACCENT;
 	const img = p.drawingContext.createImageData(W, H);
 	paint(ink, PARAMS.GW, PARAMS.GH, W, H, CELLX, CELLY, accent, img.data);
 	p.drawingContext.putImageData(img, 0, 0);

@@ -33,9 +33,30 @@ const { values } = parseArgs({
 	}
 });
 
+// Validated rather than trusted, because both failure modes are silent or misdirecting. `--width=0`
+// makes paint's pixel loops run zero times, and sharp then rejects the empty buffer with "Input
+// Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A non-numeric
+// seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence while the log
+// line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
 const W = Number(values.width);
 const H = Number(values.height);
-const seeds = values.seeds.split(',').map(Number);
+for (const [flag, v] of [
+	['--width', W],
+	['--height', H]
+]) {
+	if (!Number.isFinite(v) || v <= 0) {
+		throw new Error(`band-preview: ${flag} must be a positive number, got ${JSON.stringify(v)}`);
+	}
+}
+
+const seeds = values.seeds.split(',').map((s) => {
+	const n = Number(s);
+	if (!Number.isInteger(n)) {
+		throw new Error(`band-preview: --seeds takes integers; "${s}" is not one`);
+	}
+	return n;
+});
+if (!seeds.length) throw new Error('band-preview: --seeds must name at least one seed');
 
 /** mulberry32 — deterministic, so a preview is reproducible even though it is not p5's sequence. */
 function rng(seed) {
