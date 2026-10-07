@@ -8,7 +8,7 @@
 //
 // Positioned by the wrapper in `writing/[slug].astro`, which bottom-aligns the title over it.
 import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
-import { vectors } from '../bands';
+import { resolveSketch } from '../bands';
 
 export type Props = { sketch: string; seed: number };
 const { sketch, seed } = Astro.props;
@@ -16,7 +16,12 @@ const { sketch, seed } = Astro.props;
 // A vector Sketch needs no p5, so the CDN tag below is skipped for one. That is not just tidiness:
 // the tag is `is:inline` with an integrity hash, so it blocks render on a third-party request this
 // page would otherwise make for nothing.
-const isVector = sketch in vectors;
+//
+// Through `resolveSketch`, like every other consumer. This line was `sketch in vectors`, and the
+// frontmatter was missed when the rest of the file moved off raw lookups: `in` reaches the
+// prototype, so `sketch: constructor` — which the content schema accepts, it is only `z.string()`
+// — made this true and dropped the p5 tag for a Sketch on neither track.
+const isVector = resolveSketch(sketch)?.track === 'vector';
 ---
 
 {/* Breaks out of the page column to full width: the column is `mx-auto`, so its centre is the

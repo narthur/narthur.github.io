@@ -194,9 +194,10 @@ describe('hopfield geometry', () => {
 	//
 	// So: one shared render for every test that only reads the output, and an explicit timeout on
 	// the few that genuinely need several independent runs. The 5s default is not a statement about
-	// what these tests should cost; it is just the default, and this block ran 12 simulations before
-	// it was cut to 8. Vitest's third argument raises it per test rather than for the whole suite,
-	// so a test that hangs for an unrelated reason still fails fast.
+	// what these tests should cost; it is just the default, and this block ran 13 simulations before
+	// it was cut to 9 — 8 inside tests plus `shared`, which is computed once at collection time.
+	// Vitest's third argument raises it per test rather than for the whole suite, so a test that
+	// hangs for an unrelated reason still fails fast.
 	const SLOW = 30_000;
 	const shared = geometry(args);
 

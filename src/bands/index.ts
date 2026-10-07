@@ -58,8 +58,12 @@ export function sketchNames(): string[] {
 /**
  * The file extension a rendered Band gets, which the post page needs in order to link it.
  *
- * Defaults to webp for an unregistered name, which the page never reaches: `bandedPosts` rejects
- * such a name and fails the build before any page is served.
+ * Defaults to webp for an unregistered name, and the page's render DOES reach that default — the
+ * build is `astro build && node scripts/bands.mjs`, so every page is written to dist, complete
+ * with a dangling `band.webp` link, before `bandedPosts` ever looks at the name. What stops it
+ * reaching a reader is that `bandedPosts` then throws and fails the whole command, so the deploy
+ * step never runs and that dist is discarded. A weaker guarantee than unreachable code, and worth
+ * stating as the one it is.
  */
 export function bandExtension(sketch: string): 'svg' | 'webp' {
 	return resolveSketch(sketch)?.track === 'vector' ? 'svg' : 'webp';
