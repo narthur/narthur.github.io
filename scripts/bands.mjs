@@ -18,7 +18,7 @@ import { chromium } from 'playwright';
 import sharp from 'sharp';
 // `.ts`, and loaded by path: Node 22 strips types natively, but its resolver does not follow the
 // extensionless specifiers TypeScript allows. These erase to nothing a bundler is needed for.
-import { sketches, vectors } from '../src/bands/index.ts';
+import { resolveSketch, sketchNames } from '../src/bands/index.ts';
 import { toSvg } from '../src/bands/vector.ts';
 import { ACCENT } from '../src/theme.ts';
 
@@ -75,10 +75,10 @@ async function bandedPosts() {
 		// ENOENT inside `fingerprint`, or as `unknown sketch` from the capture page — both naming
 		// the sketch and seed and neither naming the post, which is the one thing you need in order
 		// to fix a typo.
-		if (!(band.sketch in sketches) && !(band.sketch in vectors)) {
+		if (!resolveSketch(band.sketch)) {
 			throw new Error(
-				`${file}: no Sketch named ${JSON.stringify(band.sketch)}. Registered: ` +
-					`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
+				`${file}: no Sketch named ${JSON.stringify(band.sketch)}. ` +
+					`Registered: ${sketchNames().join(', ')}`
 			);
 		}
 		out.push({ slug: file.replace(/\.md$/, ''), sketch: band.sketch, seed: band.seed });
@@ -228,8 +228,9 @@ async function main() {
 	// Sketches are all vector never launches Chromium at all.
 	const raster = [];
 	for (const post of posts) {
-		const vector = vectors[post.sketch];
-		if (vector) await renderVector(post, vector);
+		// Non-null: bandedPosts already rejected every name that resolves to nothing.
+		const { track, draw } = resolveSketch(post.sketch);
+		if (track === 'vector') await renderVector(post, draw);
 		else raster.push(post);
 	}
 	if (!raster.length) return removeRenderTarget();

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bandExtension, sketches, vectors } from './index';
+import { bandExtension, resolveSketch, sketchNames, sketches, vectors } from './index';
 
 describe('the Sketch registry', () => {
 	it('keeps the two tracks disjoint', () => {
@@ -23,5 +23,26 @@ describe('the Sketch registry', () => {
 		// Not an endorsement of the fallback — an unregistered name is a build error long before
 		// this matters. It is pinned so the behaviour is a decision rather than an accident.
 		expect(bandExtension('no-such-sketch')).toBe('webp');
+	});
+
+	it('does not resolve an inherited Object property as a Sketch', () => {
+		// `'constructor' in vectors` is true and `vectors.constructor` is the Object constructor:
+		// callable, truthy, and enough to pass a naive registered-name check. A post written with
+		// `sketch: constructor` would then be "resolved" to Object and fail somewhere downstream
+		// with the confusing error the name check exists to replace.
+		//
+		// Mutation-checked: swapping resolveSketch's `Object.hasOwn` back to `in` fails this.
+		for (const inherited of ['constructor', 'toString', 'valueOf', 'hasOwnProperty', '__proto__']) {
+			expect(resolveSketch(inherited)).toBeNull();
+			expect(sketchNames()).not.toContain(inherited);
+		}
+	});
+
+	it('resolves every registered name to the track that renders it', () => {
+		for (const name of Object.keys(vectors)) expect(resolveSketch(name)?.track).toBe('vector');
+		for (const name of Object.keys(sketches)) expect(resolveSketch(name)?.track).toBe('raster');
+		expect(sketchNames().sort()).toEqual(
+			[...Object.keys(vectors), ...Object.keys(sketches)].sort()
+		);
 	});
 });

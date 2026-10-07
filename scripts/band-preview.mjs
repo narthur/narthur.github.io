@@ -28,7 +28,7 @@
 import { parseArgs } from 'node:util';
 import { join } from 'node:path';
 import sharp from 'sharp';
-import { sketches, vectors } from '../src/bands/index.ts';
+import { resolveSketch, sketchNames } from '../src/bands/index.ts';
 import { rng, toSvg } from '../src/bands/vector.ts';
 import { ACCENT, BACKGROUND, hexToRgb } from '../src/theme.ts';
 
@@ -43,14 +43,15 @@ const { values } = parseArgs({
 	}
 });
 
-const vector = vectors[values.sketch];
-const raster = sketches[values.sketch];
-if (!vector && !raster) {
+const resolved = resolveSketch(values.sketch);
+if (!resolved) {
 	throw new Error(
-		`band-preview: no Sketch named ${JSON.stringify(values.sketch)}. Registered: ` +
-			`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
+		`band-preview: no Sketch named ${JSON.stringify(values.sketch)}. ` +
+			`Registered: ${sketchNames().join(', ')}`
 	);
 }
+const vector = resolved.track === 'vector' ? resolved.draw : null;
+const raster = resolved.track === 'raster' ? resolved.draw : null;
 
 // A vector Band defaults to the width scripts/bands.mjs ships, because for a vector Band the width
 // is not a preview convenience — it is the tiling period, and judging the repeat at 1280 would be

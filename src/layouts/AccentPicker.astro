@@ -61,6 +61,13 @@ const presets = [
 		out.className = ratio >= 4.5 ? 'text-accent' : 'text-red-400';
 		// Every navigation is a full page load, so carry the choice across pages.
 		sessionStorage.setItem('accent', hex);
+		// Anything that reads --accent once, rather than through CSS, has to be told it moved. A
+		// vector Band builds its SVG in JS and would otherwise keep the old colour until a reseed —
+		// and a reseed draws a different Band, so there would be no way to compare two accents
+		// against the same one, which is the whole job of this picker.
+		document.documentElement.dispatchEvent(
+			new CustomEvent('accentchange', { detail: hex, bubbles: false })
+		);
 		for (const b of picker.querySelectorAll('button')) {
 			const on = b.dataset.hex === hex.toLowerCase();
 			b.classList.toggle('border-ink', on);

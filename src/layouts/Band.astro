@@ -80,7 +80,7 @@ const isVector = sketch in vectors;
 
 <script>
 	import { mountBand } from '../bands/harness';
-	import { sketches, vectors } from '../bands';
+	import { resolveSketch, sketchNames } from '../bands';
 	import { toSvg } from '../bands/vector';
 	import { ACCENT, BACKGROUND } from '../theme';
 
@@ -88,21 +88,19 @@ const isVector = sketch in vectors;
 	// first version of this looked up its elements at parse time and found none.
 	const host = document.getElementById('band');
 	const name = host?.dataset.sketch ?? '';
-	const sketch = host && sketches[name];
-	const vector = host && vectors[name];
+	const resolved = host ? resolveSketch(name) : null;
 
 	// band-render.astro fails loudly on a name in neither registry, because a blank canvas there
 	// would be captured and shipped. This is the page an author actually looks at while choosing a
 	// Seed, and it used to do the opposite: no Band, no picker, no message, no clue. A typo in
 	// `band.sketch` is the likely cause and nothing else would have said so.
-	if (host && !sketch && !vector) {
+	if (host && !resolved) {
 		console.error(
-			`band: no Sketch named ${JSON.stringify(name)}. Registered: ` +
-				`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
+			`band: no Sketch named ${JSON.stringify(name)}. Registered: ${sketchNames().join(', ')}`
 		);
 	}
 
-	if (host && (sketch || vector)) {
+	if (host && resolved) {
 		const picker = document.getElementById('band-picker');
 		const label = picker?.querySelector('[data-seed-label]');
 
@@ -113,7 +111,8 @@ const isVector = sketch in vectors;
 
 		let render: (seed?: number) => void;
 
-		if (vector) {
+		if (resolved.track === 'vector') {
+			const vector = resolved.draw;
 			// The same size scripts/bands.mjs renders, so dev and the shipped asset are the same
 			// image rather than two renderings of one idea — a vector Band has no second rasteriser
 			// to drift from. Tiling and height come from the element's classes, which are the ones
@@ -137,8 +136,12 @@ const isVector = sketch in vectors;
 				announce(seed);
 			};
 			render();
+			// The picker rewrites --accent in place; CSS follows it, but an SVG built once in JS does
+			// not. Redrawn at the SAME seed, so two accents can be compared on one Band — a reseed
+			// would change the drawing and defeat the comparison.
+			document.documentElement.addEventListener('accentchange', () => render());
 		} else {
-			const band = mountBand(sketch!, {
+			const band = mountBand(resolved.draw, {
 				host,
 				height: 240,
 				seed: Number(host.dataset.seed ?? 1),

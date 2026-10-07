@@ -1,4 +1,4 @@
-import type { BandGeometry } from './types';
+import type { BandGeometry } from './types.ts';
 
 /**
  * Turning a scalar field into SVG: trace an iso-contour, join the pieces, drop the points that

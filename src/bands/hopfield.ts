@@ -2,7 +2,7 @@
 // both import this Sketch into plain Node, which strips types but will not resolve an extensionless
 // specifier. Dropping one typechecks and builds fine and breaks only those two, silently.
 import { BACKGROUND, hexToRgb } from '../theme.ts';
-import type { VectorSketch } from './types';
+import type { VectorSketch } from './types.ts';
 import { chain, contour, rng, simplify, toPathData } from './vector.ts';
 
 /**

@@ -28,9 +28,41 @@ export const sketches: Record<string, Sketch> = { trails };
 
 export const vectors: Record<string, VectorSketch> = { hopfield };
 
-/** The file extension a rendered Band gets, which the post page needs in order to link it. */
+/** A resolved Sketch: which track it is on, and the thing that draws it. */
+export type Resolved = { track: 'vector'; draw: VectorSketch } | { track: 'raster'; draw: Sketch };
+
+/**
+ * Resolves a frontmatter `band.sketch` name, or null if nothing is registered under it.
+ *
+ * `Object.hasOwn`, not `in`, and that is the whole reason this is a function rather than a lookup
+ * at each call site. `'constructor' in vectors` is TRUE — it walks the prototype chain — and
+ * `vectors['constructor']` is the `Object` constructor, which is callable and truthy. A post
+ * written with `sketch: constructor`, `toString` or `valueOf` would therefore pass every
+ * registered-name check in the codebase and then fail somewhere further on, with the confusing
+ * error the name check exists to replace.
+ *
+ * Vector wins a tie, which is the documented rule rather than an accident of ordering — though
+ * `index.spec.ts` asserts no tie exists.
+ */
+export function resolveSketch(name: string): Resolved | null {
+	if (Object.hasOwn(vectors, name)) return { track: 'vector', draw: vectors[name] };
+	if (Object.hasOwn(sketches, name)) return { track: 'raster', draw: sketches[name] };
+	return null;
+}
+
+/** Every registered name, for an error message that tells you what you could have written. */
+export function sketchNames(): string[] {
+	return [...Object.keys(vectors), ...Object.keys(sketches)].sort();
+}
+
+/**
+ * The file extension a rendered Band gets, which the post page needs in order to link it.
+ *
+ * Defaults to webp for an unregistered name, which the page never reaches: `bandedPosts` rejects
+ * such a name and fails the build before any page is served.
+ */
 export function bandExtension(sketch: string): 'svg' | 'webp' {
-	return sketch in vectors ? 'svg' : 'webp';
+	return resolveSketch(sketch)?.track === 'vector' ? 'svg' : 'webp';
 }
 
 export type { Sketch, SketchArgs, P5, VectorSketch, BandGeometry, BandPath } from './types.ts';
