@@ -188,15 +188,32 @@ describe('hopfield reliabilityField', () => {
 describe('hopfield geometry', () => {
 	const args = { width: 3440, height: 240, seed: 1, accent: '#8ded51' };
 
-	it('is deterministic for a seed, and the seed changes it', () => {
-		// docs/adr/0001: the Band must be a pure function of Sketch and Seed, or the render cache
-		// is a lie and every deploy churns the asset.
-		expect(geometry(args)).toEqual(geometry(args));
-		expect(geometry({ ...args, seed: 2 })).not.toEqual(geometry(args));
-	});
+	// Every geometry() call runs the whole Hopfield net, which is ~0.8s here and roughly twice that
+	// on a CI runner — and the cost is the SIMULATION, so it does not shrink with the render size
+	// (measured: 824ms to simulate, 11ms for contour + chain + simplify at 3440 wide).
+	//
+	// So: one shared render for every test that only reads the output, and an explicit timeout on
+	// the few that genuinely need several independent runs. The 5s default is not a statement about
+	// what these tests should cost; it is just the default, and this block ran 12 simulations before
+	// it was cut to 8. Vitest's third argument raises it per test rather than for the whole suite,
+	// so a test that hangs for an unrelated reason still fails fast.
+	const SLOW = 30_000;
+	const shared = geometry(args);
+
+	it(
+		'is deterministic for a seed, and the seed changes it',
+		() => {
+			// docs/adr/0001: the Band must be a pure function of Sketch and Seed, or the render cache
+			// is a lie and every deploy churns the asset. Two fresh calls on purpose — reusing `shared`
+			// here would compare an object with itself and assert nothing.
+			expect(geometry(args)).toEqual(geometry(args));
+			expect(geometry({ ...args, seed: 2 })).not.toEqual(shared);
+		},
+		SLOW
+	);
 
 	it('draws contours, not a fill, and stays inside the canvas', () => {
-		const g = geometry(args);
+		const g = shared;
 		expect(g.paths.length).toBeGreaterThan(10);
 		expect(g.width).toBe(3440);
 		expect(g.height).toBe(240);
@@ -227,16 +244,20 @@ describe('hopfield geometry', () => {
 		}
 	});
 
-	it('takes its accent from the caller rather than hard-coding one', () => {
-		// A Sketch that baked the accent in would keep shipping the old colour after a re-theme,
-		// with no error to notice it by — the same failure src/theme.ts exists to prevent on the
-		// raster track. Mutation-checked: replacing `accent` with the ACCENT constant fails this.
-		const red = geometry({ ...args, accent: '#ff0000' });
-		const green = geometry({ ...args, accent: '#00ff00' });
-		expect(red.paths.map((p) => p.stroke)).not.toEqual(green.paths.map((p) => p.stroke));
-		// The firmest boundary reaches the accent itself; the faintest stays off-white either way.
-		expect(red.paths.some((p) => /rgb\(2[0-9]{2},\d+,\d+\)/.test(p.stroke))).toBe(true);
-	});
+	it(
+		'takes its accent from the caller rather than hard-coding one',
+		() => {
+			// A Sketch that baked the accent in would keep shipping the old colour after a re-theme,
+			// with no error to notice it by — the same failure src/theme.ts exists to prevent on the
+			// raster track. Mutation-checked: replacing `accent` with the ACCENT constant fails this.
+			const red = geometry({ ...args, accent: '#ff0000' });
+			const green = geometry({ ...args, accent: '#00ff00' });
+			expect(red.paths.map((p) => p.stroke)).not.toEqual(green.paths.map((p) => p.stroke));
+			// The firmest boundary reaches the accent itself; the faintest stays off-white either way.
+			expect(red.paths.some((p) => /rgb\(2[0-9]{2},\d+,\d+\)/.test(p.stroke))).toBe(true);
+		},
+		SLOW
+	);
 
 	it('fits in a fraction of the raster asset it replaces', () => {
 		// The shipped WebP was 38KB. This is not a micro-optimisation note: the whole reason to go
@@ -246,50 +267,53 @@ describe('hopfield geometry', () => {
 		// let the size regress past the thing it is supposed to beat while still passing a test
 		// whose own comment says it guards that. 30KB leaves real headroom over 22 and still fails
 		// before the asset stops being a saving.
-		const svg = toSvg(geometry(args));
+		const svg = toSvg(shared);
 		expect(svg.length).toBeLessThan(30_000);
 	});
 
-	it('draws the same lattice at any render size', () => {
-		// The row count was once derived from the render width by keeping cells square, which gave
-		// 24 rows in a preview, 8 in a dev browser and 9 in the image that shipped — three pictures
-		// from one Sketch. PARAMS.GW/GH are constants now, so the lattice, and therefore the NUMBER
-		// of distinct contours, is a property of the simulation rather than of the canvas; only the
-		// coordinates scale.
-		//
-		// The raster suite had an equivalent guard and this change deleted it with `paint`. It is
-		// restored rather than dropped because a review agent reintroduced the original bug inside
-		// `geometry` and watched all 13 remaining tests pass. Mutation-checked in the same way:
-		// deriving GH from the height to keep cells square fails this.
-		const counts = (
-			[
+	it(
+		'keeps the lattice fixed at any render size while the coordinates scale',
+		() => {
+			// The row count was once derived from the render width by keeping cells square, which gave
+			// 24 rows in a preview, 8 in a dev browser and 9 in the image that shipped — three pictures
+			// from one Sketch. PARAMS.GW/GH are constants now, so the lattice, and therefore the NUMBER
+			// of distinct contours, is a property of the simulation rather than of the canvas.
+			//
+			// The raster suite had an equivalent guard and this change deleted it with `paint`. It is
+			// restored rather than dropped because a review agent reintroduced the original bug inside
+			// `geometry` and watched all 13 remaining tests pass. Mutation-checked the same way:
+			// deriving GH from the height to keep cells square fails this.
+			//
+			// The second assertion is the other half, and it shares these renders rather than making
+			// its own: a fixed lattice must not mean a fixed-size DRAWING. Without it, pinning the
+			// lattice could be satisfied by a Band that renders at one size and leaves the rest of a
+			// wider canvas blank.
+			const sizes: [number, number][] = [
 				[1280, 240],
 				[3440, 240],
 				[2048, 480]
-			] as [number, number][]
-		).map(([width, height]) => geometry({ ...args, width, height }).paths.length);
+			];
+			const rendered = sizes.map(([width, height]) => geometry({ ...args, width, height }));
 
-		// Measured 76 / 77 / 76 — the ±1 is a contour grazing the canvas edge, not the lattice
-		// moving. A lattice that tracked the canvas would swing by much more than 15%.
-		const lo = Math.min(...counts);
-		const hi = Math.max(...counts);
-		expect((hi - lo) / lo).toBeLessThan(0.15);
-	});
+			// Measured 76 / 77 / 76 — the ±1 is a contour grazing the canvas edge, not the lattice
+			// moving. A lattice that tracked the canvas would swing by much more than 15%.
+			const counts = rendered.map((g) => g.paths.length);
+			const lo = Math.min(...counts);
+			const hi = Math.max(...counts);
+			expect((hi - lo) / lo).toBeLessThan(0.15);
 
-	it('scales its coordinates with the canvas even though the lattice does not', () => {
-		// The other half of the invariant above: a fixed lattice must not mean a fixed-size
-		// drawing. Without this, pinning the lattice could be "satisfied" by a Band that renders
-		// at one size and leaves the rest of a wider canvas blank.
-		const widest = (g: { paths: { d: string }[] }) =>
-			Math.max(
-				...g.paths.flatMap(({ d }) =>
-					d
-						.split(/[ML]/)
-						.slice(1)
-						.map((p) => Number(p.split(' ')[0]))
-				)
-			);
-		expect(widest(geometry({ ...args, width: 1280 }))).toBeLessThanOrEqual(1280);
-		expect(widest(geometry({ ...args, width: 3440 }))).toBeGreaterThan(3000);
-	});
+			const widest = (g: { paths: { d: string }[] }) =>
+				Math.max(
+					...g.paths.flatMap(({ d }) =>
+						d
+							.split(/[ML]/)
+							.slice(1)
+							.map((pt) => Number(pt.split(' ')[0]))
+					)
+				);
+			expect(widest(rendered[0])).toBeLessThanOrEqual(1280);
+			expect(widest(rendered[1])).toBeGreaterThan(3000);
+		},
+		SLOW
+	);
 });
