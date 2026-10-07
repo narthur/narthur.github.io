@@ -28,10 +28,13 @@ export const BACKGROUND = '#0a0c10';
  * mixing toward the accent, and the preview flattening onto the background — so the parsing
  * belongs next to the values rather than copied beside each use.
  *
- * Six digits only. Every colour this is handed is one of the constants above or a value from a
- * native `<input type="color">`, which the HTML spec normalises to full six-digit lowercase hex;
- * a three-digit shorthand would silently parse as nonsense rather than throw, so if a source of
- * those ever appears this needs to grow a branch, not a caller-side workaround.
+ * Six digits only, and unguarded: a three-digit shorthand or an `rgb()` string parses as nonsense
+ * rather than throwing. That holds today because every colour reaching this is one of the
+ * constants above or the `.value` of a native `<input type="color">`, which is a seven-character
+ * lowercase hex string. Secondary sources agree the spec's sanitisation algorithm requires that;
+ * the primary text was not read, so treat it as the reason the narrow parse is safe rather than a
+ * guarantee it always will be. MDN notes newer browsers accept other CSS colour syntaxes in the
+ * *attribute* — if one of those ever reaches `.value`, this grows a branch.
  */
 export function hexToRgb(hex: string): [number, number, number] {
 	return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)) as [number, number, number];

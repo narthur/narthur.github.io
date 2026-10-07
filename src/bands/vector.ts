@@ -93,9 +93,9 @@ export function contour(
 /**
  * Joins segments end-to-end into polylines.
  *
- * Worth doing for its own sake: 2,600 loose segments serialise as 2,600 `M`-commands and 5,200
- * coordinate pairs, where the same contour as ~76 joined polylines is 2,676 pairs and compresses
- * far better. It is also what makes `simplify` possible at all, since a two-point segment has no
+ * Worth doing for its own sake: measured on `hopfield` at the shipped size, 2,601 loose segments
+ * serialise as 2,601 `M`-commands and 5,202 coordinate pairs, where the same contour as 77 joined
+ * polylines is 2,678 pairs and compresses far better. It is also what makes `simplify` possible at all, since a two-point segment has no
  * interior point to drop.
  *
  * Endpoints are matched by their rounded coordinates. Marching squares emits each shared crossing
@@ -143,8 +143,8 @@ export function chain(segs: Point[][]): Point[][] {
  * Douglas-Peucker: drops every point that sits within `tol` pixels of the line it would otherwise
  * interpolate.
  *
- * At the 0.5px `hopfield` passes, this removes about 40% of the points with nothing visible
- * lost, because a deviation narrower than the stroke cannot be seen. (0.5 is not half the stroke
+ * At the 0.5px `hopfield` passes, this removes 43% of the points (2,678 to 1,519) with nothing
+ * visible lost, because a deviation narrower than the stroke cannot be seen. (0.5 is not half the stroke
  * width — that would be 0.7 — it was picked by measurement.) Iterative rather than
  * recursive: a contour that runs the full width of the band is a few thousand points, and the
  * recursive form is depth-unbounded on exactly the long smooth runs this is for.

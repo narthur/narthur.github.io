@@ -334,8 +334,8 @@ export function reliabilityField(
 const SAMPLES_PER_CELL = 2;
 /**
  * How far a point may sit from the line through its neighbours before it is worth keeping, in
- * render pixels. Chosen by measurement, not derived from STROKE_WIDTH: it drops ~40% of the points
- * with nothing visible lost. An earlier version of this comment called it "half the stroke width",
+ * render pixels. Chosen by measurement, not derived from STROKE_WIDTH: it drops 43% of the points
+ * — 2,678 to 1,519 at the shipped size — with nothing visible lost. An earlier version of this comment called it "half the stroke width",
  * which was never true of these two values — half of 1.4 is 0.7 — and would have had anyone tuning
  * STROKE_WIDTH expect this to track it.
  */

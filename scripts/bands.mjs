@@ -184,7 +184,12 @@ async function renderVector(post, vector) {
 	try {
 		svg = toSvg(vector({ width: WIDTH, height: HEIGHT, seed: post.seed, accent: ACCENT }));
 	} catch (cause) {
-		throw new Error(`${post.sketch}/${post.seed} (${post.slug}): ${cause.message}`, { cause });
+		// `String(cause)`, not `cause.message`: a Sketch is free to throw a string or a plain object,
+		// and reading `.message` off one of those yields `undefined` — which would put the words
+		// "...: undefined" in the build log and drop the only description of what went wrong. That
+		// is worse than not wrapping at all, which is the opposite of why this wrapper exists.
+		const detail = cause instanceof Error ? cause.message : String(cause);
+		throw new Error(`${post.sketch}/${post.seed} (${post.slug}): ${detail}`, { cause });
 	}
 	await mkdir(join(DIST, 'writing', post.slug), { recursive: true });
 	await writeFile(join(DIST, 'writing', post.slug, 'band.svg'), svg);
