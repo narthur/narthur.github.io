@@ -18,8 +18,11 @@ import trails from './trails.ts';
  * returns geometry, runs in plain Node, and ships as SVG — which is the only way a contour a pixel
  * wide survives to the reader, since resizing and encoding a raster erases it.
  *
- * Consumers pick the track by asking which map holds the name, so there is no flag to keep in sync
- * and no way to register a Sketch as both.
+ * Consumers pick the track by asking which map holds the name, so there is no flag to keep in
+ * sync. The maps are two plain objects, though, so nothing in the type system stops a name being
+ * added to both — every consumer checks `vectors` first, which makes the resolution consistent but
+ * leaves the raster entry silently dead. `index.spec.ts` asserts the two key sets are disjoint, so
+ * that is a failing test rather than a Band nobody can explain.
  */
 export const sketches: Record<string, Sketch> = { trails };
 

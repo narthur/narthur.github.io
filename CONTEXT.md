@@ -64,10 +64,12 @@ Band is an alternative to an Illustration, not a kind of one.
 _Avoid_: banner, hero, header image
 
 **Sketch**:
-The p5 program that draws a Band. One per post, written for that post's
-content rather than configured from a shared template — the ant post's Sketch
-simulates ant navigation because the post is about what ants do without
-understanding it.
+The program that draws a Band. One per post, written for that post's content
+rather than configured from a shared template — the ant post's Sketch simulates
+ant navigation because the post is about what ants do without understanding it.
+Two kinds, and `src/bands/index.ts` is what says which a name is: a **raster
+Sketch** draws pixels with p5 and needs a browser to render, a **vector Sketch**
+returns geometry, runs in plain Node and ships as SVG.
 _Avoid_: generator, viz, pattern
 
 **Seed**:

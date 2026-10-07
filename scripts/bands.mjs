@@ -18,6 +18,7 @@ import { chromium } from 'playwright';
 import sharp from 'sharp';
 // `.ts`, and loaded by path: Node 22 strips types natively, but its resolver does not follow the
 // extensionless specifiers TypeScript allows. These erase to nothing a bundler is needed for.
+import { sketches, vectors } from '../src/bands/index.ts';
 import { toSvg } from '../src/bands/vector.ts';
 import { ACCENT } from '../src/theme.ts';
 
@@ -67,6 +68,17 @@ async function bandedPosts() {
 		if (typeof band.sketch !== 'string' || !Number.isInteger(band.seed)) {
 			throw new Error(
 				`${file}: band needs a string sketch and an integer seed, got ${JSON.stringify(band)}`
+			);
+		}
+		// The name is checked HERE, against the registry, because this is the only place that still
+		// knows which post asked for it. Left to fail downstream it surfaces either as a readFile
+		// ENOENT inside `fingerprint`, or as `unknown sketch` from the capture page — both naming
+		// the sketch and seed and neither naming the post, which is the one thing you need in order
+		// to fix a typo.
+		if (!(band.sketch in sketches) && !(band.sketch in vectors)) {
+			throw new Error(
+				`${file}: no Sketch named ${JSON.stringify(band.sketch)}. Registered: ` +
+					`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
 			);
 		}
 		out.push({ slug: file.replace(/\.md$/, ''), sketch: band.sketch, seed: band.seed });
@@ -156,13 +168,24 @@ async function capture(page, { sketch, seed }) {
 /**
  * Writes a vector Band: run the Sketch in this process, serialise, done.
  *
- * No browser, no screenshot, no resize, no encode — and no cache either. The whole thing is about
- * a second of arithmetic, where a raster Band is a Chromium launch, so a cache entry would cost
- * more to maintain than it saves.
+ * No browser, no screenshot, no resize, no encode — and no cache either. Measured at 758ms for
+ * `hopfield` at the shipped size, where a raster Band is a Chromium launch, so a cache entry would
+ * cost more to maintain than it saves.
+ *
+ * `vector`, not `sketch`: everywhere else in this pipeline `sketch` is the NAME, a string — it is
+ * `post.sketch` three lines down — and this parameter is the resolved drawing function.
  */
-async function renderVector(post, sketch) {
+async function renderVector(post, vector) {
 	const started = Date.now();
-	const svg = toSvg(sketch({ width: WIDTH, height: HEIGHT, seed: post.seed, accent: ACCENT }));
+	// Wrapped for the same reason `capture` wraps its failures: the error a Sketch throws says
+	// nothing about which post, Sketch or Seed produced it, and the build log is the only place
+	// anyone sees it.
+	let svg;
+	try {
+		svg = toSvg(vector({ width: WIDTH, height: HEIGHT, seed: post.seed, accent: ACCENT }));
+	} catch (cause) {
+		throw new Error(`${post.sketch}/${post.seed} (${post.slug}): ${cause.message}`, { cause });
+	}
 	await mkdir(join(DIST, 'writing', post.slug), { recursive: true });
 	await writeFile(join(DIST, 'writing', post.slug, 'band.svg'), svg);
 	console.log(
@@ -171,20 +194,40 @@ async function renderVector(post, sketch) {
 	);
 }
 
+/**
+ * Removes the render target from dist.
+ *
+ * `src/pages/band-render.astro` is an ordinary page — it cannot be `_`-prefixed, because Astro
+ * would then exclude it from the build as well as the route table, leaving the renderer with
+ * nothing to load — so every build emits it and every build has to take it back out.
+ *
+ * Unconditional, and that is the whole point. It used to live at the tail of `main`, which two
+ * separate early returns could skip: no banded posts at all, and (once the vector track landed)
+ * no RASTER banded posts. The second is the state the ADR names as the intended destination, so
+ * the bug would have arrived exactly when the last raster Sketch was retired, with nothing
+ * connecting the two changes.
+ */
+async function removeRenderTarget() {
+	await rm(join(DIST, 'band-render'), { recursive: true, force: true });
+	await rm(join(DIST, 'band-render.html'), { force: true });
+}
+
 async function main() {
 	const posts = await bandedPosts();
-	if (!posts.length) return console.log('bands: no posts ask for one');
+	if (!posts.length) {
+		await removeRenderTarget();
+		return console.log('bands: no posts ask for one');
+	}
 
 	// Vector Bands first, and separately: they need none of the apparatus below, so a site whose
 	// Sketches are all vector never launches Chromium at all.
-	const { vectors } = await import('../src/bands/index.ts');
 	const raster = [];
 	for (const post of posts) {
 		const vector = vectors[post.sketch];
 		if (vector) await renderVector(post, vector);
 		else raster.push(post);
 	}
-	if (!raster.length) return;
+	if (!raster.length) return removeRenderTarget();
 
 	await mkdir(CACHE, { recursive: true });
 	const server = await serve(DIST, 4178);
@@ -218,10 +261,7 @@ async function main() {
 
 	await browser.close();
 	server.close();
-
-	// The render target is scaffolding, not a page. It ships otherwise.
-	await rm(join(DIST, 'band-render'), { recursive: true, force: true });
-	await rm(join(DIST, 'band-render.html'), { force: true });
+	await removeRenderTarget();
 }
 
 await main();

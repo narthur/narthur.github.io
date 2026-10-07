@@ -23,9 +23,14 @@ const isVector = sketch in vectors;
     page's centre and translating half its own width off that lands it flush to both edges.
 
     A raster Sketch appends a canvas here and that canvas supplies the width. A vector one has no
-    canvas: it sets this element's own background to the SVG, tiled, which is byte for byte how the
-    shipped page draws it — so what the picker shows is what ships, rather than a live re-run that
-    merely resembles it. */}
+    canvas: it sets this element's own background to the SVG, tiled, the same way the shipped page
+    draws it — one function, no second rasteriser to drift from.
+
+    One deliberate exception: the accent. The build reads the ACCENT constant, this reads the live
+    `--accent`, and AccentPicker sets that property on every dev page so a candidate colour can be
+    tried against a real one. So while the picker holds a non-default accent, this Band is NOT the
+    one that would ship — which is the point of the picker, not a fault in it. At the site's
+    current accent the two agree. */}
 <div
 	id="band"
 	aria-hidden="true"
@@ -86,6 +91,17 @@ const isVector = sketch in vectors;
 	const sketch = host && sketches[name];
 	const vector = host && vectors[name];
 
+	// band-render.astro fails loudly on a name in neither registry, because a blank canvas there
+	// would be captured and shipped. This is the page an author actually looks at while choosing a
+	// Seed, and it used to do the opposite: no Band, no picker, no message, no clue. A typo in
+	// `band.sketch` is the likely cause and nothing else would have said so.
+	if (host && !sketch && !vector) {
+		console.error(
+			`band: no Sketch named ${JSON.stringify(name)}. Registered: ` +
+				`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
+		);
+	}
+
 	if (host && (sketch || vector)) {
 		const picker = document.getElementById('band-picker');
 		const label = picker?.querySelector('[data-seed-label]');
@@ -102,6 +118,11 @@ const isVector = sketch in vectors;
 			// image rather than two renderings of one idea — a vector Band has no second rasteriser
 			// to drift from. Tiling and height come from the element's classes, which are the ones
 			// writing/[slug].astro gives the shipped background.
+			//
+			// The accent is the one input that can differ: the build uses the ACCENT constant and
+			// this reads whatever `--accent` currently resolves to, which AccentPicker rewrites
+			// live. That divergence is the picker working as intended; see the comment on the host
+			// element above.
 			render = (next?: number) => {
 				const seed = next ?? Number(host.dataset.seed ?? 1);
 				const accent =

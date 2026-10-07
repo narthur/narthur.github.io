@@ -41,6 +41,42 @@ describe('contour', () => {
 		}
 	});
 
+	it('splits a saddle cell into two separate crossings, not a bowtie', () => {
+		// Keys 5 and 10 are the ambiguous cases: the two diagonal corners agree and the other two
+		// disagree, so the cell is crossed twice and which end pairs with which is a choice. A
+		// monotonic radial field has no saddle at all — instrumenting the circle fixture above at
+		// three resolutions found zero occurrences of either key — so this branch had no coverage
+		// until this test, despite being reachable and despite the implementation resolving it
+		// arbitrarily by its own admission.
+		//
+		// A hyperbolic paraboloid puts a real saddle at its centre, where the 0.5 contour is the two
+		// lines x = 5 and y = 5. The domain is sampled as a SINGLE cell so that every segment
+		// returned belongs to the saddle — in a larger grid most cells are crossed by one straight
+		// line and legitimately put both endpoints on it, which would drown the assertion below.
+		//
+		// The corners come out 0.75 / 0.25 / 0.25 / 0.75, i.e. key 10. Worth stating because the
+		// first version of this test centred the saddle on a grid vertex, where the crossing lands
+		// exactly on `> level`: that produces no saddle cell at all, and the test passed without
+		// ever reaching the branch it names.
+		const saddle = (x: number, y: number) => 0.5 + ((x - 5) * (y - 5)) / 100;
+		const segs = contour(saddle, 10, 10, 1, 1);
+		expect(segs).toHaveLength(2);
+
+		const onX = (p: Point) => Math.abs(p[0] - 5) < 1e-9;
+		const onY = (p: Point) => Math.abs(p[1] - 5) < 1e-9;
+		for (const seg of segs) for (const p of seg) expect(onX(p) || onY(p)).toBe(true);
+
+		// Both of marching squares' resolutions of a saddle join a point on one line to a point on
+		// the other — a corner cut. Joining the two points on the SAME line (top to bottom, or left
+		// to right) instead draws the two lines through each other, which is the self-crossing X
+		// the ambiguity exists to avoid. Mutation-checked: swapping key 10's
+		// `segs.push([T, R], [L, B])` for `[T, B], [L, R]` fails this.
+		for (const [a, b] of segs) {
+			expect(onX(a) && onX(b)).toBe(false);
+			expect(onY(a) && onY(b)).toBe(false);
+		}
+	});
+
 	it('closes across a field that wraps in x, leaving no gap at the seam', () => {
 		// The Band is one wide image repeated with repeat-x, so a contour that does not meet itself
 		// at the seam shows as a nick in every tile. The sampling grid spans 0..width inclusive, so
@@ -86,6 +122,41 @@ describe('chain', () => {
 		expect(joined).toHaveLength(2);
 		const long = joined.find((l) => l.length === 3)!;
 		expect(long.map((p) => p[0]).sort((a, b) => a - b)).toEqual([0, 1, 2]);
+	});
+
+	it('closes a ring, ending where it started', () => {
+		// A closed contour is the normal case for hopfield — every reliability island that does not
+		// touch the tile edge is a loop — and the walk has to terminate on one rather than circling.
+		//
+		// A contract test, not a regression guard, and mutation-checked to say so: dropping the
+		// `fromHead` pass does NOT fail this, because on a ring the tail walk alone comes all the
+		// way round. The test above is what covers that. What this one pins is the shape of the
+		// result — one line, closed, with the start repeated as the last point — which is what the
+		// stroked path depends on and what nothing else asserts.
+		const square: Point[][] = [
+			[
+				[0, 0],
+				[1, 0]
+			],
+			[
+				[1, 0],
+				[1, 1]
+			],
+			[
+				[1, 1],
+				[0, 1]
+			],
+			[
+				[0, 1],
+				[0, 0]
+			]
+		];
+		const joined = chain(square);
+		expect(joined).toHaveLength(1);
+		// Five points, not four: the ring returns to its start, and that repeated point is what
+		// makes the path close when it is stroked.
+		expect(joined[0]).toHaveLength(5);
+		expect(joined[0][0]).toEqual(joined[0][4]);
 	});
 
 	it('walks both ways from the segment it starts on', () => {
@@ -134,6 +205,30 @@ describe('simplify', () => {
 		];
 		expect(simplify(line, 0.5)).toHaveLength(3);
 		expect(simplify(line, 10)).toHaveLength(2);
+	});
+
+	it('keeps the shape of a closed contour, whose two ends coincide', () => {
+		// Douglas-Peucker anchors on the first and last point, which on a ring are the SAME point —
+		// a span with no direction to project onto. The implementation falls back to distance from
+		// the point itself there, and that fallback is named in its comment as a deliberate choice,
+		// so it is pinned here. Without a sane fallback the whole ring collapses to its endpoints.
+		const ring: Point[] = [
+			[0, 0],
+			[5, 0],
+			[10, 0],
+			[10, 10],
+			[0, 10],
+			[0, 0]
+		];
+		const simple = simplify(ring, 0.5);
+		// The collinear midpoint goes; all four corners and the closing point stay.
+		expect(simple).toEqual([
+			[0, 0],
+			[10, 0],
+			[10, 10],
+			[0, 10],
+			[0, 0]
+		]);
 	});
 
 	it('is a no-op below three points or at zero tolerance', () => {

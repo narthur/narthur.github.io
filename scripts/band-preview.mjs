@@ -26,10 +26,11 @@
 // actually registered. It loads here for the same reason scripts/bands.mjs can load it — every
 // specifier in it carries a `.ts`, which Node's resolver needs and TypeScript's does not.
 import { parseArgs } from 'node:util';
+import { join } from 'node:path';
 import sharp from 'sharp';
 import { sketches, vectors } from '../src/bands/index.ts';
-import { toSvg } from '../src/bands/vector.ts';
-import { ACCENT, BACKGROUND } from '../src/theme.ts';
+import { rng, toSvg } from '../src/bands/vector.ts';
+import { ACCENT, BACKGROUND, hexToRgb } from '../src/theme.ts';
 
 const { values } = parseArgs({
 	options: {
@@ -37,7 +38,8 @@ const { values } = parseArgs({
 		seeds: { type: 'string', default: '1,2,3' },
 		width: { type: 'string' },
 		height: { type: 'string' },
-		out: { type: 'string' }
+		out: { type: 'string' },
+		title: { type: 'string' }
 	}
 });
 
@@ -56,11 +58,13 @@ if (!vector && !raster) {
 const W = Number(values.width ?? (vector ? 3440 : 1280));
 const H = Number(values.height ?? 240);
 
-// Validated rather than trusted, because every failure mode here is silent or misdirecting.
-// `--width=0` makes paint's pixel loops run zero times, and sharp then rejects the empty buffer
-// with "Input Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A
-// non-numeric seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence
-// while the log line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
+// Validated rather than trusted, because every failure mode here is silent or misdirecting. On the
+// raster track `--width=0` makes the Sketch's pixel loops run zero times, and sharp then rejects
+// the empty buffer with "Input Buffer is empty" from inside its own constructor, pointing nowhere
+// near the flag; on the vector track it degenerates the contour arithmetic instead and writes a
+// zero-width SVG that simply draws nothing. A non-numeric seed is worse on either track: `NaN >>>
+// 0` is 0, so mulberry32 quietly renders seed 0's sequence while the log line reads "seed NaN" —
+// in a tool whose whole job is comparing seeds side by side.
 //
 // Integer, not merely positive: `--width=1280.5` survives createImageData, because `w * h * 4` is
 // still a whole number, and dies 100 lines later as "Expected width, height and channels for raw
@@ -91,6 +95,35 @@ if (!seeds.length) throw new Error('band-preview: --seeds must name at least one
 const write = (name, body) =>
 	import('node:fs/promises').then(({ writeFile }) => writeFile(name, body));
 
+/**
+ * The title to lay over a vector preview.
+ *
+ * Looked up from the post whose frontmatter names this Sketch, because the whole reason the
+ * preview draws a title at all is to judge the Band UNDER the real one — a stand-in of a different
+ * length tells you nothing about whether a contour runs through the descenders. It was hardcoded
+ * to one post's title at first, which was invisible only because there was exactly one vector
+ * Sketch; the second would have been previewed under the first one's headline.
+ *
+ * `--title` overrides, for a Sketch no post references yet.
+ */
+async function postTitle(sketch) {
+	if (values.title) return values.title;
+	const { readdir, readFile } = await import('node:fs/promises');
+	const { load } = await import('js-yaml');
+	for (const file of await readdir('src/content/posts')) {
+		if (!file.endsWith('.md')) continue;
+		const raw = await readFile(join('src/content/posts', file), 'utf8');
+		// Same BOM strip scripts/bands.mjs does, and for the same reason: `^---$` misses a first
+		// line carrying one, so the split would hand the post BODY to the YAML parser.
+		const text = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
+		const front = text.split(/^---$/m)[1];
+		if (!front) continue;
+		const data = load(front) ?? {};
+		if (data.band?.sketch === sketch && data.title) return data.title;
+	}
+	return `${sketch} — no post references this Sketch yet`;
+}
+
 if (vector) {
 	const rendered = seeds.map((seed) => ({
 		seed,
@@ -103,17 +136,23 @@ if (vector) {
 	// a title bottom-aligned over it — because the thing being judged is whether the Band works
 	// UNDER a title at a real viewport width, which a bare strip cannot tell you. The seed is
 	// printed beside each so a choice can be read straight off the page.
-	// encodeURIComponent is the only escaping needed and it is doing two jobs: it makes the SVG a
-	// legal URL, and on the way it encodes `"`, `<`, `>` and `&`, which is what keeps the value
-	// inside the HTML attribute it is embedded in. A second HTML-escape pass here would be dead
-	// code, since none of those characters can survive to reach it.
+	// encodeURIComponent is the only escaping the SVG needs, and it is doing two jobs: it makes the
+	// SVG a legal URL, and on the way it encodes `"`, `<`, `>` and `&`, which is what keeps the
+	// value inside the HTML attribute it is embedded in. A second HTML-escape pass on IT would be
+	// dead code, since none of those characters can survive to reach one.
+	//
+	// The title is a different matter — it comes from a post's frontmatter and goes into the
+	// document as markup, so it gets a real escape. A title with an ampersand or an angle bracket
+	// in it is ordinary prose, not an attack.
+	const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	const title = esc(await postTitle(values.sketch));
 	const body = rendered
 		.map(
 			({ seed, svg }) =>
 				`<section><p class="seed">seed ${seed} · ${(svg.length / 1024).toFixed(0)} KB</p>` +
 				`<div class="band" style="background-image:url(&quot;data:image/svg+xml,${encodeURIComponent(
 					svg
-				)}&quot;)"><h1>Prepare for Interviews using Custom Podcast Episodes</h1></div></section>`
+				)}&quot;)"><h1>${title}</h1></div></section>`
 		)
 		.join('');
 	await write(
@@ -137,17 +176,6 @@ if (vector) {
 	);
 } else {
 	await rasterPreview();
-}
-
-/** mulberry32 — deterministic, so a preview is reproducible even though it is not p5's sequence. */
-function rng(seed) {
-	let a = seed >>> 0;
-	return () => {
-		a = (a + 0x6d2b79f5) >>> 0;
-		let t = Math.imul(a ^ (a >>> 15), 1 | a);
-		t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-	};
 }
 
 /**
@@ -208,7 +236,7 @@ async function rasterPreview() {
 		// Flatten onto the page background. The Band is drawn on BACKGROUND and alpha is most of what
 		// a Sketch is tuning, so compositing against black would misreport every faint mark.
 		const px = captured.img.data;
-		const [br, bg, bb] = [1, 3, 5].map((i) => parseInt(BACKGROUND.slice(i, i + 2), 16));
+		const [br, bg, bb] = hexToRgb(BACKGROUND);
 		const flat = Buffer.alloc(W * H * 3);
 		for (let i = 0; i < W * H; i++) {
 			const a = px[i * 4 + 3] / 255;

@@ -20,3 +20,19 @@ export const ACCENT = '#8ded51';
  * asset as well as in the stylesheet, with nothing tying the two together.
  */
 export const BACKGROUND = '#0a0c10';
+
+/**
+ * Splits a `#rrggbb` string into its three channels.
+ *
+ * Here because both constants above get parsed this way and by two different callers — a Sketch
+ * mixing toward the accent, and the preview flattening onto the background — so the parsing
+ * belongs next to the values rather than copied beside each use.
+ *
+ * Six digits only. Every colour this is handed is one of the constants above or a value from a
+ * native `<input type="color">`, which the HTML spec normalises to full six-digit lowercase hex;
+ * a three-digit shorthand would silently parse as nonsense rather than throw, so if a source of
+ * those ever appears this needs to grow a branch, not a caller-side workaround.
+ */
+export function hexToRgb(hex: string): [number, number, number] {
+	return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)) as [number, number, number];
+}

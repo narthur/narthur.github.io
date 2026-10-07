@@ -171,8 +171,9 @@ pixels with p5, so rendering it needs headless Chromium, and it ships as WebP. A
 **vector** Sketch returns geometry, runs in plain Node with no browser at all,
 and ships as SVG. Prefer vector unless the image is genuinely a field of pixels
 the way `trails` is: a raster Band is resized and lossily encoded on its way to
-the reader, which erases anything close to a pixel wide — measured at 97% of the
-line amplitude on `hopfield` before it moved.
+the reader, which erases anything close to a pixel wide. On `hopfield`, the
+median lit pixel measured 158 of 255 as the Sketch drew it and 7 in the asset
+that shipped — a 96% loss. ADR 0001 has the per-stage breakdown.
 
 A post can also carry an **Embed**: an interactive piece (a p5.js sketch, say) the reader
 actually runs. It is a standalone HTML

@@ -1,7 +1,7 @@
 // The `.ts` extensions are required, not stylistic: scripts/bands.mjs and scripts/band-preview.mjs
 // both import this Sketch into plain Node, which strips types but will not resolve an extensionless
 // specifier. Dropping one typechecks and builds fine and breaks only those two, silently.
-import { BACKGROUND } from '../theme.ts';
+import { BACKGROUND, hexToRgb } from '../theme.ts';
 import type { VectorSketch } from './types';
 import { chain, contour, rng, simplify, toPathData } from './vector.ts';
 
@@ -332,7 +332,13 @@ export function reliabilityField(
  * visible, which is what settled it at 2.
  */
 const SAMPLES_PER_CELL = 2;
-/** Half the stroke width: a wobble narrower than the line cannot be seen, so it need not be kept. */
+/**
+ * How far a point may sit from the line through its neighbours before it is worth keeping, in
+ * render pixels. Chosen by measurement, not derived from STROKE_WIDTH: it drops ~40% of the points
+ * with nothing visible lost. An earlier version of this comment called it "half the stroke width",
+ * which was never true of these two values — half of 1.4 is 0.7 — and would have had anyone tuning
+ * STROKE_WIDTH expect this to track it.
+ */
 const SIMPLIFY_TOL = 0.5;
 const STROKE_WIDTH = 1.4;
 /** Off-white, the colour a contour the memory barely holds is drawn in. */
@@ -365,7 +371,7 @@ export const geometry: VectorSketch = ({ width: W, height: H, seed, accent }) =>
 		contour(reliability, W, H, PARAMS.GW * SAMPLES_PER_CELL, PARAMS.GH * SAMPLES_PER_CELL)
 	).map((line) => simplify(line, SIMPLIFY_TOL));
 
-	const [ar, ag, ab] = [1, 3, 5].map((i) => parseInt(accent.slice(i, i + 2), 16));
+	const [ar, ag, ab] = hexToRgb(accent);
 
 	return {
 		width: W,

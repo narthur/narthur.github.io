@@ -241,7 +241,55 @@ describe('hopfield geometry', () => {
 	it('fits in a fraction of the raster asset it replaces', () => {
 		// The shipped WebP was 38KB. This is not a micro-optimisation note: the whole reason to go
 		// vector was fidelity, and the size needs to not have quietly gone the wrong way to buy it.
+		//
+		// 30KB, not 40KB: the measured size is ~22KB, and a ceiling ABOVE the 38KB WebP would have
+		// let the size regress past the thing it is supposed to beat while still passing a test
+		// whose own comment says it guards that. 30KB leaves real headroom over 22 and still fails
+		// before the asset stops being a saving.
 		const svg = toSvg(geometry(args));
-		expect(svg.length).toBeLessThan(40_000);
+		expect(svg.length).toBeLessThan(30_000);
+	});
+
+	it('draws the same lattice at any render size', () => {
+		// The row count was once derived from the render width by keeping cells square, which gave
+		// 24 rows in a preview, 8 in a dev browser and 9 in the image that shipped — three pictures
+		// from one Sketch. PARAMS.GW/GH are constants now, so the lattice, and therefore the NUMBER
+		// of distinct contours, is a property of the simulation rather than of the canvas; only the
+		// coordinates scale.
+		//
+		// The raster suite had an equivalent guard and this change deleted it with `paint`. It is
+		// restored rather than dropped because a review agent reintroduced the original bug inside
+		// `geometry` and watched all 13 remaining tests pass. Mutation-checked in the same way:
+		// deriving GH from the height to keep cells square fails this.
+		const counts = (
+			[
+				[1280, 240],
+				[3440, 240],
+				[2048, 480]
+			] as [number, number][]
+		).map(([width, height]) => geometry({ ...args, width, height }).paths.length);
+
+		// Measured 76 / 77 / 76 — the ±1 is a contour grazing the canvas edge, not the lattice
+		// moving. A lattice that tracked the canvas would swing by much more than 15%.
+		const lo = Math.min(...counts);
+		const hi = Math.max(...counts);
+		expect((hi - lo) / lo).toBeLessThan(0.15);
+	});
+
+	it('scales its coordinates with the canvas even though the lattice does not', () => {
+		// The other half of the invariant above: a fixed lattice must not mean a fixed-size
+		// drawing. Without this, pinning the lattice could be "satisfied" by a Band that renders
+		// at one size and leaves the rest of a wider canvas blank.
+		const widest = (g: { paths: { d: string }[] }) =>
+			Math.max(
+				...g.paths.flatMap(({ d }) =>
+					d
+						.split(/[ML]/)
+						.slice(1)
+						.map((p) => Number(p.split(' ')[0]))
+				)
+			);
+		expect(widest(geometry({ ...args, width: 1280 }))).toBeLessThanOrEqual(1280);
+		expect(widest(geometry({ ...args, width: 3440 }))).toBeGreaterThan(3000);
 	});
 });

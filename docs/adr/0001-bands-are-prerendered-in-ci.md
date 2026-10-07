@@ -99,4 +99,12 @@ vector never starts it.
 The consequence is a second thing to keep working — two tracks, two renderers,
 two asset types — against one fewer thing to get wrong, since a vector Band has
 no second rasteriser to drift from: `pnpm dev` and the shipped page run the same
-function and emit the same bytes.
+function.
+
+They emit the same bytes for the site's current accent, which is the only case
+that ships. One input can differ: the build reads the `ACCENT` constant, while
+the dev page reads the live `--accent`, and `AccentPicker` rewrites that on
+every dev page so a candidate colour can be tried against a real one. So while
+the picker holds a non-default accent the dev Band is deliberately not the one
+that would ship — that is the picker doing its job, and it is the reason this
+paragraph does not say "byte for byte".

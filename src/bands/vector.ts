@@ -19,7 +19,7 @@ export type Point = [number, number];
 export type Field = (x: number, y: number) => number;
 
 /**
- * Marching squares: every place `field` crosses `level`, as unordered segments.
+ * Marching squares: every place `field` crosses 0.5, as unordered segments.
  *
  * Sampled on its own grid rather than on the field's underlying lattice, because the field between
  * lattice cells is not a straight line — `hopfield` smoothsteps it, deliberately, so that contours
@@ -35,9 +35,13 @@ export function contour(
 	width: number,
 	height: number,
 	nx: number,
-	ny: number,
-	level = 0.5
+	ny: number
 ): Point[][] {
+	// A constant rather than a parameter. It was a parameter with a default, and in the whole
+	// codebase and test suite nothing ever passed one — a field that wants a different threshold
+	// subtracts it instead, which is what every test here does. Add the parameter back beside the
+	// caller that needs it, rather than ahead of one.
+	const LEVEL = 0.5;
 	const sx = width / nx;
 	const sy = height / ny;
 	const f = new Float64Array((nx + 1) * (ny + 1));
@@ -49,7 +53,7 @@ export function contour(
 	// Where along an edge the crossing sits. The guard is for a flat edge, which cannot be crossed
 	// at all — it is only reachable through floating-point equality, and any value in range is as
 	// wrong as any other, so it returns the midpoint rather than a division by zero.
-	const cut = (a: number, b: number) => (a === b ? 0.5 : (level - a) / (b - a));
+	const cut = (a: number, b: number) => (a === b ? 0.5 : (LEVEL - a) / (b - a));
 
 	for (let j = 0; j < ny; j++) {
 		for (let i = 0; i < nx; i++) {
@@ -59,7 +63,7 @@ export function contour(
 			const br = f[(j + 1) * (nx + 1) + i + 1];
 			// Corners above the level, clockwise from top-left. 0 and 15 are wholly in or wholly out.
 			const key =
-				(tl > level ? 8 : 0) | (tr > level ? 4 : 0) | (br > level ? 2 : 0) | (bl > level ? 1 : 0);
+				(tl > LEVEL ? 8 : 0) | (tr > LEVEL ? 4 : 0) | (br > LEVEL ? 2 : 0) | (bl > LEVEL ? 1 : 0);
 			if (key === 0 || key === 15) continue;
 
 			const x0 = i * sx;
@@ -139,8 +143,9 @@ export function chain(segs: Point[][]): Point[][] {
  * Douglas-Peucker: drops every point that sits within `tol` pixels of the line it would otherwise
  * interpolate.
  *
- * At 0.5px — half the stroke width — this removes about 40% of the points with nothing visible
- * lost, because a deviation smaller than the line is wide cannot be seen. Iterative rather than
+ * At the 0.5px `hopfield` passes, this removes about 40% of the points with nothing visible
+ * lost, because a deviation narrower than the stroke cannot be seen. (0.5 is not half the stroke
+ * width — that would be 0.7 — it was picked by measurement.) Iterative rather than
  * recursive: a contour that runs the full width of the band is a few thousand points, and the
  * recursive form is depth-unbounded on exactly the long smooth runs this is for.
  */
@@ -204,6 +209,11 @@ export function toPathData(points: Point[]): string {
  * antialiasing on thin strokes — which would reintroduce exactly the hard-edged line this track
  * exists to avoid. The background is painted as a `rect` rather than left to the page so the file
  * is self-contained and can be opened on its own to judge it.
+ *
+ * Values are interpolated, not escaped, so `stroke` and `background` must be CSS colour values and
+ * `d` a path string. That holds by construction today — every producer builds them from numbers —
+ * and a Sketch that put arbitrary text in one would corrupt the document rather than escape it.
+ * Stated here because the types say `string`, which does not.
  */
 export function toSvg(g: BandGeometry): string {
 	const body = g.paths
