@@ -11,3 +11,12 @@
  * more than once, and the dev-only AccentPicker exists to try candidates against real pages.
  */
 export const ACCENT = '#8ded51';
+
+/**
+ * The page background a Band is always drawn on.
+ *
+ * Here rather than inlined because a vector Band paints it into the SVG itself, so that the file
+ * stands alone when opened to judge it — which means the literal would otherwise live in a shipped
+ * asset as well as in the stylesheet, with nothing tying the two together.
+ */
+export const BACKGROUND = '#0a0c10';

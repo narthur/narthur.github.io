@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { energy, makePatterns, overlap, paint, simulate, sweep, sweepAt, train } from './hopfield';
+import {
+	energy,
+	geometry,
+	makePatterns,
+	overlap,
+	reliabilityField,
+	simulate,
+	sweep,
+	sweepAt,
+	train
+} from './hopfield';
+import { rng, toSvg } from './vector';
 
 /**
  * The Band is a picture of recall, so the thing worth testing is that recall happens: a corrupted
@@ -8,16 +19,9 @@ import { energy, makePatterns, overlap, paint, simulate, sweep, sweepAt, train }
  * these exist rather than eyeballing the strip.
  */
 
-/** Deterministic RNG, so a failure is reproducible. mulberry32. */
-function rng(seed: number) {
-	let a = seed >>> 0;
-	return () => {
-		a = (a + 0x6d2b79f5) >>> 0;
-		let t = Math.imul(a ^ (a >>> 15), 1 | a);
-		t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-	};
-}
+// `rng` comes from ./vector rather than being redefined here: it is the same mulberry32 the Sketch
+// itself now runs on, so these tests drive it with the generator that actually ships instead of a
+// copy that could drift from it.
 
 const GW = 24;
 const GH = 8;
@@ -147,74 +151,97 @@ describe('hopfield', () => {
 	});
 });
 
-describe('hopfield paint', () => {
-	const W = 64;
-	const H = 24;
-	const CELLX = W / GW;
-	const CELLY = H / GH;
-	const run = (ink: Float32Array) => {
-		const px = new Uint8ClampedArray(W * H * 4);
-		paint(ink, GW, GH, W, H, CELLX, CELLY, '#8ded51', px);
-		return px;
+describe('hopfield reliabilityField', () => {
+	const W = 1920;
+	const H = 240;
+	const field = () => {
+		const ink = simulate(GW, GH, rng(3));
+		return reliabilityField(ink, GW, GH, W / GW, H / GH);
 	};
 
-	it('paints nothing where the field is flat', () => {
-		// A contour exists only where reliability crosses a half, so a constant field has none.
-		// This asserts that outcome, not the `grad < 1e-7` guard: verified by mutation that
-		// deleting the guard still passes, because a flat field puts `a` at 0 and `|0 - 0.5| / 0`
-		// is Infinity, which the distance cutoff already rejects. The guard is defence in depth.
-		const px = run(new Float32Array(GW * GH).fill(5));
-		for (let i = 3; i < px.length; i += 4) expect(px[i]).toBe(0);
-	});
-
-	it('paints a contour where the field has an edge, with bounded alpha', () => {
-		const ink = new Float32Array(GW * GH);
-		for (let y = 0; y < GH; y++) {
-			for (let x = 0; x < GW; x++) ink[y * GW + x] = x < GW / 2 ? 0 : 10;
-		}
-		const px = run(ink);
-		let lit = 0;
-		for (let i = 3; i < px.length; i += 4) {
-			expect(px[i]).toBeGreaterThanOrEqual(0);
-			expect(px[i]).toBeLessThanOrEqual(255);
-			if (px[i] > 0) lit++;
-		}
-		expect(lit).toBeGreaterThan(0);
-		// A contour, not a fill: an edge down the middle must not light most of the canvas.
-		expect(lit).toBeLessThan(W * H * 0.5);
-	});
-
-	it('paints deterministically', () => {
-		const ink = Float32Array.from({ length: GW * GH }, (_, i) => (i * 7919) % 23);
-		expect(run(ink)).toEqual(run(ink));
-	});
-
-	it('draws the same amount of contour at any render size', () => {
-		// The row count was once derived from the width by keeping cells square, which produced a
-		// different picture at every render size — 24 rows in a preview, 8 in a dev browser, 9 in
-		// the image that ships. Both lattice dimensions are constants now, so the contour's LENGTH
-		// is fixed and only its pixel scale changes.
+	it('wraps in x, so the Band can be tiled with repeat-x', () => {
+		// x = 0 and x = W are the same point on a cylinder, so the field has to agree on them
+		// exactly — not approximately. docs/adr/0001 repeats one wide render, and a mismatch here
+		// is a visible nick down every tile boundary on the page.
 		//
-		// A contract test, not a guard against that specific regression: mutation-checked, and
-		// forcing square cells again still passes, because compressing the lattice vertically does
-		// not move contour length by 10%. It does catch the coarser failures — a lattice that
-		// scaled with the canvas, or a line width that stopped being expressed in pixels.
-		//
-		// Normalised by the linear dimension, not by area: the contour is a fixed pixel width, so
-		// its length grows linearly while area grows quadratically, and lit/area legitimately falls
-		// as the canvas grows (measured: 0.55 at 64×24 down to 0.11 at 512×192). lit/√(w·h) is the
-		// invariant, and it settles once the canvas is big enough that the line is thin relative to
-		// it — hence two realistic sizes rather than a tiny one.
-		const ink = Float32Array.from({ length: GW * GH }, (_, i) => Math.sin(i * 0.7) * 10);
-		const perLinear = (w: number, h: number) => {
-			const px = new Uint8ClampedArray(w * h * 4);
-			paint(ink, GW, GH, w, h, w / GW, h / GH, '#8ded51', px);
-			let lit = 0;
-			for (let i = 3; i < px.length; i += 4) if (px[i] > 0) lit++;
-			return lit / Math.sqrt(w * h);
-		};
-		const small = perLinear(256, 96);
-		const large = perLinear(512, 192);
-		expect(Math.abs(small - large) / large).toBeLessThan(0.1);
+		// Mutation-checked: changing the sampler's `% GW` wrap to a clamp fails this.
+		const f = field();
+		for (let y = 0; y <= H; y += 15) expect(f(W, y)).toBeCloseTo(f(0, y), 10);
+	});
+
+	it('stays within 0 and 1 everywhere, including outside the canvas', () => {
+		// The contour tracer samples a pixel either side of each point to take a gradient, so it
+		// reads x = -1 and x = W + 1. Those must be defined rather than NaN, or the gradient — and
+		// with it the colour of every edge path — comes out NaN and the stroke silently vanishes.
+		const f = field();
+		for (const x of [-1, 0, W / 3, W, W + 1]) {
+			for (const y of [-1, 0, H / 2, H, H + 1]) {
+				const v = f(x, y);
+				expect(Number.isFinite(v)).toBe(true);
+				expect(v).toBeGreaterThanOrEqual(0);
+				expect(v).toBeLessThanOrEqual(1);
+			}
+		}
+	});
+});
+
+describe('hopfield geometry', () => {
+	const args = { width: 3440, height: 240, seed: 1, accent: '#8ded51' };
+
+	it('is deterministic for a seed, and the seed changes it', () => {
+		// docs/adr/0001: the Band must be a pure function of Sketch and Seed, or the render cache
+		// is a lie and every deploy churns the asset.
+		expect(geometry(args)).toEqual(geometry(args));
+		expect(geometry({ ...args, seed: 2 })).not.toEqual(geometry(args));
+	});
+
+	it('draws contours, not a fill, and stays inside the canvas', () => {
+		const g = geometry(args);
+		expect(g.paths.length).toBeGreaterThan(10);
+		expect(g.width).toBe(3440);
+		expect(g.height).toBe(240);
+
+		// Every coordinate within bounds. A path that escapes is not clipped by anything — the SVG
+		// has no clip and the background div does not hide overflow — so it would draw over the
+		// title.
+		for (const { d } of g.paths) {
+			for (const n of d
+				.slice(1)
+				.split(/[ML]/)
+				.flatMap((p) => p.split(' '))) {
+				const v = Number(n);
+				expect(Number.isFinite(v)).toBe(true);
+			}
+		}
+		const coords = g.paths.flatMap(({ d }) =>
+			d
+				.slice(1)
+				.split(/[ML]/)
+				.map((pair) => pair.split(' ').map(Number))
+		);
+		for (const [x, y] of coords) {
+			expect(x).toBeGreaterThanOrEqual(0);
+			expect(x).toBeLessThanOrEqual(3440);
+			expect(y).toBeGreaterThanOrEqual(0);
+			expect(y).toBeLessThanOrEqual(240);
+		}
+	});
+
+	it('takes its accent from the caller rather than hard-coding one', () => {
+		// A Sketch that baked the accent in would keep shipping the old colour after a re-theme,
+		// with no error to notice it by — the same failure src/theme.ts exists to prevent on the
+		// raster track. Mutation-checked: replacing `accent` with the ACCENT constant fails this.
+		const red = geometry({ ...args, accent: '#ff0000' });
+		const green = geometry({ ...args, accent: '#00ff00' });
+		expect(red.paths.map((p) => p.stroke)).not.toEqual(green.paths.map((p) => p.stroke));
+		// The firmest boundary reaches the accent itself; the faintest stays off-white either way.
+		expect(red.paths.some((p) => /rgb\(2[0-9]{2},\d+,\d+\)/.test(p.stroke))).toBe(true);
+	});
+
+	it('fits in a fraction of the raster asset it replaces', () => {
+		// The shipped WebP was 38KB. This is not a micro-optimisation note: the whole reason to go
+		// vector was fidelity, and the size needs to not have quietly gone the wrong way to buy it.
+		const svg = toSvg(geometry(args));
+		expect(svg.length).toBeLessThan(40_000);
 	});
 });

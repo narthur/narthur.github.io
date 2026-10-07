@@ -1,4 +1,4 @@
-// Renders a Band Sketch straight to a PNG, so it can be looked at while it is being written.
+// Renders a Band Sketch straight to a file, so it can be looked at while it is being written.
 //
 // This exists because the alternative is reloading a page and squinting, and that is genuinely
 // bad at it: the `hopfield` Sketch went through three versions judged that way, two of them wrong
@@ -8,43 +8,64 @@
 //
 //   node scripts/band-preview.mjs --sketch=hopfield --seeds=1,2,3
 //
-// Writes .band-preview.png in the repo root (gitignored) unless --out says otherwise.
+// A VECTOR Sketch writes .band-preview.svg (the first seed, the asset exactly as it would ship)
+// and .band-preview.html — every seed tiled at the size and repeat the post page uses, with a
+// title over it. Open the HTML: it is the only preview that shows the Band doing its actual job,
+// and because a vector Band has no second rasteriser, what it shows IS what ships.
 //
-// IMPORTANT: this is NOT the page's renderer, and it does not produce the page's image. It stands
-// in its own PRNG for p5's, so the same seed gives a different arrangement here than in the
-// browser. Use it to judge density, contrast, line weight and overall character — the things a
-// parameter controls — and use the dev picker in the browser to choose the actual Seed. For the
-// real shipped image see docs/adr/0001 and scripts/bands.mjs.
+// A RASTER Sketch writes .band-preview.png, the seeds stacked. That one is an approximation: it
+// stands in its own PRNG for p5's, so the same seed gives a different arrangement than the page.
+// Use it to judge density, contrast, line weight and overall character — the things a parameter
+// controls — and use the dev picker in the browser to choose the actual Seed. For the real shipped
+// image see docs/adr/0001 and scripts/bands.mjs.
+//
+// Both outputs are gitignored.
 
-// Sketches are imported as TypeScript directly: Node 22 strips types natively, and every Sketch
-// imports only `import type` from ./types, which erases completely — so no bundler is involved.
-// src/bands/index.ts is deliberately NOT used for this, because its extensionless re-exports are
-// a TypeScript convention Node's resolver does not follow; the sketch file is loaded by name.
+// The registry is imported rather than the Sketch file by name: it is what says which track a
+// Sketch takes, and looking the name up in it also rejects a typo'd `--sketch` by listing what is
+// actually registered. It loads here for the same reason scripts/bands.mjs can load it — every
+// specifier in it carries a `.ts`, which Node's resolver needs and TypeScript's does not.
 import { parseArgs } from 'node:util';
 import sharp from 'sharp';
+import { sketches, vectors } from '../src/bands/index.ts';
+import { toSvg } from '../src/bands/vector.ts';
+import { ACCENT, BACKGROUND } from '../src/theme.ts';
 
 const { values } = parseArgs({
 	options: {
 		sketch: { type: 'string', default: 'hopfield' },
 		seeds: { type: 'string', default: '1,2,3' },
-		width: { type: 'string', default: '1280' },
-		height: { type: 'string', default: '240' },
-		out: { type: 'string', default: '.band-preview.png' }
+		width: { type: 'string' },
+		height: { type: 'string' },
+		out: { type: 'string' }
 	}
 });
 
+const vector = vectors[values.sketch];
+const raster = sketches[values.sketch];
+if (!vector && !raster) {
+	throw new Error(
+		`band-preview: no Sketch named ${JSON.stringify(values.sketch)}. Registered: ` +
+			`${[...Object.keys(vectors), ...Object.keys(sketches)].sort().join(', ')}`
+	);
+}
+
+// A vector Band defaults to the width scripts/bands.mjs ships, because for a vector Band the width
+// is not a preview convenience — it is the tiling period, and judging the repeat at 1280 would be
+// judging an image the page never shows. A raster preview has no such constraint.
+const W = Number(values.width ?? (vector ? 3440 : 1280));
+const H = Number(values.height ?? 240);
+
 // Validated rather than trusted, because every failure mode here is silent or misdirecting.
-// `--width=0` makes paint's pixel loops run zero times, and sharp then rejects the empty buffer with
-// "Input Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A
-// non-numeric seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence while
-// the log line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
+// `--width=0` makes paint's pixel loops run zero times, and sharp then rejects the empty buffer
+// with "Input Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A
+// non-numeric seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence
+// while the log line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
 //
 // Integer, not merely positive: `--width=1280.5` survives createImageData, because `w * h * 4` is
 // still a whole number, and dies 100 lines later as "Expected width, height and channels for raw
 // pixel input" — which names neither the flag nor the value. Reproduced before this line was
 // tightened; `Number.isInteger` subsumes the finite check, so NaN and Infinity are still caught.
-const W = Number(values.width);
-const H = Number(values.height);
 for (const [flag, v] of [
 	['--width', W],
 	['--height', H]
@@ -66,6 +87,57 @@ const seeds = values.seeds.split(',').map((s) => {
 	return n;
 });
 if (!seeds.length) throw new Error('band-preview: --seeds must name at least one seed');
+
+const write = (name, body) =>
+	import('node:fs/promises').then(({ writeFile }) => writeFile(name, body));
+
+if (vector) {
+	const rendered = seeds.map((seed) => ({
+		seed,
+		svg: toSvg(vector({ width: W, height: H, seed, accent: ACCENT }))
+	}));
+
+	await write(values.out ?? '.band-preview.svg', rendered[0].svg);
+
+	// Shown the way writing/[slug].astro shows it — a repeat-x background at a locked height, with
+	// a title bottom-aligned over it — because the thing being judged is whether the Band works
+	// UNDER a title at a real viewport width, which a bare strip cannot tell you. The seed is
+	// printed beside each so a choice can be read straight off the page.
+	// encodeURIComponent is the only escaping needed and it is doing two jobs: it makes the SVG a
+	// legal URL, and on the way it encodes `"`, `<`, `>` and `&`, which is what keeps the value
+	// inside the HTML attribute it is embedded in. A second HTML-escape pass here would be dead
+	// code, since none of those characters can survive to reach it.
+	const body = rendered
+		.map(
+			({ seed, svg }) =>
+				`<section><p class="seed">seed ${seed} · ${(svg.length / 1024).toFixed(0)} KB</p>` +
+				`<div class="band" style="background-image:url(&quot;data:image/svg+xml,${encodeURIComponent(
+					svg
+				)}&quot;)"><h1>Prepare for Interviews using Custom Podcast Episodes</h1></div></section>`
+		)
+		.join('');
+	await write(
+		'.band-preview.html',
+		`<!doctype html><meta charset="utf-8"><title>band preview · ${values.sketch}</title>` +
+			`<style>` +
+			`body{margin:0;background:${BACKGROUND};color:#e8e9ec;` +
+			`font:16px/1.5 ui-sans-serif,system-ui,sans-serif}` +
+			`section{margin:0 0 3rem}` +
+			`.seed{margin:0 0 .25rem;padding:0 1.5rem;font:12px ui-monospace,monospace;color:#6b7280}` +
+			// auto 240px and repeat-x: the same two rules the post page sets, so the tiling period
+			// and the seam land exactly where they will in production.
+			`.band{height:240px;background-size:auto 240px;background-repeat:repeat-x;` +
+			`background-position:center;display:flex;align-items:flex-end;padding:0 1.5rem}` +
+			`h1{margin:0 0 1rem;font-size:2.25rem;font-weight:500;letter-spacing:-.02em}` +
+			`</style>${body}`
+	);
+	process.stdout.write(
+		`${rendered.map((r) => `rendered ${values.sketch} seed ${r.seed}`).join('\n')}\n` +
+			`wrote ${values.out ?? '.band-preview.svg'} and .band-preview.html — open the HTML\n`
+	);
+} else {
+	await rasterPreview();
+}
 
 /** mulberry32 — deterministic, so a preview is reproducible even though it is not p5's sequence. */
 function rng(seed) {
@@ -116,57 +188,53 @@ function fakeP5(rnd, captured) {
 	});
 }
 
-const { ACCENT } = await import('../src/theme.ts');
-// Sketches read --accent off the document; the real render page declares it from this same
-// constant, so resolving it here keeps the preview honest after a re-theme.
-globalThis.document = { documentElement: {} };
-globalThis.getComputedStyle = () => ({ getPropertyValue: () => ACCENT });
+async function rasterPreview() {
+	// Sketches read --accent off the document; the real render page declares it from this same
+	// constant, so resolving it here keeps the preview honest after a re-theme.
+	globalThis.document = { documentElement: {} };
+	globalThis.getComputedStyle = () => ({ getPropertyValue: () => ACCENT });
 
-let sketch;
-try {
-	({ default: sketch } = await import(`../src/bands/${values.sketch}.ts`));
-} catch (e) {
-	throw new Error(`band-preview: could not load sketch "${values.sketch}": ${e.message}`);
-}
-
-const GAP = 8;
-const tiles = [];
-for (const seed of seeds) {
-	const captured = {};
-	await sketch(fakeP5(rng(seed), captured), { width: W, height: H, density: 1, seed });
-	if (!captured.img) {
-		throw new Error(
-			`band-preview: "${values.sketch}" drew nothing via putImageData at seed ${seed}. ` +
-				`Sketches that draw with p5 primitives instead are not previewable this way yet.`
+	const GAP = 8;
+	const tiles = [];
+	for (const seed of seeds) {
+		const captured = {};
+		await raster(fakeP5(rng(seed), captured), { width: W, height: H, density: 1, seed });
+		if (!captured.img) {
+			throw new Error(
+				`band-preview: "${values.sketch}" drew nothing via putImageData at seed ${seed}. ` +
+					`Sketches that draw with p5 primitives instead are not previewable this way yet.`
+			);
+		}
+		// Flatten onto the page background. The Band is drawn on BACKGROUND and alpha is most of what
+		// a Sketch is tuning, so compositing against black would misreport every faint mark.
+		const px = captured.img.data;
+		const [br, bg, bb] = [1, 3, 5].map((i) => parseInt(BACKGROUND.slice(i, i + 2), 16));
+		const flat = Buffer.alloc(W * H * 3);
+		for (let i = 0; i < W * H; i++) {
+			const a = px[i * 4 + 3] / 255;
+			flat[i * 3] = px[i * 4] * a + br * (1 - a);
+			flat[i * 3 + 1] = px[i * 4 + 1] * a + bg * (1 - a);
+			flat[i * 3 + 2] = px[i * 4 + 2] * a + bb * (1 - a);
+		}
+		tiles.push(
+			await sharp(flat, { raw: { width: W, height: H, channels: 3 } })
+				.png()
+				.toBuffer()
 		);
+		process.stdout.write(`rendered ${values.sketch} seed ${seed}\n`);
 	}
-	// Flatten onto the page background. The Band is drawn on #0a0c10 and alpha is most of what a
-	// Sketch is tuning, so compositing against black would misreport every faint mark.
-	const px = captured.img.data;
-	const flat = Buffer.alloc(W * H * 3);
-	for (let i = 0; i < W * H; i++) {
-		const a = px[i * 4 + 3] / 255;
-		flat[i * 3] = px[i * 4] * a + 0x0a * (1 - a);
-		flat[i * 3 + 1] = px[i * 4 + 1] * a + 0x0c * (1 - a);
-		flat[i * 3 + 2] = px[i * 4 + 2] * a + 0x10 * (1 - a);
-	}
-	tiles.push(
-		await sharp(flat, { raw: { width: W, height: H, channels: 3 } })
-			.png()
-			.toBuffer()
-	);
-	process.stdout.write(`rendered ${values.sketch} seed ${seed}\n`);
-}
 
-await sharp({
-	create: {
-		width: W,
-		height: H * tiles.length + GAP * (tiles.length - 1),
-		channels: 3,
-		background: '#000000'
-	}
-})
-	.composite(tiles.map((input, i) => ({ input, top: i * (H + GAP), left: 0 })))
-	.png()
-	.toFile(values.out);
-process.stdout.write(`wrote ${values.out}\n`);
+	const out = values.out ?? '.band-preview.png';
+	await sharp({
+		create: {
+			width: W,
+			height: H * tiles.length + GAP * (tiles.length - 1),
+			channels: 3,
+			background: '#000000'
+		}
+	})
+		.composite(tiles.map((input, i) => ({ input, top: i * (H + GAP), left: 0 })))
+		.png()
+		.toFile(out);
+	process.stdout.write(`wrote ${out}\n`);
+}

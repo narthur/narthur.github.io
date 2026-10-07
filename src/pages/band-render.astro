@@ -37,7 +37,7 @@ const names = Object.keys(sketches);
 		<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
 		<script>
 			import { mountBand } from '../bands/harness';
-			import { sketches } from '../bands';
+			import { sketches, vectors } from '../bands';
 
 			const params = new URLSearchParams(location.search);
 			const host = document.getElementById('band')!;
@@ -52,7 +52,13 @@ const names = Object.keys(sketches);
 
 			if (!sketch) {
 				// Fail loudly: a silent blank canvas here would be captured and shipped as a Band.
-				window.__bandError = `unknown sketch: ${params.get('sketch')}`;
+				// A vector Sketch is named separately, because it is not unknown — it is one this
+				// page cannot draw, and scripts/bands.mjs should never have routed it here.
+				const name = params.get('sketch') ?? '';
+				window.__bandError =
+					name in vectors
+						? `${name} is a vector Sketch; it renders without a browser, not here`
+						: `unknown sketch: ${name}`;
 			} else {
 				mountBand(sketch, {
 					host,

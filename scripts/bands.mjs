@@ -16,6 +16,10 @@ import { extname, join } from 'node:path';
 import { load } from 'js-yaml';
 import { chromium } from 'playwright';
 import sharp from 'sharp';
+// `.ts`, and loaded by path: Node 22 strips types natively, but its resolver does not follow the
+// extensionless specifiers TypeScript allows. These erase to nothing a bundler is needed for.
+import { toSvg } from '../src/bands/vector.ts';
+import { ACCENT } from '../src/theme.ts';
 
 const DIST = 'dist';
 const POSTS = 'src/content/posts';
@@ -149,16 +153,45 @@ async function capture(page, { sketch, seed }) {
 	return Buffer.from(dataUrl.split(',')[1], 'base64');
 }
 
+/**
+ * Writes a vector Band: run the Sketch in this process, serialise, done.
+ *
+ * No browser, no screenshot, no resize, no encode — and no cache either. The whole thing is about
+ * a second of arithmetic, where a raster Band is a Chromium launch, so a cache entry would cost
+ * more to maintain than it saves.
+ */
+async function renderVector(post, sketch) {
+	const started = Date.now();
+	const svg = toSvg(sketch({ width: WIDTH, height: HEIGHT, seed: post.seed, accent: ACCENT }));
+	await mkdir(join(DIST, 'writing', post.slug), { recursive: true });
+	await writeFile(join(DIST, 'writing', post.slug, 'band.svg'), svg);
+	console.log(
+		`bands: ${post.slug} (${post.sketch}/${post.seed}) ${Date.now() - started}ms ` +
+			`svg ${(svg.length / 1024).toFixed(0)}KB`
+	);
+}
+
 async function main() {
 	const posts = await bandedPosts();
 	if (!posts.length) return console.log('bands: no posts ask for one');
+
+	// Vector Bands first, and separately: they need none of the apparatus below, so a site whose
+	// Sketches are all vector never launches Chromium at all.
+	const { vectors } = await import('../src/bands/index.ts');
+	const raster = [];
+	for (const post of posts) {
+		const vector = vectors[post.sketch];
+		if (vector) await renderVector(post, vector);
+		else raster.push(post);
+	}
+	if (!raster.length) return;
 
 	await mkdir(CACHE, { recursive: true });
 	const server = await serve(DIST, 4178);
 	const browser = await chromium.launch();
 	const page = await browser.newPage({ deviceScaleFactor: SCALE });
 
-	for (const post of posts) {
+	for (const post of raster) {
 		const id = await fingerprint(post.sketch, post.seed);
 		const cached = join(CACHE, `${id}.png`);
 		let png;

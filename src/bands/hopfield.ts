@@ -1,8 +1,9 @@
-// The `.ts` extension is required, not stylistic: scripts/band-preview.mjs imports this Sketch
-// into plain Node, which strips types but will not resolve an extensionless specifier. Dropping it
-// typechecks and builds fine and breaks only the preview tool, silently.
-import { ACCENT } from '../theme.ts';
-import type { P5, SketchArgs } from './types';
+// The `.ts` extensions are required, not stylistic: scripts/bands.mjs and scripts/band-preview.mjs
+// both import this Sketch into plain Node, which strips types but will not resolve an extensionless
+// specifier. Dropping one typechecks and builds fine and breaks only those two, silently.
+import { BACKGROUND } from '../theme.ts';
+import type { VectorSketch } from './types';
+import { chain, contour, rng, simplify, toPathData } from './vector.ts';
 
 /**
  * Associative recall — a Hopfield network remembering one pattern out of noise, repeatedly.
@@ -200,12 +201,11 @@ function shuffled(n: number, rnd: () => number): Int32Array {
 }
 
 /**
- * Every knob the image has. Each value below was chosen by rendering the Sketch to a PNG and
- * looking at it (`pnpm band-preview`), not by reloading a page and squinting — which produced two
- * bad versions first. That tool captures the default export's buffer through a fake p5; it does
- * not call `simulate` or `paint`, so nothing here needs to stay exported on its account.
+ * Every knob the image has. Each value below was chosen by rendering the Sketch and looking at it
+ * (`pnpm band-preview`), not by reloading a page and squinting — which produced two bad versions
+ * first.
  *
- * The split between `simulate` and `paint` earns its place on its own terms: the simulation is
+ * The split between `simulate` and the drawing earns its place on its own terms: the simulation is
  * what the tests can assert about, and the two have been rewritten independently of each other.
  */
 export const PARAMS = {
@@ -279,22 +279,20 @@ export function simulate(GW: number, GH: number, rnd: () => number): Float32Arra
 	return ink;
 }
 
-/** Paints an ink field into RGBA at W×H. Separate from `simulate` so the preview can call both. */
-export function paint(
+/**
+ * The continuous field the contour is traced from: how reliably the memory held each point, 0 to 1.
+ *
+ * Its own function because it is the only thing the simulation and the drawing share, and because
+ * the two properties that matter about it are assertable on their own — it is C1 (so contours
+ * curve rather than turning a right angle every cell) and it wraps in x (so the Band tiles).
+ */
+export function reliabilityField(
 	ink: Float32Array,
 	GW: number,
 	GH: number,
-	W: number,
-	H: number,
 	CELLX: number,
-	CELLY: number,
-	accent: string,
-	px: Uint8ClampedArray
-) {
-	const ar = parseInt(accent.slice(1, 3), 16);
-	const ag = parseInt(accent.slice(3, 5), 16);
-	const ab = parseInt(accent.slice(5, 7), 16);
-
+	CELLY: number
+): (x: number, y: number) => number {
 	// Stretch to the range the run actually produced rather than to RUNS × SWEEPS. How confidently
 	// a crowded net recalls varies with the seed, so a fixed ceiling makes some seeds wash out pale
 	// and others clip to a slab. Percentiles rather than min/max so one extreme cell cannot set the
@@ -308,8 +306,7 @@ export function paint(
 	// patterns are built with. Sampling nearest-neighbour instead gives hard 30px squares, which
 	// reads as a chart rather than something that settled.
 	const at = (gx: number, gy: number) => ink[gy * GW + (((gx % GW) + GW) % GW)];
-	/** How reliably the memory held this point, 0 to 1, bilinear between lattice cells. */
-	const reliability = (x: number, y: number) => {
+	return (x: number, y: number) => {
 		const fy = Math.min(GH - 1, Math.max(0, y / CELLY - 0.5));
 		const y0 = Math.floor(fy);
 		const y1 = Math.min(GH - 1, y0 + 1);
@@ -327,61 +324,82 @@ export function paint(
 			(at(x0, y1) * (1 - tx) + at(x0 + 1, y1) * tx) * ty;
 		return Math.min(1, Math.max(0, (v - lo) / span));
 	};
-
-	// Draw the net's UNCERTAINTY, not its answer: the boundary where reliability crosses a half,
-	// between what the memory holds and what it does not. Painting confidence instead fills half
-	// the canvas with solid accent, which is the camouflage an earlier version was.
-	//
-	// The contour is found analytically rather than by shading every cell near the threshold.
-	// Shading gives a line whose width is set by the lattice — about one cell, which is ~28 screen
-	// pixels on a wide canvas, and reads as fuzzy however the ramp is tuned. Dividing the distance
-	// from the threshold by the local gradient converts it to a distance in PIXELS, so the line
-	// holds a fixed weight at any lattice size or render width and the softness is one pixel of
-	// antialiasing rather than half a cell of blur.
-	const HALF = 0.7; // half the line weight, in pixels
-	const FEATHER = 1.1; // antialiasing falloff, in pixels
-	for (let y = 0; y < H; y++) {
-		for (let x = 0; x < W; x++) {
-			const a = reliability(x, y);
-			// Central differences, so the gradient belongs to the same interpolated field drawn.
-			const gx = (reliability(x + 1, y) - reliability(x - 1, y)) / 2;
-			const gy = (reliability(x, y + 1) - reliability(x, y - 1)) / 2;
-			const grad = Math.hypot(gx, gy);
-			// No contour passes through a flat region at all; without this guard such pixels divide
-			// by ~0 and the whole interior lights up.
-			if (grad < 1e-7) continue;
-			const dist = Math.abs(a - 0.5) / grad;
-			if (dist > HALF + FEATHER) continue;
-			const cover = 1 - Math.max(0, (dist - HALF) / FEATHER);
-			// A steeper boundary is one the memory holds more sharply, so the gradient doubles as a
-			// hierarchy: firm edges take the accent, vague ones stay off-white. Without it every
-			// line is identical and the Band reads as a uniform mesh rather than a system.
-			// Scaled by the cell size so it measures change per LATTICE CELL, not per pixel. Per
-			// pixel it is a function of render width, so the same Band would come out all accent at
-			// one size and all off-white at another. Cells are not square, so this uses their mean.
-			const t = Math.min(1, (grad * ((CELLX + CELLY) / 2)) / 1.4);
-			const o = (y * W + x) * 4;
-			px[o] = 232 + (ar - 232) * t;
-			px[o + 1] = 233 + (ag - 233) * t;
-			px[o + 2] = 236 + (ab - 236) * t;
-			px[o + 3] = Math.min(255, cover * 245);
-		}
-	}
 }
 
-// `density` is unused: the Harness has already folded it into width/height, and the cell size is
-// derived from those, so every mark scales with the canvas without consulting it.
-export default function hopfield(p: P5, { width: W, height: H }: SketchArgs) {
+/**
+ * Samples per lattice cell when tracing. The field curves inside a cell, so one sample per cell
+ * would straighten it back out; 4 moved the point count from 1,500 to 2,200 and changed nothing
+ * visible, which is what settled it at 2.
+ */
+const SAMPLES_PER_CELL = 2;
+/** Half the stroke width: a wobble narrower than the line cannot be seen, so it need not be kept. */
+const SIMPLIFY_TOL = 0.5;
+const STROKE_WIDTH = 1.4;
+/** Off-white, the colour a contour the memory barely holds is drawn in. */
+const FAINT = [232, 233, 236];
+
+/**
+ * The Band as geometry.
+ *
+ * Draws the net's UNCERTAINTY, not its answer: the boundary where reliability crosses a half,
+ * between what the memory holds and what it does not. Painting confidence instead fills half the
+ * canvas with solid accent, which is the camouflage an earlier version was.
+ *
+ * This replaced a per-pixel rasteriser that found the same contour analytically — distance from
+ * the threshold over the local gradient — and the geometry it produces is the same curve. What
+ * changed is that the curve is no longer flattened into pixels at build time, so nothing downstream
+ * can thin it: the raster asset lost ~97% of its line amplitude to a 2x downscale followed by a
+ * lossy encode, measured, which is the whole reason this exists.
+ */
+export const geometry: VectorSketch = ({ width: W, height: H, seed, accent }) => {
 	// Both cell dimensions are just the canvas spread over a FIXED lattice, so the pattern reads the
-	// same at any render size and the cells grow instead. Neither GW nor GH is derived from the
-	// canvas — deriving the row count from the width is the bug PARAMS.GH describes.
+	// same at any size and the cells grow instead. Neither GW nor GH is derived from the canvas —
+	// deriving the row count from the width is the bug PARAMS.GH describes.
 	const CELLX = W / PARAMS.GW;
 	const CELLY = H / PARAMS.GH;
 
-	const ink = simulate(PARAMS.GW, PARAMS.GH, () => p.random());
-	const accent =
-		getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || ACCENT;
-	const img = p.drawingContext.createImageData(W, H);
-	paint(ink, PARAMS.GW, PARAMS.GH, W, H, CELLX, CELLY, accent, img.data);
-	p.drawingContext.putImageData(img, 0, 0);
-}
+	const ink = simulate(PARAMS.GW, PARAMS.GH, rng(seed));
+	const reliability = reliabilityField(ink, PARAMS.GW, PARAMS.GH, CELLX, CELLY);
+
+	const lines = chain(
+		contour(reliability, W, H, PARAMS.GW * SAMPLES_PER_CELL, PARAMS.GH * SAMPLES_PER_CELL)
+	).map((line) => simplify(line, SIMPLIFY_TOL));
+
+	const [ar, ag, ab] = [1, 3, 5].map((i) => parseInt(accent.slice(i, i + 2), 16));
+
+	return {
+		width: W,
+		height: H,
+		background: BACKGROUND,
+		strokeWidth: STROKE_WIDTH,
+		paths: lines.map((line) => {
+			// A steeper boundary is one the memory holds more sharply, so the gradient doubles as a
+			// hierarchy: firm edges take the accent, vague ones stay off-white. Without it every line
+			// is identical and the Band reads as a uniform mesh rather than a system.
+			//
+			// Averaged along the whole contour, where the raster version evaluated it per pixel. That
+			// is a real coarsening: a line that stiffens halfway along now takes one colour for its
+			// whole length. It is also the better reading of the same idea — the hierarchy belongs to
+			// a boundary, which is a thing the net has, rather than to a pixel, which is not.
+			let total = 0;
+			for (const [x, y] of line) {
+				// Central differences, so the gradient belongs to the same interpolated field traced.
+				const gx = (reliability(x + 1, y) - reliability(x - 1, y)) / 2;
+				const gy = (reliability(x, y + 1) - reliability(x, y - 1)) / 2;
+				total += Math.hypot(gx, gy);
+			}
+			// Scaled by the cell size so it measures change per LATTICE CELL, not per pixel. Per pixel
+			// it is a function of render width, so the same Band would come out all accent at one size
+			// and all off-white at another. Cells are not square, so this uses their mean.
+			const t = Math.min(1, ((total / line.length) * ((CELLX + CELLY) / 2)) / 1.4);
+			const mix = (from: number, to: number) => Math.round(from + (to - from) * t);
+			return {
+				d: toPathData(line),
+				stroke: `rgb(${mix(FAINT[0], ar)},${mix(FAINT[1], ag)},${mix(FAINT[2], ab)})`,
+				// Constant, as it was in the raster: there every contour reached the same alpha at its
+				// centre and only the antialiasing varied. Hierarchy is carried by colour alone.
+				opacity: 245 / 255
+			};
+		})
+	};
+};

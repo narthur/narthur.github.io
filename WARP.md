@@ -22,10 +22,14 @@ pnpm test          # vitest, single run
 pnpm lint          # prettier --check + eslint
 pnpm format        # prettier --write
 
-# Renders a Band Sketch to .band-preview.png without a browser, for writing one.
-# Its arrangement differs from the page (own PRNG), so tune parameters with it and
-# still pick the Seed in the dev picker.
-# No `--` before the flags: pnpm 10 forwards them as-is and treats `--` as a positional.
+# Renders a Band Sketch without a browser, for writing one. No `--` before the
+# flags: pnpm 10 forwards them as-is and treats `--` as a positional.
+#
+#   vector Sketch -> .band-preview.svg + .band-preview.html. Open the HTML: it tiles
+#     each seed at the size and repeat the post page uses, with a title over it, and
+#     is byte-for-byte what ships.
+#   raster Sketch -> .band-preview.png, seeds stacked. An approximation — its own
+#     PRNG, so tune parameters with it and still pick the Seed in the dev picker.
 pnpm band-preview --sketch=hopfield --seeds=1,2,3
 ```
 
@@ -74,13 +78,22 @@ Astro needs Node >= 22.19.
 
 Pure logic modules are tested; markup is not, and there is deliberately no
 component-test or e2e harness. Currently that means `src/uses/filter.ts`
-(tag/category functions), `src/work/*` (chart, commits, taskratchet) and
-`src/bands/hopfield.ts` (the Band simulation). Use `pnpm test` (single run)
+(tag/category functions), `src/work/*` (chart, commits, taskratchet),
+`src/bands/hopfield.ts` (the Band simulation and its geometry) and
+`src/bands/vector.ts` (contour tracing and SVG). Use `pnpm test` (single run)
 rather than watch mode.
 
-A Band Sketch is worth testing despite drawing pixels: its failures are silent —
+A Band Sketch is worth testing despite being a picture: its failures are silent —
 a net that never settles still renders a plausible-looking wash — so the suite
 asserts the invariants instead of relying on someone glancing at the strip.
+`vector.ts` is tested against fields whose contour is known in closed form, a
+circle and a plane, because "the picture changed" says nothing about whether the
+geometry is right while "the circle came out round" does.
+
+Where a test's comment claims it catches a particular regression, that claim has
+been checked by making the regression and watching the test fail. If a test
+asserts a contract but does not actually catch the mutation, its comment says so
+rather than implying coverage it does not have.
 
 ## Common gotchas
 

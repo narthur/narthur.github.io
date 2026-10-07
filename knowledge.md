@@ -158,12 +158,21 @@ in the Markdown so they keep explicit dimensions; follow the same pattern for
 new images.
 
 A post can instead open on a **Band**: a generative strip behind its title, drawn
-by a p5 Sketch in `src/bands/` and named from frontmatter as
-`band: { sketch, seed }`. `pnpm build` renders it with headless Chromium and
-writes one tiling WebP per post, so the page carries a background-image and no
-JavaScript; `pnpm dev` runs the Sketch live instead, with a picker that chooses a
-Seed and copies the frontmatter line. `CONTEXT.md` defines the vocabulary and
-ADR 0001 says why a browser is in the deploy.
+by a Sketch in `src/bands/` and named from frontmatter as
+`band: { sketch, seed }`. Either way `pnpm build` writes one tiling asset per
+post and the page carries a background-image and no JavaScript; `pnpm dev` shows
+it live, with a picker that chooses a Seed and copies the frontmatter line.
+`CONTEXT.md` defines the vocabulary and ADR 0001 says why a browser is in the
+deploy.
+
+There are **two kinds of Sketch**, and `src/bands/index.ts` is what says which a
+name is — `sketches` for raster, `vectors` for vector. A **raster** Sketch draws
+pixels with p5, so rendering it needs headless Chromium, and it ships as WebP. A
+**vector** Sketch returns geometry, runs in plain Node with no browser at all,
+and ships as SVG. Prefer vector unless the image is genuinely a field of pixels
+the way `trails` is: a raster Band is resized and lossily encoded on its way to
+the reader, which erases anything close to a pixel wide — measured at 97% of the
+line amplitude on `hopfield` before it moved.
 
 A post can also carry an **Embed**: an interactive piece (a p5.js sketch, say) the reader
 actually runs. It is a standalone HTML
