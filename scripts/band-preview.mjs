@@ -33,19 +33,24 @@ const { values } = parseArgs({
 	}
 });
 
-// Validated rather than trusted, because both failure modes are silent or misdirecting. `--width=0`
-// makes paint's pixel loops run zero times, and sharp then rejects the empty buffer with "Input
-// Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A non-numeric
-// seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence while the log
-// line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
+// Validated rather than trusted, because every failure mode here is silent or misdirecting.
+// `--width=0` makes paint's pixel loops run zero times, and sharp then rejects the empty buffer with
+// "Input Buffer is empty" from inside its own constructor, pointing nowhere near the flag. A
+// non-numeric seed is worse: `NaN >>> 0` is 0, so mulberry32 quietly renders seed 0's sequence while
+// the log line reads "seed NaN" — in a tool whose whole job is comparing seeds side by side.
+//
+// Integer, not merely positive: `--width=1280.5` survives createImageData, because `w * h * 4` is
+// still a whole number, and dies 100 lines later as "Expected width, height and channels for raw
+// pixel input" — which names neither the flag nor the value. Reproduced before this line was
+// tightened; `Number.isInteger` subsumes the finite check, so NaN and Infinity are still caught.
 const W = Number(values.width);
 const H = Number(values.height);
 for (const [flag, v] of [
 	['--width', W],
 	['--height', H]
 ]) {
-	if (!Number.isFinite(v) || v <= 0) {
-		throw new Error(`band-preview: ${flag} must be a positive number, got ${JSON.stringify(v)}`);
+	if (!Number.isInteger(v) || v <= 0) {
+		throw new Error(`band-preview: ${flag} must be a positive integer, got ${JSON.stringify(v)}`);
 	}
 }
 
