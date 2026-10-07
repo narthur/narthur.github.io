@@ -63,3 +63,48 @@ images. That is why the key covers the p5 version and the render page too, and
 why the accent is a shared constant rather than a token read off whatever page
 happens to be rendering: a Sketch that silently reads nothing would freeze every
 Band at the old colour after a re-theme.
+
+## Amendment, 2026-10-07: a second track, for Sketches that are curves
+
+The decision above still holds for a Band that is a field of pixels. It does not
+hold for one that is a set of curves, because the pipeline it describes destroys
+curves — which was not known when it was written.
+
+Measured on `hopfield`, whose contours are 1.4px wide: the Sketch draws them at
+device resolution, the render is then resized 2:1 (`SCALE`), and the result is
+encoded at `quality: 70`. The resize halves a 1.4px line to 0.7px, and a line
+narrower than a pixel cannot keep its amplitude through an area average; WebP
+then treats what is left as noise and spreads it wider and fainter still. Median
+brightness of a lit pixel, out of 255: **158** as drawn, **50** after the resize,
+**5** after the encode. The shipped asset measured 7. Lossless encoding recovers
+to 50 and q95 to 41, so the encoder is the larger multiplier, but the resize is
+the cause — it is what creates the sub-pixel line the encoder then erases.
+
+So a **vector track**: a Sketch may instead export `geometry`, returning paths
+rather than writing pixels. `src/bands/index.ts` holds the two registries and is
+the only place that says which track a name takes. A vector Band is a pure
+function of size, Seed and accent, so it runs in plain Node — no DOM, no p5, no
+browser, no screenshot, no resize, no encode — and ships as SVG the browser
+antialiases at the device's own resolution. `hopfield` is 7KB gzipped against
+38KB for the WebP it replaced.
+
+**This does not reverse the rejection of "dropping p5" above.** That option was
+rejected to keep the full p5 API available for Sketches not yet written, and
+that reason is untouched: `sketches` and Chromium remain, `trails` still renders
+through them, and a new Sketch can still be written against p5. What changed is
+that a Sketch which does not need p5 is no longer made to pay for it. Chromium
+launches only if some post wants a raster Band; a site whose Sketches are all
+vector never starts it.
+
+The consequence is a second thing to keep working — two tracks, two renderers,
+two asset types — against one fewer thing to get wrong, since a vector Band has
+no second rasteriser to drift from: `pnpm dev` and the shipped page run the same
+function.
+
+They emit the same bytes for the site's current accent, which is the only case
+that ships. One input can differ: the build reads the `ACCENT` constant, while
+the dev page reads the live `--accent`, and `AccentPicker` rewrites that on
+every dev page so a candidate colour can be tried against a real one. So while
+the picker holds a non-default accent the dev Band is deliberately not the one
+that would ship — that is the picker doing its job, and it is the reason this
+paragraph does not say "byte for byte".

@@ -30,4 +30,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # Band preview renders (scripts/band-preview.mjs)
-.band-*.png
+.band-preview.*

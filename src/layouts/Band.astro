@@ -8,19 +8,43 @@
 //
 // Positioned by the wrapper in `writing/[slug].astro`, which bottom-aligns the title over it.
 import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
+import { resolveSketch } from '../bands';
 
 export type Props = { sketch: string; seed: number };
 const { sketch, seed } = Astro.props;
+
+// A vector Sketch needs no p5, so the CDN tag below is skipped for one. That is not just tidiness:
+// the tag is `is:inline` with an integrity hash, so it blocks render on a third-party request this
+// page would otherwise make for nothing.
+//
+// Through `resolveSketch`, like every other consumer. This line was `sketch in vectors`, and the
+// frontmatter was missed when the rest of the file moved off raw lookups: `in` reaches the
+// prototype, so `sketch: constructor` — which the content schema accepts, it is only `z.string()`
+// — made this true and dropped the p5 tag for a Sketch on neither track.
+const isVector = resolveSketch(sketch)?.track === 'vector';
 ---
 
 {/* Breaks out of the page column to full width: the column is `mx-auto`, so its centre is the
-    page's centre and translating half its own width off that lands it flush to both edges. */}
+    page's centre and translating half its own width off that lands it flush to both edges.
+
+    A raster Sketch appends a canvas here and that canvas supplies the width. A vector one has no
+    canvas: it sets this element's own background to the SVG, tiled, the same way the shipped page
+    draws it — one function, no second rasteriser to drift from.
+
+    One deliberate exception: the accent. The build reads the ACCENT constant, this reads the live
+    `--accent`, and AccentPicker sets that property on every dev page so a candidate colour can be
+    tried against a real one. So while the picker holds a non-default accent, this Band is NOT the
+    one that would ship — which is the point of the picker, not a fault in it. At the site's
+    current accent the two agree. */}
 <div
 	id="band"
 	aria-hidden="true"
 	data-sketch={sketch}
 	data-seed={seed}
-	class="absolute bottom-0 left-1/2 z-0 h-60 -translate-x-1/2"
+	class:list={[
+		'absolute bottom-0 left-1/2 z-0 h-60 -translate-x-1/2',
+		isVector && 'w-screen bg-center bg-repeat-x'
+	]}
 ></div>
 
 {
@@ -50,36 +74,92 @@ const { sketch, seed } = Astro.props;
 	)
 }
 
-<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
+{
+	/* Raster Sketches only. A vector Sketch draws with no p5 at all, and this tag is `is:inline`
+	   with an integrity hash — so leaving it in would block render on a third-party request made
+	   for nothing. */
+	!isVector && (
+		<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
+	)
+}
 
 <script>
 	import { mountBand } from '../bands/harness';
-	import { sketches } from '../bands';
+	import { resolveSketch, sketchNames } from '../bands';
+	import { toSvg } from '../bands/vector';
+	import { ACCENT, BACKGROUND } from '../theme';
 
 	// A module script is deferred, so the DOM is parsed and the inline p5 tag above has run. The
 	// first version of this looked up its elements at parse time and found none.
 	const host = document.getElementById('band');
-	const sketch = host && sketches[host.dataset.sketch ?? ''];
+	const name = host?.dataset.sketch ?? '';
+	const resolved = host ? resolveSketch(name) : null;
 
-	if (host && sketch) {
+	// band-render.astro fails loudly on a name in neither registry, because a blank canvas there
+	// would be captured and shipped. This is the page an author actually looks at while choosing a
+	// Seed, and it used to do the opposite: no Band, no picker, no message, no clue. A typo in
+	// `band.sketch` is the likely cause and nothing else would have said so.
+	if (host && !resolved) {
+		console.error(
+			`band: no Sketch named ${JSON.stringify(name)}. Registered: ${sketchNames().join(', ')}`
+		);
+	}
+
+	if (host && resolved) {
 		const picker = document.getElementById('band-picker');
 		const label = picker?.querySelector('[data-seed-label]');
 
-		const band = mountBand(sketch, {
-			host,
-			height: 240,
-			seed: Number(host.dataset.seed ?? 1),
-			// The build-time renderer appends ?w= so the capture is a known width rather than
-			// whatever the headless viewport happens to be.
-			width: Number(new URLSearchParams(location.search).get('w')) || undefined,
-			onRender: (seed) => {
-				if (label) label.textContent = String(seed);
-				host.dataset.seed = String(seed);
-			}
-		});
+		const announce = (seed: number) => {
+			if (label) label.textContent = String(seed);
+			host.dataset.seed = String(seed);
+		};
+
+		let render: (seed?: number) => void;
+
+		if (resolved.track === 'vector') {
+			const vector = resolved.draw;
+			// The same size scripts/bands.mjs renders, so dev and the shipped asset are the same
+			// image rather than two renderings of one idea — a vector Band has no second rasteriser
+			// to drift from. Tiling and height come from the element's classes, which are the ones
+			// writing/[slug].astro gives the shipped background.
+			//
+			// The accent is the one input that can differ: the build uses the ACCENT constant and
+			// this reads whatever `--accent` currently resolves to, which AccentPicker rewrites
+			// live. That divergence is the picker working as intended; see the comment on the host
+			// element above.
+			render = (next?: number) => {
+				const seed = next ?? Number(host.dataset.seed ?? 1);
+				const accent =
+					getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || ACCENT;
+				const svg = toSvg(vector({ width: 3440, height: 240, seed, accent }));
+				// encodeURIComponent, not base64: it keeps the markup readable in devtools, and a
+				// `#` anywhere in the SVG — every colour here starts with one — would otherwise end
+				// the URL early and leave the element blank.
+				host.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+				host.style.backgroundSize = 'auto 240px';
+				host.style.backgroundColor = BACKGROUND;
+				announce(seed);
+			};
+			render();
+			// The picker rewrites --accent in place; CSS follows it, but an SVG built once in JS does
+			// not. Redrawn at the SAME seed, so two accents can be compared on one Band — a reseed
+			// would change the drawing and defeat the comparison.
+			document.documentElement.addEventListener('accentchange', () => render());
+		} else {
+			const band = mountBand(resolved.draw, {
+				host,
+				height: 240,
+				seed: Number(host.dataset.seed ?? 1),
+				// The build-time renderer appends ?w= so the capture is a known width rather than
+				// whatever the headless viewport happens to be.
+				width: Number(new URLSearchParams(location.search).get('w')) || undefined,
+				onRender: announce
+			});
+			render = band.render;
+		}
 
 		picker?.querySelector('[data-reseed]')?.addEventListener('click', () => {
-			band.render(Math.floor(Math.random() * 100000));
+			render(Math.floor(Math.random() * 100000));
 		});
 
 		picker?.querySelector('[data-copy]')?.addEventListener('click', async (event) => {

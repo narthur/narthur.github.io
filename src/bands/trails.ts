@@ -2,7 +2,7 @@
 // into plain Node, which strips types but will not resolve an extensionless specifier. Dropping it
 // typechecks and builds fine and breaks only the preview tool, silently.
 import { ACCENT } from '../theme.ts';
-import type { P5, SketchArgs } from './types';
+import type { P5, SketchArgs } from './types.ts';
 
 /**
  * Stigmergy — how ants actually find paths.

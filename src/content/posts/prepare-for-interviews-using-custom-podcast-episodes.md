@@ -1,7 +1,7 @@
 ---
 title: 'Prepare for Interviews using Custom Podcast Episodes'
 date: 2026-10-07T16:06:03.000Z
-band: { sketch: 'hopfield', seed: 1 }
+band: { sketch: 'hopfield', seed: 7 }
 ---
 
 I've started getting a few interviews for jobs I've been applying to (finally!). That means learning how to prepare for interviews.

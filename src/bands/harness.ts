@@ -1,4 +1,4 @@
-import type { P5, Sketch } from './types';
+import type { P5, Sketch } from './types.ts';
 
 /**
  * Owns everything a Band needs that isn't the drawing: the p5 instance, canvas sizing, device

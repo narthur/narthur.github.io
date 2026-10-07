@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Band from '../../layouts/Band.astro';
+import { bandExtension } from '../../bands';
 
 export async function getStaticPaths() {
 	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
@@ -39,10 +40,14 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 	    this file cuts a rectangle of page background out from behind `data-band-text`. Without one
 	    the wrapper is inert and the heading flows exactly as it always has. */}
 	<div class:list={['relative', band && 'flex min-h-[15rem] flex-col justify-end']}>
-		{/* Dev runs the Sketch live so the picker can drive it; the shipped page gets the image
+		{/* Dev runs the Sketch live so the picker can drive it; the shipped page gets the asset
 		    scripts/bands.mjs rendered, as a background rather than an <img> so it can repeat-x. The
 		    field is a torus, so one asset tiles seamlessly at any viewport width — and the height is
-		    locked, so the reflection edges at top and bottom are never cropped away. */}
+		    locked, so the reflection edges at top and bottom are never cropped away.
+
+		    The extension is asked for rather than assumed: a vector Sketch ships SVG and a raster one
+		    WebP, and a page that hard-coded either would link an asset the renderer never wrote —
+		    reaching the reader as a 404 with nothing in the build log. */}
 		{band &&
 			(import.meta.env.DEV ? (
 				<Band sketch={band.sketch} seed={band.seed} />
@@ -50,7 +55,7 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 				<div
 					aria-hidden="true"
 					class="absolute bottom-0 left-1/2 z-0 h-60 w-screen -translate-x-1/2 bg-center bg-repeat-x"
-					style={`background-image:url(/writing/${post.id}/band.webp);background-size:auto 240px`}
+					style={`background-image:url(/writing/${post.id}/band.${bandExtension(band.sketch)});background-size:auto 240px`}
 				/>
 			))}
 
