@@ -21,6 +21,12 @@ pnpm check         # astro check
 pnpm test          # vitest, single run
 pnpm lint          # prettier --check + eslint
 pnpm format        # prettier --write
+
+# Renders a Band Sketch to .band-preview.png without a browser, for writing one.
+# Its arrangement differs from the page (own PRNG), so tune parameters with it and
+# still pick the Seed in the dev picker.
+# No `--` before the flags: pnpm 10 forwards them as-is and treats `--` as a positional.
+pnpm band-preview --sketch=hopfield --seeds=1,2,3
 ```
 
 Astro needs Node >= 22.19.
@@ -66,9 +72,15 @@ Astro needs Node >= 22.19.
 
 ## Testing
 
-The only tested code is `src/uses/filter.ts` — pure tag/category functions.
-Everything else is markup, and there is deliberately no component-test or e2e
-harness. Use `pnpm test` (single run) rather than watch mode.
+Pure logic modules are tested; markup is not, and there is deliberately no
+component-test or e2e harness. Currently that means `src/uses/filter.ts`
+(tag/category functions), `src/work/*` (chart, commits, taskratchet) and
+`src/bands/hopfield.ts` (the Band simulation). Use `pnpm test` (single run)
+rather than watch mode.
+
+A Band Sketch is worth testing despite drawing pixels: its failures are silent —
+a net that never settles still renders a plausible-looking wash — so the suite
+asserts the invariants instead of relying on someone glancing at the strip.
 
 ## Common gotchas
 

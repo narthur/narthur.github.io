@@ -1,4 +1,5 @@
 import type { Sketch } from './types';
+import hopfield from './hopfield';
 import trails from './trails';
 
 /**
@@ -8,6 +9,6 @@ import trails from './trails';
  * this grows by one entry each time a post opts in, and entries are not meant to be reused unless
  * a later post genuinely wants the same idea.
  */
-export const sketches: Record<string, Sketch> = { trails };
+export const sketches: Record<string, Sketch> = { hopfield, trails };
 
 export type { Sketch, SketchArgs, P5 } from './types';
