@@ -13,4 +13,17 @@ describe('rings', () => {
 		expect(g(3)).toBe(g(3));
 		expect(g(3)).not.toBe(g(4));
 	});
+
+	it('draws the same rings at any height', () => {
+		// Ring count, not path data: simplify works in output pixels, so the points differ slightly.
+		// With the H/240 scaling removed, 120 high draws 84 rings to 240 high's 158.
+		const rings = (width: number, height: number) =>
+			geometry({ width, height, seed: 58954, accent: '#8ded51' }).paths[0].d.split('M').length;
+		const at240 = rings(3440, 240);
+		for (const [w, h] of [
+			[1720, 120],
+			[6880, 480]
+		])
+			expect(Math.abs(rings(w, h) - at240)).toBeLessThanOrEqual(at240 * 0.05);
+	});
 });

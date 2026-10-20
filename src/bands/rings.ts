@@ -1,4 +1,5 @@
-// The `.ts` extensions are required: scripts/bands.mjs imports this into plain Node. See index.ts.
+// The `.ts` extensions are required: this module is loaded by plain Node, which will not resolve an
+// extensionless specifier. See index.ts.
 import { BACKGROUND } from '../theme.ts';
 import type { VectorSketch } from './types.ts';
 import { chain, contour, rng, simplify, toPathData, type Field } from './vector.ts';
@@ -8,8 +9,8 @@ import { chain, contour, rng, simplify, toPathData, type Field } from './vector.
  *
  * A tree keeps its history by laying a new ring over the last one, and the record can be read
  * long after the season that wrote it. Fieldnotes are the same bargain: each session adds a layer
- * that the next one can read. Several stumps sit just off the strip, and where two sets of rings
- * collide they meet in a seam, as end grain does.
+ * that the next one can read. The stumps sit near the strip's top and bottom edges, and where two sets
+ * of rings collide they meet in a seam, as end grain does.
  *
  * Distance to the nearest stump, wobbled by noise and folded through a sine, traced at 0.5. The
  * distance and the noise both wrap in x, so the Band tiles.
@@ -17,7 +18,8 @@ import { chain, contour, rng, simplify, toPathData, type Field } from './vector.
 export const PARAMS = {
 	STUMPS: 9,
 	SPACING: 34, // ring pitch, in Band units at the 240-high render
-	WOBBLE: 9, // noise amplitude, same units; at 0 the rings are perfect circles and read as a diagram
+	WOBBLE: 9, // noise scale, same units: the noise is bounded by ±2.45 (1 + 1/2 + … + 1/6), so rings
+	// shift by up to 9 × 2.45 ≈ 22. At 0 the rings are perfect circles and read as a diagram.
 	SAMPLES: [1720, 120] as [number, number] // marching-squares grid across the full Band
 };
 
@@ -42,8 +44,9 @@ function wobble(W: number, rnd: () => number): Field {
 /** The ring field: 0..1, crossing 0.5 twice per ring pitch. Exported for the tiling test. */
 export function ringField(W: number, H: number, seed: number): Field {
 	const rnd = rng(seed);
-	// Jittered even spacing in x; each stump just above or just below the strip, so the Band shows
-	// arcs rather than bullseyes.
+	// Jittered even spacing in x. Each stump's centre lies near the top or bottom edge, anywhere from
+	// 0.15H outside it to 0.25H inside, so most rings cross the strip as arcs; a stump inside the strip
+	// also shows its innermost rings as closed loops.
 	const stumps = Array.from({ length: PARAMS.STUMPS }, (_, k) => [
 		((k + 0.5 + (rnd() - 0.5) * 0.5) * W) / PARAMS.STUMPS,
 		H * (rnd() < 0.5 ? -0.15 + rnd() * 0.4 : 0.75 + rnd() * 0.4)
