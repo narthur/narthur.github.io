@@ -15,4 +15,10 @@ I call these notes "fieldnotes." I have [a `/fieldnotes` skill](https://gist.git
 >
 > Maintaining Fieldnotes is proactive and does not require permission. Read, create, and update notes on your own initiative as part of doing the work — don't ask whether to record something or wait to be told. (This covers Fieldnotes upkeep only; it is not blanket authorization for unrelated outward-facing actions.)
 
+You might ask whether this is necessary given Claude Code already has a built-in memory system. These two systems serve different purposes. Claude Code's memories are short, usually one fact per file. Fieldnotes are meant to be exhaustively detailed, including all the information we know about a given project or task. These two systems are meant to complement each other.
+
+Claude Code's memories are stored in per-project folders inside `~/.claude/projects`. Fieldnotes are meant to be more flexible, allowing Claude to use whatever folder structure it desires and create as many or as few notes as it wishes for any given task or subject. Practically this has meant an almost-entirely flat list of notes.
+
+Additionally, I prefer having a system that is fully in my control and portable. A folder of markdown files located where I choose and backed up automatically achieves this in a way that feels more secure than a system Anthropic defines.
+
 I've been using this setup since early May of this year. So far Claude Code has created more than 150 notes containing more than 360,000 words total. I've found that this approach is especially helpful for allowing Claude Code to remember all the relevant details on a project across sessions or after the current session is compacted.
