@@ -1,5 +1,5 @@
 // The `.ts` extensions are required: scripts/bands.mjs imports this into plain Node. See index.ts.
-import { BACKGROUND, hexToRgb } from '../theme.ts';
+import { BACKGROUND } from '../theme.ts';
 import type { VectorSketch } from './types.ts';
 import { rng, simplify, toPathData, type Point } from './vector.ts';
 
@@ -20,14 +20,15 @@ export const PARAMS = {
 	// Trees, rooted at jittered even spacing along the ground. With the whole ground sticky the
 	// tallest shoots caught every walker (DLA's screening effect) and the strip came out as grass;
 	// separate roots grow separate trees instead. Per forest.
-	ROOTS: 20,
+	ROOTS: 30,
 	// Stop once the median tree's top reaches this fraction of the height. The median, so one
 	// runaway tree cannot end the run for the rest.
 	CAP: 0.9,
 	// Walkers launch in this top fraction of the space below the cluster's top. At 0 (all from
 	// above) one tree caught nearly every walker and the rest stayed stubs; at 1 (anywhere) the
-	// trees filled in to a flat hedge and lost their branching. Chosen by eye at 0, .25, .45, 1.
-	LAUNCH_BAND: 0.25,
+	// trees filled in to a flat hedge and lost their branching. Chosen by eye; .4 once the two
+	// forests interlocked and Nathan asked for denser.
+	LAUNCH_BAND: 0.4,
 	MAX: 60000, // particle ceiling, so a pathological seed still terminates
 	JITTER: 0.35 // off-lattice nudge per point, in cells, so branches don't read as a grid
 };
@@ -97,10 +98,9 @@ export function grow(GW: number, GH: number, rnd: () => number, p = PARAMS): Nod
 }
 
 const STROKE_WIDTH = 1.4;
-const FAINT = [232, 233, 236];
-const BUCKETS = 8; // colour steps; one <path> each keeps the file small
-// Twigs with fewer particles than this are dropped. At 1 the tips read as hair.
-const PRUNE = 3;
+// Twigs with fewer particles than this are dropped. At 1 the tips read as hair; at 4 the trees
+// looked bare.
+const PRUNE = 2;
 // Each forest's share of the height. Over half, so the two interlock rather than meet at a line.
 const REACH = 0.7;
 // Douglas-Peucker tolerance after smoothing, in Band units. Smoothing quadruples the points; this
@@ -175,35 +175,20 @@ export const geometry: VectorSketch = ({ width: W, height: H, seed, accent }) =>
 		return branches(nodes, pts, W);
 	});
 
-	// Trunks — what most later growth hangs from — take the accent; fresh twigs stay off-white.
-	const most = Math.log(Math.max(...all.map((b) => b.size)));
-	const subpaths: string[][] = Array.from({ length: BUCKETS }, () => []);
-	for (const { line, size } of all) {
-		const b = Math.min(BUCKETS - 1, Math.floor((Math.log(size) / most) * BUCKETS));
+	// One colour at one opacity, as in hopfield: the shape carries the image, not a hierarchy.
+	const d: string[] = [];
+	for (const { line } of all) {
 		const lo = Math.min(...line.map((q) => q[0]));
 		const hi = Math.max(...line.map((q) => q[0]));
 		// The Band tiles, so a branch past either edge is drawn again on the other side.
 		for (const shift of [0, ...(lo < 0 ? [W] : []), ...(hi > W ? [-W] : [])])
-			subpaths[b].push(toPathData(line.map(([x, y]) => [x + shift, y])));
+			d.push(toPathData(line.map(([x, y]) => [x + shift, y])));
 	}
-
-	const [ar, ag, ab] = hexToRgb(accent);
 	return {
 		width: W,
 		height: H,
 		background: BACKGROUND,
 		strokeWidth: STROKE_WIDTH,
-		paths: subpaths.flatMap((d, b) => {
-			if (!d.length) return [];
-			const t = b / (BUCKETS - 1);
-			const mix = (from: number, to: number) => Math.round(from + (to - from) * t);
-			return [
-				{
-					d: d.join(''),
-					stroke: `rgb(${mix(FAINT[0], ar)},${mix(FAINT[1], ag)},${mix(FAINT[2], ab)})`,
-					opacity: 0.55 + 0.4 * t
-				}
-			];
-		})
+		paths: [{ d: d.join(''), stroke: accent, opacity: 245 / 255 }]
 	};
 };
