@@ -15,7 +15,7 @@ I call these notes "fieldnotes." I have [a `/fieldnotes` skill](https://gist.git
 >
 > Maintaining Fieldnotes is proactive and does not require permission. Read, create, and update notes on your own initiative as part of doing the work — don't ask whether to record something or wait to be told. (This covers Fieldnotes upkeep only; it is not blanket authorization for unrelated outward-facing actions.)
 
-You might ask whether this is necessary given Claude Code already has a built-in memory system. These two systems serve different purposes. Claude Code's memories are short, usually one fact per file. Fieldnotes are meant to be exhaustively detailed, including all the information we know about a given project or task. On my system Claude's memories average about 180 words in length, where as fieldnotes average more than 1,300 words each.
+You might ask whether this is necessary given Claude Code already has a built-in memory system. These two systems serve different purposes. Claude Code's memories are short, usually one fact per file. Fieldnotes are meant to be exhaustively detailed, including all the information we know about a given project or task. On my system Claude's memories average about 215 words in length, where as fieldnotes average more than 2,200 words each.
 
 Claude Code's memories are stored in per-project folders inside `~/.claude/projects`. Fieldnotes are meant to be more flexible, allowing Claude to use whatever folder structure it desires and create as many or as few notes as it wishes for any given task or subject. Practically this has meant an almost-entirely flat list of notes.
 
