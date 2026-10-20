@@ -16,9 +16,9 @@ describe('rings', () => {
 
 	it('draws the same rings at any height', () => {
 		// Ring count, not path data: simplify works in output pixels, so the points differ slightly.
-		// With the H/240 scaling removed, 120 high draws 84 rings to 240 high's 158.
+		// With the H/240 scaling removed, 120 high draws 83 rings to 240 high's 157.
 		const rings = (width: number, height: number) =>
-			geometry({ width, height, seed: 58954, accent: '#8ded51' }).paths[0].d.split('M').length;
+			geometry({ width, height, seed: 58954, accent: '#8ded51' }).paths[0].d.split('M').length - 1;
 		const at240 = rings(3440, 240);
 		for (const [w, h] of [
 			[1720, 120],
