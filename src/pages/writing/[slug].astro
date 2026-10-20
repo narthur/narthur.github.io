@@ -230,6 +230,9 @@ const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…
 		padding-left: 1em;
 		color: theme('colors.mute');
 	}
+	.post :global(blockquote > * + *) {
+		margin-top: 1.25em;
+	}
 	.post :global(code) {
 		font-family: theme('fontFamily.mono');
 		font-size: 0.875em;
