@@ -1,7 +1,7 @@
 ---
 title: 'Agent Fieldnotes for Persistent Context'
 date: 2026-10-20T14:51:00.000Z
-band: { sketch: 'dla', seed: 1 }
+band: { sketch: 'rings', seed: 58954 }
 ---
 
 I've found that Claude Code works far better when it has access to all the context it needs, and can proactively save new information to a location where it can retrieve that information later. I've achieved this by giving it access to my Obsidian vault, and additionally giving it a folder inside the vault where it explicitly has permission and is encouraged to create notes and store information about what we're working on as we work on it.

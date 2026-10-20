@@ -79,8 +79,8 @@ Astro needs Node >= 22.19.
 Pure logic modules are tested; markup is not, and there is deliberately no
 component-test or e2e harness. Currently that means `src/uses/filter.ts`
 (tag/category functions), `src/work/*` (chart, commits, taskratchet),
-`src/bands/hopfield.ts` (the Band simulation and its geometry), `src/bands/dla.ts` (the
-aggregation's attachment and stopping rules) and
+`src/bands/hopfield.ts` (the Band simulation and its geometry), `src/bands/rings.ts` (that
+the ring field tiles) and
 `src/bands/vector.ts` (contour tracing and SVG). Use `pnpm test` (single run)
 rather than watch mode.
 
