@@ -86,7 +86,7 @@ src/
 │   ├── slop/about.astro        # how Slop is made
 │   ├── slop/rss.xml.ts         # Slop's own feed, never emailed
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
-├── content.config.ts           # the `posts` and `projects` collection schemas
+├── content.config.ts           # the `posts`, `projects` and `slop` collection schemas
 ├── content/posts/*.md          # newsletter posts
 ├── content/projects/*.mdx      # project pages: prose with charts and screenshots
 ├── content/slop/*.md           # Slop posts, committed ahead of their date
@@ -206,28 +206,12 @@ absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
 
-## Slop
-
-`/slop` is a separate section of short daily posts, one link or technique each, written by AI
-from Nathan's notes and approved by him before they are committed. It is kept apart from the
-newsletter on purpose: its own collection (`src/content/slop/`), its own index and its own feed
-(`/slop/rss.xml`). The rss-to-email Worker reads only `/rss.xml`, so Slop is never emailed.
-Slop pages carry `ai` permanently, a disclosure line under every title and at the top of every
-feed item, and no comments.
-
-Approved posts are committed with future `date`s, one per day. `publishedSlop()` in
-`src/slop.ts` drops any post dated after build time, so a queued post has no page and no feed
-item yet; the `schedule` trigger in `deploy.yml` rebuilds daily at 12:00 UTC to publish the
-day's post. Frontmatter is `title`, `date`, and optional `link` (the resource). Drafts never
-live in this repo: they are written and reviewed in the Obsidian vault and copied here only on
-approval.
-
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.
 
 There is no site nav, and components live beside the data they draw (`src/work/detail/`)
 rather than in a components directory. Subpages carry a back link to their parent: "←
-Nathan Arthur" on most, "← Writing" on a post, "← Work" on a project page. The footer
+Nathan Arthur" on most, "← Writing" on a post, "← Slop" on a Slop post and its about page, "← Work" on a project page. The footer
 lives in the layout — its only consumer.
 
 `Layout.astro` renders a dev-only accent picker (colour input, presets, and a
@@ -243,6 +227,25 @@ cursor — on an 8px stroke over a 64 grid, so every limb is 2px at the 16px
 browsers actually draw and nothing thins out to grey. It replaced an "n"
 monogram on 2026-09-19: a letterform was legible but said nothing the tab
 title doesn't.
+
+## Slop
+
+`/slop` is a separate section of short daily posts, one link or technique each, written by AI
+from Nathan's notes and approved by him before they are committed. It is kept apart from the
+newsletter on purpose: its own collection (`src/content/slop/`), its own index and its own feed
+(`/slop/rss.xml`). The rss-to-email Worker reads only `/rss.xml`, so Slop is never emailed.
+Every Slop page carries `ai` permanently, so the layout shows its notice; each post page also has
+a disclosure line under its title, each feed item one at its top, and there are no comments.
+
+Approved posts are committed with future `date`s, one per day. `publishedSlop()` in
+`src/slop.ts` drops any post dated after build time, so a queued post has no page and no feed
+item yet; the `schedule` trigger in `deploy.yml` rebuilds daily at 12:00 UTC to publish the
+day's post. A post goes live at the first build on or after 00:00 UTC of its date, so a push
+earlier that day publishes it too. GitHub disables scheduled workflows in a public repo after 60
+days without a commit; if that happens, queued posts stop appearing until a push or a manual
+`workflow_dispatch` re-enables it. Frontmatter is `title`, `date`, and optional `link` (the resource). Drafts never
+live in this repo: they are written and reviewed in the Obsidian vault and copied here only on
+approval.
 
 ## Newsletter form
 

@@ -55,6 +55,9 @@ Astro needs Node >= 22.19.
   Astro content collection (`src/content.config.ts`) rendered by
   `src/pages/writing/[slug].astro` and fed by `src/pages/rss.xml.ts`. To
   publish, add a file; see `knowledge.md`.
+- Slop is a second collection, `src/content/slop/`, with its own pages under
+  `src/pages/slop/`, its own feed, and a date filter in `src/slop.ts`; see
+  `knowledge.md` § Slop. Post body styles for both live in `src/post.css`.
 
 ## Styling
 
@@ -71,7 +74,7 @@ Astro needs Node >= 22.19.
 - `src/pages/404.astro` builds to `dist/404.html`; `wrangler.jsonc` sets
   `not_found_handling: "404-page"` so Cloudflare serves it for unmatched paths.
 - Deployed via GitHub Actions (`.github/workflows/deploy.yml`) on push to
-  `master`. Requires repo secrets `CLOUDFLARE_API_TOKEN` and
+  `master`, and daily at 12:00 UTC so that the day's Slop post goes live. Requires repo secrets `CLOUDFLARE_API_TOKEN` and
   `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Testing

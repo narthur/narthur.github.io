@@ -19,7 +19,7 @@ pnpm test      # vitest
 
 ## Deployment
 
-Pushes to `master` deploy via `.github/workflows/deploy.yml`, which builds the
+Pushes to `master`, and a daily 12:00 UTC schedule, deploy via `.github/workflows/deploy.yml`, which builds the
 site and publishes `dist/` with Wrangler.
 
 ## More

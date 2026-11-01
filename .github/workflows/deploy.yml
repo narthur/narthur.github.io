@@ -5,7 +5,8 @@ on:
     branches: [master]
   workflow_dispatch:
   # Publishes the day's Slop post: posts are committed ahead of their date and src/slop.ts hides
-  # them until it arrives. 12:00 UTC is 06:00 or 07:00 in Chicago, never earlier.
+  # them until it arrives. 12:00 UTC is 06:00 or 07:00 in Chicago, never earlier. GitHub disables
+  # this trigger after 60 days without a commit; a push or workflow_dispatch then catches up.
   schedule:
     - cron: '0 12 * * *'
 
@@ -49,6 +50,10 @@ jobs:
           key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/theme.ts', 'src/pages/band-render.astro', 'src/content/posts/**') }}
           restore-keys: bands-${{ runner.os }}-
       - run: pnpm run build
+      # /rss.xml is emailed to every subscriber within the hour, and Slop must never be. Item links
+      # are the only literal <link> elements in the feed, so this fails on any Slop item.
+      - name: Check no Slop in the newsletter feed
+        run: "! grep -q '<link>https://nathanarthur.com/slop/' dist/rss.xml"
       - uses: cloudflare/wrangler-action@v3
         with:
           # v3 defaults to wrangler 3.90, which lacks assets-only Worker support
