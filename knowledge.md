@@ -92,6 +92,8 @@ src/
 ├── content/slop/*.md           # Slop posts, committed ahead of their date
 ├── slop.ts                     # published-only query, feed and disclosure constants
 ├── post.css                    # post body styles, shared by /writing and /slop
+├── describe.ts                 # meta description from a post's opening paragraph
+├── slop-date.ts                # the Slop publish rule, with its spec
 ├── uses/
 │   ├── filter.ts               # tag/category logic
 │   ├── filter.spec.ts

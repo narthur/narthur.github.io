@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Band from '../../layouts/Band.astro';
 import { bandExtension } from '../../bands';
 import '../../post.css';
+import { describe } from '../../describe';
 
 export async function getStaticPaths() {
 	// Newest first, as /writing and the home page list them, so index+1 is the older neighbour.
@@ -21,15 +22,8 @@ const { title, subtitle, date, substack, ai, band } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
 
-// Most posts have no subtitle, so fall back to the opening paragraph, markdown stripped.
-// Code fences go first: a blank line inside one would otherwise split it into "paragraphs".
-const opening =
-	post.body
-		?.replace(/```[\s\S]*?```/g, '')
-		.split('\n\n')
-		.find((block) => /^[\p{L}"“‘]/u.test(block)) ?? title;
-const plain = opening.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '');
-const description = subtitle ?? (plain.length > 160 ? `${plain.slice(0, 157)}…` : plain);
+// Most posts have no subtitle, so describe() falls back to the opening paragraph.
+const description = describe(post.body, title, subtitle);
 ---
 
 <Layout title={`${title} — Nathan Arthur`} description={description} ai={ai}>

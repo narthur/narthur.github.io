@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { DISCLOSURE, SLOP_FEED, publishedSlop } from '../../slop';
 import '../../post.css';
+import { describe } from '../../describe';
 
 // Only published posts get a page, so a queued post's URL 404s until its day.
 export async function getStaticPaths() {
@@ -13,11 +14,7 @@ const { post } = Astro.props;
 const { title, date } = post.data;
 const { Content } = await render(post);
 const day = date.toISOString().slice(0, 10);
-const plain = (post.body ?? '')
-	.split('\n\n')[0]
-	.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-	.replace(/[*_`]/g, '');
-const description = plain.length > 160 ? `${plain.slice(0, 157)}…` : plain || title;
+const description = describe(post.body, title);
 ---
 
 <Layout title={`${title} — Slop — Nathan Arthur`} description={description} ai feed={SLOP_FEED}>
