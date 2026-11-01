@@ -81,10 +81,17 @@ src/
 │   ├── writing.astro           # newsletter post list, Beeminder articles
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
+│   ├── slop.astro              # Slop index
+│   ├── slop/[slug].astro       # one Slop post
+│   ├── slop/about.astro        # how Slop is made
+│   ├── slop/rss.xml.ts         # Slop's own feed, never emailed
 │   └── uses.astro              # renders uses.yaml; its <script> is the tag filter
 ├── content.config.ts           # the `posts` and `projects` collection schemas
 ├── content/posts/*.md          # newsletter posts
 ├── content/projects/*.mdx      # project pages: prose with charts and screenshots
+├── content/slop/*.md           # Slop posts, committed ahead of their date
+├── slop.ts                     # published-only query, feed and disclosure constants
+├── post.css                    # post body styles, shared by /writing and /slop
 ├── uses/
 │   ├── filter.ts               # tag/category logic
 │   ├── filter.spec.ts
@@ -185,7 +192,7 @@ caption link back to the standalone page so the way out survives the swap. The
 still is PNG rather than WebP because it is what the email shows, and Outlook
 does not render WebP. The other post images are WebP and have the same problem;
 the still gets the workaround because it is the only thing an email reader sees
-of the sketch. Post body styles are in `writing/[slug].astro`, built from the
+of the sketch. Post body styles are in `src/post.css`, built from the
 palette tokens. Code blocks are the one place outside the palette: Shiki
 highlights them with the `one-dark-pro` preset, and `.post pre` drops the
 preset's panel background so the block keeps the hairline border the rest of
@@ -198,6 +205,22 @@ The feed carries each post's full rendered HTML with root-relative URLs made
 absolute, and uses `trailingSlash: false` so item links (which double as
 guids) match the real page URLs. Changing a post's file name changes its URL
 and its guid.
+
+## Slop
+
+`/slop` is a separate section of short daily posts, one link or technique each, written by AI
+from Nathan's notes and approved by him before they are committed. It is kept apart from the
+newsletter on purpose: its own collection (`src/content/slop/`), its own index and its own feed
+(`/slop/rss.xml`). The rss-to-email Worker reads only `/rss.xml`, so Slop is never emailed.
+Slop pages carry `ai` permanently, a disclosure line under every title and at the top of every
+feed item, and no comments.
+
+Approved posts are committed with future `date`s, one per day. `publishedSlop()` in
+`src/slop.ts` drops any post dated after build time, so a queued post has no page and no feed
+item yet; the `schedule` trigger in `deploy.yml` rebuilds daily at 12:00 UTC to publish the
+day's post. Frontmatter is `title`, `date`, and optional `link` (the resource). Drafts never
+live in this repo: they are written and reviewed in the Obsidian vault and copied here only on
+approval.
 
 `src/uses/` lives outside `pages/` because Astro treats every `.ts` file under
 `pages/` as an endpoint.

@@ -12,7 +12,7 @@ export default defineConfig({
 	// Real highlighting beats a perfect palette match for code, so Shiki uses a preset rather
 	// than the site's own tokens. `one-dark-pro` of the dark presets: it was picked by eye from
 	// the 20 whose every token clears 4.5:1 on `bg`, which the palette rule in knowledge.md
-	// requires and most presets fail. Its panel background is dropped in writing/[slug].astro,
+	// requires and most presets fail. Its panel background is dropped in src/post.css,
 	// leaving the hairline border every other framed element here uses.
 	markdown: { syntaxHighlight: 'shiki', shikiConfig: { theme: 'one-dark-pro' } }
 });

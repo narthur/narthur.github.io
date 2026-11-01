@@ -4,6 +4,10 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  # Publishes the day's Slop post: posts are committed ahead of their date and src/slop.ts hides
+  # them until it arrives. 12:00 UTC is 06:00 or 07:00 in Chicago, never earlier.
+  schedule:
+    - cron: '0 12 * * *'
 
 concurrency:
   group: deploy-${{ github.ref }}

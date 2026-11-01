@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SLOP_FEED, publishedSlop } from '../slop';
+
+const posts = await publishedSlop();
+---
+
+<Layout
+	title="Slop — Nathan Arthur"
+	description="One useful link, tool, or technique a day, written by AI from Nathan Arthur's notes."
+	ai
+	feed={SLOP_FEED}
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/">&larr; Nathan Arthur</a>
+	</p>
+
+	<h1 class="text-4xl font-medium tracking-tight">Slop</h1>
+	<p class="mt-5 max-w-prose leading-relaxed text-mute">
+		One useful link, tool, or technique a day. AI-written from Nathan's notes and reviewed by him;
+		his own writing is under{' '}
+		<a href="/writing" class="text-ink underline decoration-mute underline-offset-4">
+			Writing
+		</a>
+		.{' '}
+		<a href="/slop/about" class="text-ink underline decoration-mute underline-offset-4">
+			How it's made
+		</a>
+		, or follow
+		<a href={SLOP_FEED.href} class="text-ink underline decoration-mute underline-offset-4">
+			the RSS feed
+		</a>
+		.
+	</p>
+
+	<ul class="mt-20 border-t border-rule">
+		{posts.map((post) => (
+			<li class="flex items-baseline justify-between gap-4 border-b border-rule py-3">
+				<a href={`/slop/${post.id}`} class="text-sm">
+					{post.data.title}
+				</a>
+				<time
+					datetime={post.data.date.toISOString().slice(0, 10)}
+					class="whitespace-nowrap font-mono text-xs text-faint"
+				>
+					{post.data.date.toISOString().slice(0, 10)}
+				</time>
+			</li>
+		))}
+	</ul>
+</Layout>
