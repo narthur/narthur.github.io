@@ -244,8 +244,9 @@ Approved posts are committed with future `date`s, one per day. `publishedSlop()`
 item yet; the `schedule` trigger in `deploy.yml` rebuilds daily at 12:00 UTC to publish the
 day's post. A post goes live at the first build on or after 00:00 UTC of its date, so a push
 earlier that day publishes it too. GitHub disables scheduled workflows in a public repo after 60
-days without a commit; if that happens, queued posts stop appearing until a push or a manual
-`workflow_dispatch` re-enables it. Frontmatter is `title`, `date`, and optional `link` (the resource). Drafts never
+days without a commit; if that happens, queued posts stop appearing until the workflow is re-enabled
+(Actions tab, or `gh workflow enable deploy.yml`). A push or `workflow_dispatch` deploys once,
+publishing whatever is due, but does not restore the daily trigger. Frontmatter is `title`, `date`, and optional `link` (the resource). Drafts never
 live in this repo: they are written and reviewed in the Obsidian vault and copied here only on
 approval.
 
