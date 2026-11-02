@@ -58,7 +58,7 @@ describe('hopfield', () => {
 		for (let i = 0; i < N; i++) state[i] = rnd() < 0.5 ? -1 : 1;
 
 		let last = energy(state, w, N);
-		let changed = 0;
+		let changed: number;
 		let sweeps = 0;
 		do {
 			changed = sweep(state, w, N, order(N));
