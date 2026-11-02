@@ -32,4 +32,16 @@ const projects = defineCollection({
 	})
 });
 
-export const collections = { posts, projects };
+// Slop: short AI-written tips, served at /slop/<file name> with their own feed, never emailed.
+// Approved posts are committed ahead of their `date`; src/slop.ts hides them until it arrives,
+// and the daily scheduled deploy publishes each one. `link` is the resource the post is about.
+const slop = defineCollection({
+	loader: glob({ pattern: '*.md', base: './src/content/slop' }),
+	schema: z.object({
+		title: z.string(),
+		date: z.coerce.date(),
+		link: z.url().optional()
+	})
+});
+
+export const collections = { posts, projects, slop };

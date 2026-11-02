@@ -1,0 +1,33 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { DISCLOSURE, SLOP_FEED, publishedSlop } from '../../slop';
+import '../../post.css';
+import { describe } from '../../describe';
+
+// Only published posts get a page, so a queued post's URL 404s until its day.
+export async function getStaticPaths() {
+	return (await publishedSlop()).map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { title, date } = post.data;
+const { Content } = await render(post);
+const day = date.toISOString().slice(0, 10);
+const description = describe(post.body, title);
+---
+
+<Layout title={`${title} — Slop — Nathan Arthur`} description={description} ai feed={SLOP_FEED}>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/slop">&larr; Slop</a>
+	</p>
+
+	<h1 class="text-4xl font-medium tracking-tight">{title}</h1>
+	<p class="mt-4 font-mono text-xs text-faint">
+		<time datetime={day}>{day}</time> · {DISCLOSURE} <a href="/slop/about">About Slop</a>
+	</p>
+
+	<article class="post mt-12">
+		<Content />
+	</article>
+</Layout>

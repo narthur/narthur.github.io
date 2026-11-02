@@ -14,11 +14,20 @@ interface Props {
 	ai?: boolean;
 	/** The home page stands on its own, so it drops the newsletter footer. */
 	footer?: boolean;
+	/** The feed to advertise in <head>; /slop pages point readers at their own. */
+	feed?: { title: string; href: string };
 }
 
 import { ACCENT } from '../theme';
 
-const { title, description, wide = false, ai = false, footer = true } = Astro.props;
+const {
+	title,
+	description,
+	wide = false,
+	ai = false,
+	footer = true,
+	feed = { title: 'Narthur Online', href: '/rss.xml' }
+} = Astro.props;
 
 const footerLinks = [
 	{ name: 'Uses', url: '/uses' },
@@ -42,7 +51,7 @@ const footerLinks = [
 		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<link rel="alternate" type="application/rss+xml" title="Narthur Online" href="/rss.xml" />
+		<link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
 		<script
 			is:inline
 			src="https://challenges.cloudflare.com/turnstile/v0/api.js"

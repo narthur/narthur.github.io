@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { SLOP_FEED } from '../../slop';
+import '../../post.css';
+---
+
+<Layout
+	title="About Slop — Nathan Arthur"
+	description="How the Slop posts on nathanarthur.com are made."
+	ai
+	feed={SLOP_FEED}
+>
+	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
+		<a href="/slop">&larr; Slop</a>
+	</p>
+
+	<h1 class="text-4xl font-medium tracking-tight">About Slop</h1>
+	<article class="post mt-12 max-w-prose">
+		<p>
+			Slop is a daily feed of short, practical posts: one link, tool, or technique each. Claude
+			writes them; Nathan does not. That is the point of the name.
+		</p>
+		<p>
+			Each post starts from something already in Nathan's notes: an article he clipped, a project
+			fieldnote, a newsletter idea that never became an issue, or recent work in his public GitHub
+			repositories. Claude drafts one post from one source, checks that the link works and that the
+			post gives the reader something to do, and files it as a draft.
+		</p>
+		<p>
+			Nothing is published until Nathan has read the draft and approved it. Approved posts are
+			queued a day apart and go out each morning. Rejected ones are dropped, along with the source
+			they came from.
+		</p>
+		<p>
+			Slop is kept apart from Nathan's own <a href="/writing">writing</a>: it has its own{' '}
+			<a href={SLOP_FEED.href}>RSS feed</a>, it is never sent to newsletter subscribers, and every
+			post says it was written by AI.
+		</p>
+	</article>
+</Layout>
