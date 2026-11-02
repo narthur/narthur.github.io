@@ -26,7 +26,9 @@ function ghToken() {
 		return execFileSync('gh', ['auth', 'token'], { encoding: 'utf8' }).trim();
 	} catch (err) {
 		if (err.code === 'ENOENT') {
-			throw new Error('The GitHub CLI (gh) is not installed: https://cli.github.com/');
+			throw new Error('The GitHub CLI (gh) is not installed: https://cli.github.com/', {
+				cause: err
+			});
 		}
 		throw err; // Carries gh's own stderr, e.g. "no oauth token found" when logged out.
 	}
