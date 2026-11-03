@@ -71,7 +71,8 @@ name="description">` — `index.astro` derives one from the other, so editing
 src/
 ├── app.css                     # Tailwind entry point
 ├── layouts/
-│   ├── Layout.astro            # <head>, column, footer, global styles
+│   ├── Layout.astro            # <head>, column, footer links, global styles
+│   ├── Subscribe.astro         # newsletter form + Turnstile, on /writing and its posts
 │   └── AccentPicker.astro      # dev-only accent picker
 ├── pages/
 │   ├── index.astro             # home: avatar, positioning, contact, signposts, latest post
@@ -252,9 +253,11 @@ approval.
 
 ## Newsletter form
 
-The footer form in `Layout.astro` posts to the rss-to-email Worker at
+`Subscribe.astro` posts to the rss-to-email Worker at
 `mail.nathanarthur.com/subscribe` (double opt-in), guarded by Cloudflare
-Turnstile with `data-action="subscribe"`, which the Worker checks.
+Turnstile with `data-action="subscribe"`, which the Worker checks. It loads the
+Turnstile script itself, so only pages that render the form fetch it. Its blurb
+is Nathan's copy; keep it verbatim rather than redrafting it per placement.
 
 ## Comments
 

@@ -45,7 +45,7 @@ Astro needs Node >= 22.19.
   fetch is `/taskratchet`'s live stats: `TaskRatchetStats.astro` renders the
   public TaskRatchet API's counters at build time, then refetches them in the
   browser so they stay current between deploys. Two third-party scripts load:
-  Cloudflare Turnstile in `Layout.astro`, guarding the newsletter form, and
+  Cloudflare Turnstile in `Subscribe.astro`, guarding the newsletter form, and
   giscus on newsletter posts, which backs comments with this repo's GitHub
   Discussions. Embedded sketches in `public/writing/<slug>/` load p5.js
   from jsDelivr inside their own iframe.

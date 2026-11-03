@@ -1,0 +1,47 @@
+---
+interface Props {
+	/** Prefix for the input's id. Only needs setting if a page renders two forms. */
+	id?: string;
+}
+
+const { id = 'subscribe' } = Astro.props;
+const inputId = `${id}-email`;
+---
+
+<div class="text-sm text-mute">
+	<p class="max-w-prose">
+		I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and the
+		random thoughts of a web developer with ADHD.
+	</p>
+	<!-- Handled by rss-to-email-worker; it replies with its own confirmation page. -->
+	<form
+		class="mt-4 flex flex-wrap gap-2"
+		method="post"
+		action="https://mail.nathanarthur.com/subscribe"
+	>
+		<label for={inputId} class="sr-only">
+			Email address
+		</label>
+		<input
+			id={inputId}
+			type="email"
+			name="email"
+			required
+			autocomplete="email"
+			placeholder="you@example.com"
+			class="min-w-0 flex-1 rounded border border-rule bg-transparent px-3 py-2 text-ink placeholder:text-faint"
+		/>
+		<button class="rounded bg-accent px-4 py-2 font-medium text-bg">Subscribe</button>
+		<!-- action="subscribe" is checked by the Worker. -->
+		<div
+			class="cf-turnstile w-full"
+			data-sitekey="0x4AAAAAAE8B6mITS1r7e6Zz"
+			data-action="subscribe"
+			data-appearance="interaction-only"
+			data-theme="dark"
+			data-size="flexible"
+		></div>
+	</form>
+</div>
+<!-- ponytail: inline, so two forms on one page would load this twice. Fine while each page has one. -->
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
