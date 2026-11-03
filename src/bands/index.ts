@@ -5,6 +5,7 @@
 import type { Sketch, VectorSketch } from './types.ts';
 import { geometry as hopfield } from './hopfield.ts';
 import { geometry as rings } from './rings.ts';
+import kuramoto from './kuramoto.ts';
 import trails from './trails.ts';
 
 /**
@@ -25,7 +26,7 @@ import trails from './trails.ts';
  * leaves the raster entry silently dead. `index.spec.ts` asserts the two key sets are disjoint, so
  * that is a failing test rather than a Band nobody can explain.
  */
-export const sketches: Record<string, Sketch> = { trails };
+export const sketches: Record<string, Sketch> = { kuramoto, trails };
 
 export const vectors: Record<string, VectorSketch> = { hopfield, rings };
 
