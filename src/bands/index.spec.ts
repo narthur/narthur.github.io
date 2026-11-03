@@ -45,4 +45,15 @@ describe('the Sketch registry', () => {
 			[...Object.keys(vectors), ...Object.keys(sketches)].sort()
 		);
 	});
+
+	it('maps every name to the module file of the same name', async () => {
+		// scripts/bands.mjs fingerprints a raster Band by hashing `src/bands/<name>.ts`, and leaves
+		// this registry out of the hash so that opting in a new post doesn't re-render every Band.
+		// That is only sound if the name decides the file: `trails: kuramoto` would change the
+		// pixels without changing anything the fingerprint reads. This makes that a failing test.
+		for (const [name, sketch] of Object.entries(sketches))
+			expect((await import(`./${name}.ts`)).default, name).toBe(sketch);
+		for (const [name, vector] of Object.entries(vectors))
+			expect((await import(`./${name}.ts`)).geometry, name).toBe(vector);
+	});
 });

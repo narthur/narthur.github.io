@@ -12,7 +12,7 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { readFile, writeFile, mkdir, readdir, rm, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
 import { load } from 'js-yaml';
 import { chromium } from 'playwright';
 import sharp from 'sharp';
@@ -95,26 +95,41 @@ async function bandedPosts() {
  * p5's random() and noise() have changed across releases, so a version bump that did not bust the
  * cache would silently keep serving an image the current code would no longer produce.
  *
- * The registry is in there for the same reason. The Sketch is hashed by path, but the path is
- * derived from a name the registry resolves, so pointing `trails` at a different module would
- * change every pixel without changing any file this otherwise reads.
+ * The registry is deliberately left out. It gains an entry each time a post opts in, so hashing it
+ * re-rendered every raster Band on every opt-in. The Sketch is hashed by the path its name gives,
+ * which is only sound while each name points at the file of the same name; `index.spec.ts`
+ * enforces that rule, so pointing `trails` at another module fails a test instead of serving a
+ * stale image.
+ *
+ * Each of those files is hashed with every local module it imports, transitively: `kuramoto`
+ * draws from `rng` in vector.ts, so an edit there changes its pixels too. The render page is the
+ * exception, hashed alone, because it imports the registry.
  *
  * Editing only a comment in any of these re-renders to identical bytes, which is harmless.
  */
 async function fingerprint(sketch, seed) {
-	const parts = await Promise.all(
-		[
-			`src/bands/${sketch}.ts`,
-			'src/bands/index.ts',
-			'src/bands/harness.ts',
-			'src/bands/cdn.ts',
-			'src/theme.ts',
-			'src/pages/band-render.astro'
-		].map((f) => readFile(f, 'utf8'))
-	);
+	const files = new Set();
+	for (const root of [
+		`src/bands/${sketch}.ts`,
+		'src/bands/harness.ts',
+		'src/bands/cdn.ts',
+		'src/theme.ts'
+	])
+		await withImports(root, files);
+	files.add('src/pages/band-render.astro');
+	const parts = await Promise.all([...files].map((f) => readFile(f, 'utf8')));
 	const hash = createHash('sha256');
 	for (const part of parts) hash.update(part);
 	return hash.update(JSON.stringify({ seed, WIDTH, HEIGHT, SCALE })).digest('hex').slice(0, 16);
+}
+
+/** Adds `file` and every relative module it imports, transitively, to `seen`. */
+async function withImports(file, seen) {
+	if (seen.has(file)) return;
+	seen.add(file);
+	const text = await readFile(file, 'utf8');
+	for (const [, spec] of text.matchAll(/(?:from|import)\s*\(?\s*['"](\.{1,2}\/[^'"]+)['"]/g))
+		await withImports(join(dirname(file), spec), seen);
 }
 
 /** Serves dist/ so the render target can be loaded over http rather than file://. */
@@ -221,6 +236,7 @@ async function main() {
 	const posts = await bandedPosts();
 	if (!posts.length) {
 		await removeRenderTarget();
+		await rm(CACHE, { recursive: true, force: true });
 		return console.log('bands: no posts ask for one');
 	}
 
@@ -233,15 +249,29 @@ async function main() {
 		if (track === 'vector') await renderVector(post, draw);
 		else raster.push(post);
 	}
-	if (!raster.length) return removeRenderTarget();
+	if (!raster.length) {
+		// No raster Band left, so no cache entry is claimed; see the eviction at the end.
+		await rm(CACHE, { recursive: true, force: true });
+		return removeRenderTarget();
+	}
 
 	await mkdir(CACHE, { recursive: true });
 	const server = await serve(DIST, 4178);
 	const browser = await chromium.launch();
 	const page = await browser.newPage({ deviceScaleFactor: SCALE });
 
+	const live = new Set();
 	for (const post of raster) {
+		// The fingerprint hashes the file the name gives, so a name pointing at another module would
+		// serve a stale image. index.spec.ts checks this too; checking here as well means a deploy,
+		// which runs no tests, cannot ship one.
+		const { draw } = resolveSketch(post.sketch);
+		if ((await import(`../src/bands/${post.sketch}.ts`)).default !== draw)
+			throw new Error(
+				`bands: '${post.sketch}' is not the default export of src/bands/${post.sketch}.ts`
+			);
 		const id = await fingerprint(post.sketch, post.seed);
+		live.add(`${id}.png`);
 		const cached = join(CACHE, `${id}.png`);
 		let png;
 
@@ -268,6 +298,10 @@ async function main() {
 	await browser.close();
 	server.close();
 	await removeRenderTarget();
+
+	// CI restores and saves this directory whole, and each entry is a ~2.7MB 2x PNG, so drop any
+	// entry no current Band claims rather than carry every superseded render forever.
+	for (const file of await readdir(CACHE)) if (!live.has(file)) await rm(join(CACHE, file));
 }
 
 await main();
