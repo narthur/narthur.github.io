@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Band from '../../layouts/Band.astro';
+import Subscribe from '../../layouts/Subscribe.astro';
 import { bandExtension } from '../../bands';
 import '../../post.css';
 import { describe } from '../../describe';
@@ -74,6 +75,10 @@ const description = describe(post.body, title, subtitle);
 	<article class="post mt-12">
 		<Content />
 	</article>
+
+	<section aria-label="Subscribe" class="mt-20 border-t border-rule pt-8">
+		<Subscribe />
+	</section>
 
 	{/* Older on the left, newer on the right, so the pair reads as the timeline does. Each side
 	    keeps its column when the other is missing, so the first and last posts don't shift. */}
