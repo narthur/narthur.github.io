@@ -141,10 +141,6 @@ const isVector = resolveSketch(sketch)?.track === 'vector';
 				announce(seed);
 			};
 			render();
-			// The picker rewrites --accent in place; CSS follows it, but an SVG built once in JS does
-			// not. Redrawn at the SAME seed, so two accents can be compared on one Band — a reseed
-			// would change the drawing and defeat the comparison.
-			document.documentElement.addEventListener('accentchange', () => render());
 		} else {
 			const band = mountBand(resolved.draw, {
 				host,
@@ -157,6 +153,12 @@ const isVector = resolveSketch(sketch)?.track === 'vector';
 			});
 			render = band.render;
 		}
+
+		// The picker rewrites --accent in place; CSS follows it, but neither track does: a vector
+		// Band's SVG and a raster Band's canvas both read the accent once, at draw time. Redrawn at
+		// the SAME seed, so two accents can be compared on one Band — a reseed would change the
+		// drawing and defeat the comparison.
+		document.documentElement.addEventListener('accentchange', () => render());
 
 		picker?.querySelector('[data-reseed]')?.addEventListener('click', () => {
 			render(Math.floor(Math.random() * 100000));
