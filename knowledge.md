@@ -258,6 +258,7 @@ approval.
 Turnstile with `data-action="subscribe"`, which the Worker checks. It loads the
 Turnstile script itself, so only pages that render the form fetch it. Its blurb
 is Nathan's copy; keep it verbatim rather than redrafting it per placement.
+`/writing` hides it (`blurb={false}`) because its intro makes the same pitch.
 
 ## Comments
 
