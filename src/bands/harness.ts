@@ -134,7 +134,8 @@ export function mountBand(sketch: Sketch, opts: MountOptions): MountedBand {
 	return {
 		render: (next?: number) => {
 			if (redraw) redraw(next);
-			else pending = { seed: next };
+			// A seedless render (the dev picker's accent redraw) keeps a reseed already queued.
+			else pending = { seed: next ?? pending?.seed };
 		}
 	};
 }
