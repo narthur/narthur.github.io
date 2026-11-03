@@ -1,3 +1,13 @@
+---
+interface Props {
+	/** Prefix for the input's id. Only needs setting if a page renders two forms. */
+	id?: string;
+}
+
+const { id = 'subscribe' } = Astro.props;
+const inputId = `${id}-email`;
+---
+
 <div class="text-sm text-mute">
 	<p class="max-w-prose">
 		I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and the
@@ -9,11 +19,11 @@
 		method="post"
 		action="https://mail.nathanarthur.com/subscribe"
 	>
-		<label for="subscribe-email" class="sr-only">
+		<label for={inputId} class="sr-only">
 			Email address
 		</label>
 		<input
-			id="subscribe-email"
+			id={inputId}
 			type="email"
 			name="email"
 			required
@@ -33,5 +43,5 @@
 		></div>
 	</form>
 </div>
-<!-- ponytail: one form per page. A second would duplicate the subscribe-email id and load this script twice; give it an id prop and a deduplicated loader if that is ever needed. -->
+<!-- ponytail: inline, so two forms on one page would load this twice. Fine while each page has one. -->
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
