@@ -95,9 +95,11 @@ async function bandedPosts() {
  * p5's random() and noise() have changed across releases, so a version bump that did not bust the
  * cache would silently keep serving an image the current code would no longer produce.
  *
- * The registry is in there for the same reason. The Sketch is hashed by path, but the path is
- * derived from a name the registry resolves, so pointing `trails` at a different module would
- * change every pixel without changing any file this otherwise reads.
+ * The registry is deliberately left out. It gains an entry each time a post opts in, so hashing it
+ * re-rendered every raster Band on every opt-in. The Sketch is hashed by the path its name gives,
+ * which is only sound while each name points at the file of the same name; `index.spec.ts`
+ * enforces that rule, so pointing `trails` at another module fails a test instead of serving a
+ * stale image.
  *
  * Editing only a comment in any of these re-renders to identical bytes, which is harmless.
  */
@@ -105,7 +107,6 @@ async function fingerprint(sketch, seed) {
 	const parts = await Promise.all(
 		[
 			`src/bands/${sketch}.ts`,
-			'src/bands/index.ts',
 			'src/bands/harness.ts',
 			'src/bands/cdn.ts',
 			'src/theme.ts',
@@ -240,8 +241,10 @@ async function main() {
 	const browser = await chromium.launch();
 	const page = await browser.newPage({ deviceScaleFactor: SCALE });
 
+	const live = new Set();
 	for (const post of raster) {
 		const id = await fingerprint(post.sketch, post.seed);
+		live.add(`${id}.png`);
 		const cached = join(CACHE, `${id}.png`);
 		let png;
 
@@ -268,6 +271,10 @@ async function main() {
 	await browser.close();
 	server.close();
 	await removeRenderTarget();
+
+	// CI restores and saves this directory whole, and each entry is a ~2.7MB 2x PNG, so drop any
+	// entry no current Band claims rather than carry every superseded render forever.
+	for (const file of await readdir(CACHE)) if (!live.has(file)) await rm(join(CACHE, file));
 }
 
 await main();
