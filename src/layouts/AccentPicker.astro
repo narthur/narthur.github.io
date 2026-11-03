@@ -62,7 +62,7 @@ const presets = [
 		// Every navigation is a full page load, so carry the choice across pages.
 		sessionStorage.setItem('accent', hex);
 		// Anything that reads --accent once, rather than through CSS, has to be told it moved. A
-		// vector Band builds its SVG in JS and would otherwise keep the old colour until a reseed —
+		// Band builds its SVG or canvas in JS and would otherwise keep the old colour until a reseed —
 		// and a reseed draws a different Band, so there would be no way to compare two accents
 		// against the same one, which is the whole job of this picker.
 		document.documentElement.dispatchEvent(
