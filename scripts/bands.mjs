@@ -128,7 +128,7 @@ async function withImports(file, seen) {
 	if (seen.has(file)) return;
 	seen.add(file);
 	const text = await readFile(file, 'utf8');
-	for (const [, spec] of text.matchAll(/from\s+['"](\.{1,2}\/[^'"]+)['"]/g))
+	for (const [, spec] of text.matchAll(/(?:from|import)\s*\(?\s*['"](\.{1,2}\/[^'"]+)['"]/g))
 		await withImports(join(dirname(file), spec), seen);
 }
 
