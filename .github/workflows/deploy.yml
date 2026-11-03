@@ -20,11 +20,11 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: pnpm
@@ -34,7 +34,7 @@ jobs:
       - name: Resolve Playwright version
         id: pw
         run: echo "version=$(node -p "require('./node_modules/playwright/package.json').version")" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
@@ -44,7 +44,7 @@ jobs:
       # edits re-render to identical bytes; what it rules out is shipping an image the current
       # code would no longer produce. Without this the cache is empty every run and every banded post is
       # re-rendered on every push, however unrelated the change.
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: node_modules/.cache/bands
           key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/theme.ts', 'src/pages/band-render.astro', 'src/content/posts/**') }}
@@ -54,7 +54,7 @@ jobs:
       # are absolute <link> elements and post bodies are HTML-escaped, so only a Slop item can match.
       - name: Check no Slop in the newsletter feed
         run: "test -s dist/rss.xml && ! grep -q '<link>https://nathanarthur.com/slop/' dist/rss.xml"
-      - uses: cloudflare/wrangler-action@v3
+      - uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3.15.0
         with:
           # v3 defaults to wrangler 3.90, which lacks assets-only Worker support
           wranglerVersion: '4'
