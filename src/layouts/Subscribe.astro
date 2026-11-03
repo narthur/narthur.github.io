@@ -2,23 +2,23 @@
 interface Props {
 	/** Prefix for the input's id. Only needs setting if a page renders two forms. */
 	id?: string;
+	/** Off where the page's own copy already pitches the newsletter, as /writing's intro does. */
+	blurb?: boolean;
 }
 
-const { id = 'subscribe' } = Astro.props;
+const { id = 'subscribe', blurb = true } = Astro.props;
 const inputId = `${id}-email`;
 ---
 
 <div class="text-sm text-mute">
-	<p class="max-w-prose">
-		I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and the
-		random thoughts of a web developer with ADHD.
-	</p>
+	{blurb && (
+		<p class="mb-4 max-w-prose">
+			I write a mostly-weekly newsletter. Subscribe for productivity tips and tools, AI news, and
+			the random thoughts of a web developer with ADHD.
+		</p>
+	)}
 	<!-- Handled by rss-to-email-worker; it replies with its own confirmation page. -->
-	<form
-		class="mt-4 flex flex-wrap gap-2"
-		method="post"
-		action="https://mail.nathanarthur.com/subscribe"
-	>
+	<form class="flex flex-wrap gap-2" method="post" action="https://mail.nathanarthur.com/subscribe">
 		<label for={inputId} class="sr-only">
 			Email address
 		</label>

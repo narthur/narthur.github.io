@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import Subscribe from '../layouts/Subscribe.astro';
 
 const posts = (await getCollection('posts')).sort(
 	(a, b) => b.data.date.getTime() - a.data.date.getTime()
@@ -39,13 +40,17 @@ const beeminderPosts = [
 
 	<h1 class="text-4xl font-medium tracking-tight">Writing</h1>
 	<p class="mt-5 max-w-prose leading-relaxed text-mute">
-		I write about web development, productivity, and AI in my mostly-weekly newsletter. Subscribe in
-		the footer, or via{' '}
+		I write about web development, productivity, and AI in my mostly-weekly newsletter. Subscribe
+		below, or via{' '}
 		<a href="/rss.xml" class="text-ink underline decoration-mute underline-offset-4">
 			the RSS feed
 		</a>
 		.
 	</p>
+
+	<div class="mt-8">
+		<Subscribe blurb={false} />
+	</div>
 
 	<section class="mt-20">
 		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Newsletter</h2>
