@@ -141,6 +141,15 @@ projects:
       An AI-written Hitchhiker's Guide to the Galaxy: search for anything and the Guide writes
       an entry for it in the book's voice, caching each one.
 
+  - name: MyWords
+    url: https://mywords.nathanarthur.com/
+    start: 2026
+    meta: solo · typescript
+    description: >-
+      Tool for putting a text in your own words: paste the original and rewrite it in an
+      editor that marks words still taken from it, with a progress bar and a redaction toggle
+      that hides the current paragraph's wording while you replace it.
+
   - name: Later
     url: https://later.nathanarthur.com/
     start: 2025
