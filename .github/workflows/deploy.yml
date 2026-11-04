@@ -60,7 +60,8 @@ jobs:
         run: "test -s dist/rss.xml && ! grep -q '<link>https://nathanarthur.com/slop/' dist/rss.xml"
       - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
-          # v3 defaults to wrangler 3.90, which lacks assets-only Worker support
+          # Holds wrangler to major 4 (assets-only Worker support needs it), so a new major arrives
+          # as a deliberate change rather than with the action's default.
           wranglerVersion: '4'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
