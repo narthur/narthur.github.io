@@ -76,7 +76,7 @@ jobs:
       - name: Resolve Playwright version
         id: pw
         run: echo "version=$(node -p "require('./node_modules/playwright/package.json').version")" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
@@ -87,7 +87,7 @@ jobs:
       # shipping an image the current code would no longer produce. Without this the cache is
       # empty every run and every banded post is re-rendered on every push, however unrelated
       # the change.
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: node_modules/.cache/bands
           key: bands-${{ runner.os }}-${{ hashFiles('src/bands/**', 'src/theme.ts', 'src/pages/band-render.astro', 'src/content/posts/**') }}
