@@ -12,8 +12,8 @@ import { rng, toPathData, type Point } from './vector.ts';
  * ones do around the code that changed, so the strip is busy in places and calm in others; each
  * column also gets one stray finding of its own.
  *
- * Tiles because every cell sits inside one column and the columns divide the width exactly, and
- * the findings' x positions wrap.
+ * The Band tiles in x because every cell sits inside one column and the columns divide the width
+ * exactly. The clustered findings wrap in x, so a cluster near one edge continues at the other.
  */
 export const PARAMS = {
 	CLUSTERS: 9,

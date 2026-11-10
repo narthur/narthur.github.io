@@ -23,11 +23,13 @@ describe('subdivide', () => {
 			expect(layout(3440, 240, seed).cells.every((c) => c.depth > 0)).toBe(true);
 	});
 
-	it('keeps every cell inside the strip, so nothing crosses the seam', () => {
+	it('covers the strip exactly, so nothing crosses the seam or leaves a hole', () => {
 		for (const c of cells) {
 			expect(c.x).toBeGreaterThanOrEqual(0);
 			expect(c.x + c.w).toBeLessThanOrEqual(3440 + 1e-9);
 		}
+		// Inside the strip and summing to its area means no gaps and no overlaps.
+		expect(cells.reduce((a, c) => a + c.w * c.h, 0)).toBeCloseTo(3440 * 240, 3);
 	});
 
 	it('is a pure function of the seed', () => {

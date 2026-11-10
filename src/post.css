@@ -108,8 +108,12 @@
 .post :is(th, td) {
 	padding: 0.5em 1.5em 0.5em 0;
 	border-bottom: 1px solid theme('colors.rule');
-	text-align: left;
 	vertical-align: top;
+}
+/* Headers centre by default; left-align them unless the Markdown set an alignment (remark emits
+   it as an align attribute, which any author rule would override). */
+.post th:not([align]) {
+	text-align: left;
 }
 .post :is(th, td):last-child {
 	padding-right: 0;
