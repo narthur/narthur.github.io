@@ -1,7 +1,7 @@
 ---
 title: 'Using AI for Recursive Code Review'
 date: 2026-11-10T16:00:00.000Z
-band: { sketch: 'subdivide', seed: 1 }
+band: { sketch: 'subdivide', seed: 43691 }
 ---
 
 Since switching to doing my development work almost exclusively via Claude Code, I've become focused on finding ways to automate quality control to ensure what I ship doesn't become worse over time.
