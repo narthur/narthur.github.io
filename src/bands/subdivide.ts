@@ -8,8 +8,9 @@ import { rng, toPathData, type Point } from './vector.ts';
  * Recursive subdivision, for "Using AI for Recursive Code Review".
  *
  * The strip is a row of cells. Any cell holding a finding splits in four and each quarter is
- * reviewed again, down to a depth limit; a clean cell stays whole. Findings cluster, as real
- * ones do around the code that changed, so the strip is busy in places and calm in others.
+ * reviewed again, down to a depth limit; a clean cell stays whole. Most findings cluster, as real
+ * ones do around the code that changed, so the strip is busy in places and calm in others; each
+ * column also gets one stray finding of its own.
  *
  * Tiles because every cell sits inside one column and the columns divide the width exactly, and
  * the findings' x positions wrap.
@@ -42,6 +43,10 @@ export function layout(W: number, H: number, seed: number): { findings: Point[];
 		const x = (((cx + bell() * PARAMS.SPREAD[0]) % W) + W) % W;
 		return [x, Math.max(1, Math.min(H - 1, cy + bell() * PARAMS.SPREAD[1]))];
 	});
+	// One stray finding per column, so no column is left as a whole, empty full-height cell, which
+	// reads as a hole in the strip rather than as clean code.
+	for (let i = 0; i < cols; i++)
+		findings.push([(i + 0.1 + rnd() * 0.8) * cw, H * (0.1 + rnd() * 0.8)]);
 
 	const cells: Cell[] = [];
 	const split = (c: Cell) => {

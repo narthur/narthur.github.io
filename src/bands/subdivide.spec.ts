@@ -17,6 +17,12 @@ describe('subdivide', () => {
 		for (const c of cells.filter((c) => c.depth < PARAMS.MAX_DEPTH)) expect(dirty(c)).toBe(false);
 	});
 
+	it('splits every column at least once', () => {
+		// Seed 1 used to leave the first column whole; check a spread of seeds, not just that one.
+		for (let seed = 1; seed <= 50; seed++)
+			expect(layout(3440, 240, seed).cells.every((c) => c.depth > 0)).toBe(true);
+	});
+
 	it('keeps every cell inside the strip, so nothing crosses the seam', () => {
 		for (const c of cells) {
 			expect(c.x).toBeGreaterThanOrEqual(0);
