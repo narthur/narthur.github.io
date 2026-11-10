@@ -41,7 +41,12 @@
 }
 .post ol {
 	list-style: decimal;
-	padding-left: 1.5em;
+	padding-left: 2em;
+}
+/* A gap between marker and text, for bullets and numbers alike. ol is indented further so
+   two-digit numbers stay inside the column instead of hanging past the paragraph edge. */
+.post li {
+	padding-left: 0.375em;
 }
 .post li + li,
 .post li > :is(ul, ol) {
