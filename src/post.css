@@ -43,9 +43,9 @@
 	list-style: decimal;
 	padding-left: 2em;
 }
-/* A gap between marker and text, for bullets and numbers alike. ol is indented further so
-   two-digit numbers stay inside the column instead of hanging past the paragraph edge. */
-.post li {
+/* Numbers sit flush against their text, so they get a gap; a disc marker already carries one.
+   ol is indented further so two-digit numbers stay inside the column. */
+.post ol > li {
 	padding-left: 0.375em;
 }
 .post li + li,
