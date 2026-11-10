@@ -92,3 +92,28 @@
 	aspect-ratio: 16 / 9;
 	border: 1px solid theme('colors.rule');
 }
+/* Typographic like the rest of the site: hairline rows, no boxes, headers set as the small
+   mono section labels. display: block lets a wide table scroll instead of widening the page. */
+.post table {
+	display: block;
+	overflow-x: auto;
+	border-collapse: collapse;
+	font-size: 0.9375rem;
+}
+.post :is(th, td) {
+	padding: 0.5em 1.5em 0.5em 0;
+	border-bottom: 1px solid theme('colors.rule');
+	text-align: left;
+	vertical-align: top;
+}
+.post :is(th, td):last-child {
+	padding-right: 0;
+}
+.post th {
+	font-family: theme('fontFamily.mono');
+	font-size: 0.75rem;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: theme('colors.mute');
+}
