@@ -27,6 +27,8 @@ describe('subdivide', () => {
 		for (const c of cells) {
 			expect(c.x).toBeGreaterThanOrEqual(0);
 			expect(c.x + c.w).toBeLessThanOrEqual(3440 + 1e-9);
+			expect(c.y).toBeGreaterThanOrEqual(0);
+			expect(c.y + c.h).toBeLessThanOrEqual(240 + 1e-9);
 		}
 		// Inside the strip and summing to its area means no gaps and no overlaps.
 		expect(cells.reduce((a, c) => a + c.w * c.h, 0)).toBeCloseTo(3440 * 240, 3);
