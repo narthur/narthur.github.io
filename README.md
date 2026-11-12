@@ -6,7 +6,7 @@ Cloudflare Workers static assets.
 
 ## Development
 
-Requires Node >= 22.19 (`.tool-versions` pins a version for asdf) and pnpm.
+Requires Node >= 22.23.4 (`.tool-versions` pins a version for asdf) and pnpm.
 
 ```bash
 pnpm install

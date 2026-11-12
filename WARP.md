@@ -33,7 +33,7 @@ pnpm format        # prettier --write
 pnpm band-preview --sketch=hopfield --seeds=1,2,3
 ```
 
-Astro needs Node >= 22.19.
+Astro needs Node >= 22.23.4.
 
 ## Architecture
 
