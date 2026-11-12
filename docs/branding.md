@@ -169,12 +169,12 @@ and is kept anyway.
 
 ## Neighbours
 
-The footer places this site among four others: Substack (the newsletter's home),
-Pine Peak Digital (the company), Stack Overflow, and Ko-fi
-(`src/layouts/Layout.astro`). The personal site is the hub and does not absorb
-them — the newsletter keeps its own home and its own voice, and the company
-keeps its own brand. _Inferred from the footer and from the newsletter's
-separate domain; no decision about the relationship is recorded._
+The footer places this site among three others: Pine Peak Digital (the
+company), Stack Overflow, and Ko-fi (`src/layouts/Layout.astro`). The personal
+site is the hub and does not absorb them — the company keeps its own brand.
+_Inferred from the footer; no decision about the relationship is recorded._
+The newsletter was once a fourth, on Substack, until it moved to `/writing` in
+September 2026 (`knowledge.md`).
 
 ## Open questions
 
