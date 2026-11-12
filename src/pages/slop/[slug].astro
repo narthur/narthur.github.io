@@ -17,7 +17,13 @@ const day = date.toISOString().slice(0, 10);
 const description = describe(post.body, title);
 ---
 
-<Layout title={`${title} — Slop — Nathan Arthur`} description={description} ai feed={SLOP_FEED}>
+<Layout
+	title={`${title} — Slop — Nathan Arthur`}
+	description={description}
+	ai
+	feed={SLOP_FEED}
+	published={date}
+>
 	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
 		<a href="/slop">&larr; Slop</a>
 	</p>
