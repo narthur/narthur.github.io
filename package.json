@@ -5,7 +5,7 @@
 	"type": "module",
 	"packageManager": "pnpm@10.6.1",
 	"engines": {
-		"node": ">=22.19"
+		"node": ">=22.23.4"
 	},
 	"scripts": {
 		"dev": "astro dev",
@@ -25,6 +25,7 @@
 		"@astrojs/check": "^0.9.12",
 		"@astrojs/mdx": "^8.1.2",
 		"@astrojs/rss": "^4.0.19",
+		"@astrojs/sitemap": "^3.7.4",
 		"@eslint/compat": "^2.1.1",
 		"@eslint/js": "^10.0.1",
 		"@fontsource/instrument-sans": "^5.3.0",
@@ -58,7 +59,6 @@
 		}
 	},
 	"dependencies": {
-		"@astrojs/sitemap": "^3.7.4",
 		"js-yaml": "^4.3.2"
 	}
 }

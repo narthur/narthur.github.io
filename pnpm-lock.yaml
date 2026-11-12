@@ -15,9 +15,6 @@ importers:
 
   .:
     dependencies:
-      '@astrojs/sitemap':
-        specifier: ^3.7.4
-        version: 3.7.4
       js-yaml:
         specifier: ^4.3.2
         version: 4.3.2
@@ -31,6 +28,9 @@ importers:
       '@astrojs/rss':
         specifier: ^4.0.19
         version: 4.0.19
+      '@astrojs/sitemap':
+        specifier: ^3.7.4
+        version: 3.7.4
       '@eslint/compat':
         specifier: ^2.1.1
         version: 2.1.1(eslint@10.14.0(jiti@1.21.7))
