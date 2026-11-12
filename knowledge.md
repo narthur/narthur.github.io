@@ -228,6 +228,12 @@ leftover scaffolding, and it never reaches the build. Keep its script
 `is:inline`: a processed `<script>` is bundled into the build whether or not the
 component renders.
 
+`@astrojs/sitemap` writes `sitemap-index.xml` at build time, and
+`public/robots.txt` points crawlers at it. The sitemap leaves out `/404` and
+`/band-render` (see `astro.config.mjs`). A new page that should not be indexed
+needs adding to that filter. Cloudflare prepends its managed content-signals
+block to the served `robots.txt`, so the file in `public/` holds only our lines.
+
 The favicon is self-hosted: `public/favicon.svg` is the source and
 `public/favicon.png` is rendered from it as the fallback for browsers that don't
 take SVG icons. Keep them in step. The mark is a shell prompt — chevron and
