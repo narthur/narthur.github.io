@@ -18,6 +18,8 @@ interface Props {
 	feed?: { title: string; href: string };
 	/** A post's date. Marks the page as an article in link previews. */
 	published?: Date;
+	/** Who wrote the page, for LinkedIn's author field. Slop leaves it off, since AI writes it. */
+	author?: string;
 }
 
 import { ACCENT } from '../theme';
@@ -30,7 +32,8 @@ const {
 	ai = false,
 	footer = true,
 	feed = { title: 'Narthur Online', href: '/rss.xml' },
-	published
+	published,
+	author
 } = Astro.props;
 
 // The build writes /work.html, but the site serves it as /work (see build.format in astro.config).
@@ -62,6 +65,7 @@ const footerLinks = [
 		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		{author && <meta name="author" content={author} />}
 		{!isNotFound && <link rel="canonical" href={url} />}
 		{/* Link previews in Discord, Slack, LinkedIn etc. ponytail: one site-wide image, the
 		    avatar 8x; per-page images only if a page needs its own. */}

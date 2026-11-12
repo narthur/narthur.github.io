@@ -236,7 +236,9 @@ block to the served `robots.txt`, so the file in `public/` holds only our lines.
 
 Post pages pass their date to `Layout` as `published`, which makes the link
 preview an `og:type` article with `article:published_time`. Every other page is
-`website`.
+`website`. Newsletter posts also pass `author`, which LinkedIn reads from
+`<meta name="author">`. Slop posts leave it off: they are AI-written, and an
+author tag would credit the writing to Nathan.
 
 The favicon is self-hosted: `public/favicon.svg` is the source and
 `public/favicon.png` is rendered from it as the fallback for browsers that don't
