@@ -16,6 +16,8 @@ interface Props {
 	footer?: boolean;
 	/** The feed to advertise in <head>; /slop pages point readers at their own. */
 	feed?: { title: string; href: string };
+	/** A post's date. Marks the page as an article in link previews. */
+	published?: Date;
 }
 
 import { ACCENT } from '../theme';
@@ -27,7 +29,8 @@ const {
 	wide = false,
 	ai = false,
 	footer = true,
-	feed = { title: 'Narthur Online', href: '/rss.xml' }
+	feed = { title: 'Narthur Online', href: '/rss.xml' },
+	published
 } = Astro.props;
 
 // The build writes /work.html, but the site serves it as /work (see build.format in astro.config).
@@ -63,6 +66,8 @@ const footerLinks = [
 		{/* Link previews in Discord, Slack, LinkedIn etc. ponytail: one site-wide image, the
 		    avatar 8x; per-page images only if a page needs its own. */}
 		<meta property="og:site_name" content={`Nathan Arthur · ${POSITIONING}`} />
+		<meta property="og:type" content={published ? 'article' : 'website'} />
+		{published && <meta property="article:published_time" content={published.toISOString()} />}
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		{!isNotFound && <meta property="og:url" content={url} />}

@@ -27,7 +27,7 @@ const day = date.toISOString().slice(0, 10);
 const description = describe(post.body, title, subtitle);
 ---
 
-<Layout title={`${title} — Nathan Arthur`} description={description} ai={ai}>
+<Layout title={`${title} — Nathan Arthur`} description={description} ai={ai} published={date}>
 	<p class="mb-10 font-mono text-xs uppercase tracking-widest text-faint">
 		<a href="/writing">&larr; Writing</a>
 	</p>
