@@ -50,9 +50,10 @@ What it claims is narrow and accurate: this person works in a terminal. It makes
 no claim about design, taste, or company. For a developer's verification site
 that is the right size of claim — _inferred from the choice of glyph_.
 
-There is no wordmark beyond the name set in Instrument Sans, and no `og:image`
-— link previews currently fall back to whatever the platform generates.
-_Inferred: no decision about either is recorded anywhere._
+There is no wordmark beyond the name set in Instrument Sans. Link previews use
+the pixel avatar, upscaled 8x to `public/og.png`, as a site-wide `og:image`
+(set in `Layout.astro`). _Inferred: no decision about a wordmark is recorded
+anywhere._
 
 ## Colour
 
@@ -180,6 +181,5 @@ separate domain; no decision about the relationship is recorded._
 Nothing here answers these; they are listed so a later reader knows they are
 unanswered rather than settled.
 
-- No `og:image`, so shared links have no controlled preview.
 - No wordmark or any mark larger than the 64px favicon.
 - Whether the accent is ever intended to settle, or stays a parameter.
