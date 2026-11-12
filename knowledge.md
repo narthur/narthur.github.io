@@ -238,7 +238,7 @@ title doesn't.
 
 ## Slop
 
-`/slop` is a separate section of short daily posts, one link or technique each, written by AI
+`/slop` is a separate section of short posts, one link or technique each, written by AI
 from Nathan's notes and approved by him before they are committed. It is kept apart from the
 newsletter on purpose: its own collection (`src/content/slop/`), its own index and its own feed
 (`/slop/rss.xml`). The rss-to-email Worker reads only `/rss.xml`, so Slop is never emailed.
