@@ -12,3 +12,6 @@ yarn.lock
 
 # Written by `pnpm project-stats`; one line per project so a refresh is one changed line
 src/work/commits/
+
+# Issued by Google Search Console; must stay byte-for-byte as issued
+public/google*.html
