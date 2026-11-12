@@ -54,8 +54,9 @@ ornament never.
 ## Content Guidelines
 
 - The positioning line under the name is also the home page's `<meta
-name="description">` — `index.astro` derives one from the other, so editing
-  the constant changes the search result too.
+name="description">` and, after the name, every link preview's `og:site_name`.
+  It is one constant, `POSITIONING` in `src/site.ts`, so editing it changes
+  the search result and the previews too.
 - The home page is one screen and lists no projects: three signposts (Work,
   Writing, Uses) point at the pages that do. `/work` carries the tiering —
   `emphasis: featured` entries lead, the rest follow one line each.
@@ -91,6 +92,7 @@ src/
 ├── content/posts/*.md          # newsletter posts
 ├── content/projects/*.mdx      # project pages: prose with charts and screenshots
 ├── content/slop/*.md           # Slop posts, committed ahead of their date
+├── site.ts                     # POSITIONING, the line under the name
 ├── slop.ts                     # published-only query, feed and disclosure constants
 ├── post.css                    # post body styles, shared by /writing and /slop
 ├── describe.ts                 # meta description from a post's opening paragraph

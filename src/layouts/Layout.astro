@@ -19,6 +19,7 @@ interface Props {
 }
 
 import { ACCENT } from '../theme';
+import { POSITIONING } from '../site';
 
 const {
 	title,
@@ -62,7 +63,7 @@ const footerLinks = [
 		{!isNotFound && <link rel="canonical" href={url} />}
 		{/* Link previews in Discord, Slack, LinkedIn etc. ponytail: one site-wide image, the
 		    avatar 8x; per-page images only if a page needs its own. */}
-		<meta property="og:site_name" content="Nathan Arthur" />
+		<meta property="og:site_name" content={`Nathan Arthur · ${POSITIONING}`} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		{!isNotFound && <meta property="og:url" content={url} />}
