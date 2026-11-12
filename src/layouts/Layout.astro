@@ -19,6 +19,7 @@ interface Props {
 }
 
 import { ACCENT } from '../theme';
+import { POSITIONING } from '../site';
 
 const {
 	title,
@@ -28,6 +29,14 @@ const {
 	footer = true,
 	feed = { title: 'Narthur Online', href: '/rss.xml' }
 } = Astro.props;
+
+// The build writes /work.html, but the site serves it as /work (see build.format in astro.config).
+const url = new URL(
+	Astro.url.pathname.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, ''),
+	Astro.site
+);
+// 404.html is served at every missing URL, so it must not claim one of its own.
+const isNotFound = url.pathname === '/404';
 
 const footerLinks = [
 	{ name: 'Uses', url: '/uses' },
@@ -51,6 +60,16 @@ const footerLinks = [
 		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		{!isNotFound && <link rel="canonical" href={url} />}
+		{/* Link previews in Discord, Slack, LinkedIn etc. ponytail: one site-wide image, the
+		    avatar 8x; per-page images only if a page needs its own. */}
+		<meta property="og:site_name" content={`Nathan Arthur · ${POSITIONING}`} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		{!isNotFound && <meta property="og:url" content={url} />}
+		<meta property="og:image" content={new URL('/og.png', Astro.site)} />
+		<meta property="og:image:alt" content="Pixel-art portrait of Nathan Arthur" />
+		<meta name="twitter:card" content="summary" />
 		<link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
 	</head>
 	<body>

@@ -3,8 +3,9 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import avatar from '../images/avatar.jpg';
 import Layout from '../layouts/Layout.astro';
+import { POSITIONING } from '../site';
 
-const positioning = 'Full-stack web developer building in React and TypeScript';
+const positioning = POSITIONING;
 
 const contact = [
 	{ name: 'GitHub', url: 'https://github.com/narthur' },
