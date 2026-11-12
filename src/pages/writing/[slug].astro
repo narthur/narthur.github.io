@@ -65,7 +65,10 @@ const description = describe(post.body, title, subtitle);
 				{substack && (
 					<>
 						{' '}
-						· <a href={substack}>Originally on Substack</a>
+						·{' '}
+						<a href={substack} class="text-ink underline decoration-mute underline-offset-4">
+							Originally on Substack
+						</a>
 					</>
 				)}
 			</p>
@@ -131,8 +134,13 @@ const description = describe(post.body, title, subtitle);
 		<noscript>
 			<p class="text-mute">
 				Comments need JavaScript. They also live on{' '}
-				<a href="https://github.com/narthur/narthur.github.io/discussions">GitHub Discussions</a>,
-				which works without it.
+				<a
+					href="https://github.com/narthur/narthur.github.io/discussions"
+					class="text-ink underline decoration-mute underline-offset-4"
+				>
+					GitHub Discussions
+				</a>
+				, which works without it.
 			</p>
 		</noscript>
 	</section>

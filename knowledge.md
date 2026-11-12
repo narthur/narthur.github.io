@@ -30,7 +30,10 @@ ornament never.
 - Instrument Sans (400, 500) for prose and headings; the system mono stack for
   metadata — stack lists, dates, roles, section labels.
 - Section labels are small mono, uppercase, wide tracking.
-- Links are body-colored and underline on hover in `accent`. No hover lifts, no
+- Links are body-colored and underline on hover in `accent`. A link inside a
+  sentence also carries a resting underline in `mute`, because otherwise nothing
+  marks it as a link until it is hovered: `.post a` in post bodies, and
+  `text-ink underline decoration-mute underline-offset-4` elsewhere. No hover lifts, no
   scroll effects, no entrance animations. Genuine controls (the `/uses` tag
   filter) may take a hover colour change and a `transition-colors`, because a
   control that gives no feedback is an accessibility problem, not restraint.
