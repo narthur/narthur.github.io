@@ -30,7 +30,10 @@ ornament never.
 - Instrument Sans (400, 500) for prose and headings; the system mono stack for
   metadata — stack lists, dates, roles, section labels.
 - Section labels are small mono, uppercase, wide tracking.
-- Links are body-colored and underline on hover in `accent`. No hover lifts, no
+- Links are body-colored and underline on hover in `accent`. A link inside a
+  sentence also carries a resting underline in `mute`, because otherwise nothing
+  marks it as a link until it is hovered: `.post a` in post bodies, and
+  `text-ink underline decoration-mute underline-offset-[0.25em]` elsewhere. No hover lifts, no
   scroll effects, no entrance animations. Genuine controls (the `/uses` tag
   filter) may take a hover colour change and a `transition-colors`, because a
   control that gives no feedback is an accessibility problem, not restraint.
@@ -235,7 +238,7 @@ title doesn't.
 
 ## Slop
 
-`/slop` is a separate section of short daily posts, one link or technique each, written by AI
+`/slop` is a separate section of short posts, one link or technique each, written by AI
 from Nathan's notes and approved by him before they are committed. It is kept apart from the
 newsletter on purpose: its own collection (`src/content/slop/`), its own index and its own feed
 (`/slop/rss.xml`). The rss-to-email Worker reads only `/rss.xml`, so Slop is never emailed.

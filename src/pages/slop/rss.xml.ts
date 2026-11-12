@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
 	const posts = await publishedSlop();
 	return rss({
 		title: SLOP_FEED.title,
-		description: 'One useful link, tool, or technique a day. AI-written, human-reviewed.',
+		description: 'One useful link, tool, or technique at a time. AI-written, human-reviewed.',
 		site,
 		trailingSlash: false,
 		items: posts.map((post) => ({
