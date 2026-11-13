@@ -14,8 +14,17 @@ export async function getStaticPaths() {
 	const posts = (await getCollection('posts')).sort(
 		(a, b) => b.data.date.getTime() - a.data.date.getTime()
 	);
-	// Recommended posts (CONTEXT.md): the three whose text is closest to this one's.
+	// Recommended posts (CONTEXT.md): the three whose text is closest to this one's. A post with
+	// no body would be matched on its title alone, so it fails the build instead.
+	const empty = posts.find((post) => !post.body?.trim());
+	if (empty) throw new Error(`similar: ${empty.id} has no body to recommend from`);
+	const start = performance.now();
 	const vectors = await embed(posts.map((post) => `${post.data.title}. ${post.body}`));
+	// ponytail: every post is scored against every other, so build time grows with posts squared;
+	// fine at a few hundred, compute each pair once if it ever shows in the log line below.
+	console.log(
+		`similar: ${posts.length} posts embedded in ${Math.round(performance.now() - start)}ms`
+	);
 	return posts.map((post, i) => ({
 		params: { slug: post.id },
 		props: {
