@@ -83,7 +83,7 @@ src/
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
-│   ├── writing.astro           # newsletter post list, Beeminder articles
+│   ├── writing.astro           # newsletter post list, links elsewhere
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   ├── slop.astro              # Slop index
