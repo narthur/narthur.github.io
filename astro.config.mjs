@@ -7,7 +7,8 @@ export default defineConfig({
 	site: 'https://nathanarthur.com',
 	// Project pages are MDX so their charts and screenshots can sit inside the prose.
 	// The sitemap leaves out /404, which is served at every missing URL rather than at its own, and
-	// /band-render, which scripts/bands.mjs deletes from dist after the build.
+	// /band-render and /card-render, which scripts/bands.mjs and scripts/cards.mjs delete from dist
+	// after the build.
 	integrations: [
 		mdx(),
 		sitemap({ filter: (page) => !/\/(404|band-render|card-render)$/.test(page) })

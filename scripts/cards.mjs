@@ -7,6 +7,7 @@
 // ponytail: no cache. Every card re-renders on every build, which measured 6.7s for 79 cards.
 // Add one keyed like bands.mjs's if the post count makes that hurt.
 
+import { existsSync } from 'node:fs';
 import { readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -20,9 +21,12 @@ const browser = await chromium.launch();
 try {
 	const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 	// Serve dist/ straight from disk; the render page's assets are root-relative.
-	await page.route(`${ORIGIN}/**`, (route) =>
-		route.fulfill({ path: join(DIST, decodeURIComponent(new URL(route.request().url()).pathname)) })
-	);
+	// A missing file gets a 404, not a thrown ENOENT: a throw here leaves the request hanging, while
+	// a 404 reaches the page's own load checks, which fail the card by name.
+	await page.route(`${ORIGIN}/**`, (route) => {
+		const file = join(DIST, decodeURIComponent(new URL(route.request().url()).pathname));
+		return existsSync(file) ? route.fulfill({ path: file }) : route.fulfill({ status: 404 });
+	});
 	for (const { path, title, kind, band } of cards) {
 		const query = new URLSearchParams({ title, kind, ...(band && { band }) });
 		await page.goto(`${ORIGIN}/card-render.html?${query}`);

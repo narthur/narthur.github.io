@@ -103,11 +103,24 @@ import { ACCENT } from '../theme';
 				// Explicit, so a font that failed to load fails the card instead of falling back silently.
 				if (!(await document.fonts.load('500 76px "Instrument Sans"', title.textContent)).length)
 					throw new Error('Instrument Sans failed to load');
-				// Step the size down until the title fits in three lines. Never truncate.
+				// Step the size down until the title fits in three lines. Never truncate: a title that
+				// still does not fit at the floor fails the build rather than shipping clipped.
+				const body = document.getElementById('body');
+				const fits = (size) => {
+					title.style.fontSize = `${size}px`;
+					return (
+						title.getBoundingClientRect().height <= size * 1.12 * 3.05 &&
+						title.scrollWidth <= title.clientWidth &&
+						body.scrollHeight <= body.clientHeight
+					);
+				};
 				let size = 76;
-				const lines = () => title.getBoundingClientRect().height / (size * 1.12);
-				do title.style.fontSize = `${size}px`;
-				while (lines() > 3.05 && (size -= 4) > 24);
+				while (!fits(size)) if ((size -= 4) < 24) throw new Error('title does not fit at 24px');
+				// The avatar is checked like the Band below: a broken image would otherwise ship silently.
+				const avatar = document.querySelector('#foot img');
+				await avatar.decode().catch(() => {
+					throw new Error('avatar failed to load');
+				});
 				// A missing Band would otherwise render as an empty strip with nothing in the build log.
 				if (q.get('band'))
 					await new Promise((resolve, reject) => {
