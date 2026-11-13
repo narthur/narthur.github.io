@@ -1,4 +1,5 @@
 ---
+featured: true
 title: 'Toward AI-Friendly Software Architecture'
 date: 2025-08-11T16:22:34.773Z
 substack: https://narthur.substack.com/p/toward-ai-friendly-software-architecture

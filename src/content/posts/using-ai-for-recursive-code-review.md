@@ -1,4 +1,5 @@
 ---
+featured: true
 title: 'Using AI for Recursive Code Review'
 date: 2026-11-10T16:00:00.000Z
 band: { sketch: 'subdivide', seed: 43691 }

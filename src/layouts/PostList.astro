@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+// A titled list of newsletter posts, one row each: /writing's Featured and full lists, and a
+// post's Read next.
+interface Props {
+	heading: string;
+	posts: CollectionEntry<'posts'>[];
+}
+
+const { heading, posts } = Astro.props;
+---
+
+<section class="mt-20">
+	<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">{heading}</h2>
+	<ul class="mt-8 border-t border-rule">
+		{posts.map((post) => (
+			<li class="flex items-baseline justify-between gap-4 border-b border-rule py-3">
+				<a href={`/writing/${post.id}`} class="text-sm">
+					{post.data.title}
+				</a>
+				<time
+					datetime={post.data.date.toISOString().slice(0, 10)}
+					class="whitespace-nowrap font-mono text-xs text-faint"
+				>
+					{post.data.date.toISOString().slice(0, 10)}
+				</time>
+			</li>
+		))}
+	</ul>
+</section>
