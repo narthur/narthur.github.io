@@ -230,9 +230,10 @@ component renders.
 
 `@astrojs/sitemap` writes `sitemap-index.xml` at build time, and
 `public/robots.txt` points crawlers at it. The sitemap leaves out `/404`,
-`/band-render` and `/card-render` (see `astro.config.mjs`). A new page that should not be indexed
-needs adding to that filter. Cloudflare prepends its managed content-signals
-block to the served `robots.txt`, so the file in `public/` holds only our lines.
+`/band-render` and `/card-render` (see `astro.config.mjs`). A new page that
+should not be indexed needs adding to that filter. Cloudflare prepends its
+managed content-signals block to the served `robots.txt`, so the file in
+`public/` holds only our lines.
 
 Post pages pass their date to `Layout` as `published`, which makes the link
 preview an `og:type` article with `article:published_time`. Every other page is
