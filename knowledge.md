@@ -77,13 +77,14 @@ src/
 ├── layouts/
 │   ├── Layout.astro            # <head>, column, footer links, global styles
 │   ├── Subscribe.astro         # newsletter form + Turnstile, on /writing and its posts
+│   ├── PostList.astro          # post lists: Featured, archive, Read next
 │   └── AccentPicker.astro      # dev-only accent picker
 ├── pages/
 │   ├── index.astro             # home: avatar, positioning, contact, signposts, latest post
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
-│   ├── writing.astro           # newsletter post list, links elsewhere
+│   ├── writing.astro           # Featured, newsletter list, links elsewhere
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   ├── slop.astro              # Slop index
@@ -99,6 +100,7 @@ src/
 ├── slop.ts                     # published-only query, feed and disclosure constants
 ├── post.css                    # post body styles, shared by /writing and /slop
 ├── describe.ts                 # meta description from a post's opening paragraph
+├── similar.ts                  # Recommended posts: embeddings, ranking
 ├── slop-date.ts                # the Slop publish rule, with its spec
 ├── uses/
 │   ├── filter.ts               # tag/category logic
@@ -250,6 +252,17 @@ lists them from the same collections the pages use, and
 There is no cache: all cards re-render in about 7 seconds. A retitled post keeps
 its image URL, so a network that cached the old card needs a manual re-scrape
 (LinkedIn Post Inspector, Facebook Sharing Debugger).
+
+A Featured post carries `featured: true`, which Nathan sets by hand; `/writing`
+lists those first. Every newsletter post ends with three Recommended posts under
+"Read next", which `src/similar.ts` picks during the build. A local embedding
+model (transformers.js, pinned to one revision) embeds each post in 150-word
+passages. Two posts score as the mean of their three best-matching passage
+pairs, so a digest post matches on any one of its sections. No API key is
+involved. The model is about 23MB, downloaded on first use into
+`node_modules/.cache/transformers`, which CI and deploy cache. Embedding adds
+about 3 seconds to the build. Slop takes no part: it neither shows nor receives
+recommendations.
 
 The favicon is self-hosted: `public/favicon.svg` is the source and
 `public/favicon.png` is rendered from it as the fallback for browsers that don't

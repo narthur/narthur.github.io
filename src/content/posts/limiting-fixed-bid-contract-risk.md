@@ -1,4 +1,5 @@
 ---
+featured: true
 title: 'Limiting Fixed-Bid Contract Risk'
 date: 2025-05-09T16:20:11.708Z
 substack: https://narthur.substack.com/p/limiting-fixed-bid-contract-risk

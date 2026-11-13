@@ -15,7 +15,9 @@ const posts = defineCollection({
 		// src/bands/, `seed` fixes its arrangement. Posts without one open on the title, as every
 		// imported post does. The dev picker writes this line for you — see docs/adr/0001.
 		band: z.object({ sketch: z.string(), seed: z.number().int() }).optional(),
-		ai: z.boolean().default(false)
+		ai: z.boolean().default(false),
+		// A Featured post (CONTEXT.md): listed first on /writing. Nathan picks these by hand.
+		featured: z.boolean().default(false)
 	})
 });
 

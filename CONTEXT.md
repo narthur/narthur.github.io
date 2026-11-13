@@ -106,3 +106,22 @@ Preview image says it is Slop. Pages that are not posts share the avatar
 instead. It is made when the site is built, never when someone asks for it,
 because nothing in it varies from one request to the next.
 _Avoid_: og image, social card, thumbnail, share image
+
+### Writing
+
+**Featured post**:
+A newsletter post Nathan has picked as representative of his writing, shown
+first on `/writing` for the visitor skimming to see what he writes. The choice
+is his and is made on the post itself; nothing is featured automatically. A
+Featured post stays in the full list too, which is the archive, and writing
+published elsewhere is never featured.
+_Avoid_: selected, pinned, highlighted, best of
+
+**Recommended post**:
+One of the three newsletter posts shown at the end of another under "Read
+next", chosen because its content is the most similar to the post being read.
+Picked by comparing the posts' text, never by hand and never by tag, so a new
+post gets recommendations without anyone choosing them. Slop posts neither
+show nor receive them.
+_Avoid_: related post, suggested post. ("Read next" is only the heading over
+them.)
