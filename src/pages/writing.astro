@@ -6,28 +6,6 @@ import Subscribe from '../layouts/Subscribe.astro';
 const posts = (await getCollection('posts')).sort(
 	(a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
-
-const beeminderPosts = [
-	{
-		title: 'Ex WordPress Ad Astro Per Narthurius',
-		url: 'https://blog.beeminder.com/astroblog/',
-		date: '2023-09-06',
-		blurb: 'Announcing the rebuild of the Beeminder blog I did, moving it from WordPress to Astro.'
-	},
-	{
-		title: 'Beeminder vs CBT',
-		url: 'https://blog.beeminder.com/cbt/',
-		date: '2022-09-15',
-		blurb:
-			'Responding to the critique of Beeminder that it is a crutch and should be replaced by something positive like CBT.'
-	},
-	{
-		title: 'Announcing TaskRatchet: Like Beeminder for Your Todo List',
-		url: 'https://blog.beeminder.com/taskratchet/',
-		date: '2020-06-22',
-		blurb: 'The announcement post for TaskRatchet.'
-	}
-];
 ---
 
 <Layout
@@ -85,20 +63,5 @@ const beeminderPosts = [
 				</li>
 			))}
 		</ul>
-	</section>
-
-	<section class="mt-20">
-		<h2 class="font-mono text-xs uppercase tracking-[0.2em] text-faint">Beeminder blog</h2>
-		{beeminderPosts.map((post) => (
-			<article class="mt-8 border-t border-rule pt-8">
-				<div class="flex items-baseline justify-between gap-4">
-					<h3 class="text-lg font-medium tracking-tight">
-						<a href={post.url}>{post.title}</a>
-					</h3>
-					<span class="whitespace-nowrap font-mono text-xs text-faint">{post.date}</span>
-				</div>
-				<p class="mt-3 max-w-prose text-sm leading-relaxed text-mute">{post.blurb}</p>
-			</article>
-		))}
 	</section>
 </Layout>
