@@ -8,7 +8,10 @@ export default defineConfig({
 	// Project pages are MDX so their charts and screenshots can sit inside the prose.
 	// The sitemap leaves out /404, which is served at every missing URL rather than at its own, and
 	// /band-render, which scripts/bands.mjs deletes from dist after the build.
-	integrations: [mdx(), sitemap({ filter: (page) => !/\/(404|band-render)$/.test(page) })],
+	integrations: [
+		mdx(),
+		sitemap({ filter: (page) => !/\/(404|band-render|card-render)$/.test(page) })
+	],
 	// Emit /uses.html, not /uses/index.html, as the SvelteKit build did. Cloudflare serves the
 	// latter at /uses/ and redirects /uses to it; this keeps every existing URL as-is.
 	build: { format: 'file' },

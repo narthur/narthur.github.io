@@ -95,3 +95,14 @@ _Avoid_: widget, demo
 The AI-generated painting a post carries as its cover image, produced by the
 workflow in `my-ai-illustration-workflow`.
 _Avoid_: image, art
+
+### Link previews
+
+**Preview image**:
+The picture a link preview shows when a post is shared to a social network or
+chat app. Every post has its own, carrying the post's title, Nathan's avatar
+and the site's name, over the post's Band when it has one. A Slop post's
+Preview image says it is Slop. Pages that are not posts share the avatar
+instead. It is made when the site is built, never when someone asks for it,
+because nothing in it varies from one request to the next.
+_Avoid_: og image, social card, thumbnail, share image

@@ -20,6 +20,8 @@ interface Props {
 	published?: Date;
 	/** Who wrote the page, for LinkedIn's author field. Slop leaves it off, since AI writes it. */
 	author?: string;
+	/** The page's own Preview image (scripts/cards.mjs). Without one, the page shares the avatar. */
+	preview?: { src: string; alt: string };
 }
 
 import { ACCENT } from '../theme';
@@ -33,7 +35,8 @@ const {
 	footer = true,
 	feed = { title: 'Narthur Online', href: '/rss.xml' },
 	published,
-	author
+	author,
+	preview
 } = Astro.props;
 
 // The build writes /work.html, but the site serves it as /work (see build.format in astro.config).
@@ -67,17 +70,19 @@ const footerLinks = [
 		<meta name="description" content={description} />
 		{author && <meta name="author" content={author} />}
 		{!isNotFound && <link rel="canonical" href={url} />}
-		{/* Link previews in Discord, Slack, LinkedIn etc. ponytail: one site-wide image, the
-		    avatar 8x; per-page images only if a page needs its own. */}
+		{/* Link previews in Discord, Slack, LinkedIn etc. Posts pass their own Preview image, shown
+		    large; every other page shares the avatar 8x as a small square. */}
 		<meta property="og:site_name" content={`Nathan Arthur · ${POSITIONING}`} />
 		<meta property="og:type" content={published ? 'article' : 'website'} />
 		{published && <meta property="article:published_time" content={published.toISOString()} />}
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		{!isNotFound && <meta property="og:url" content={url} />}
-		<meta property="og:image" content={new URL('/og.png', Astro.site)} />
-		<meta property="og:image:alt" content="Pixel-art portrait of Nathan Arthur" />
-		<meta name="twitter:card" content="summary" />
+		<meta property="og:image" content={new URL(preview?.src ?? '/og.png', Astro.site)} />
+		<meta property="og:image:width" content={preview ? '1200' : '496'} />
+		<meta property="og:image:height" content={preview ? '630' : '488'} />
+		<meta property="og:image:alt" content={preview?.alt ?? 'Pixel-art portrait of Nathan Arthur'} />
+		<meta name="twitter:card" content={preview ? 'summary_large_image' : 'summary'} />
 		<link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
 	</head>
 	<body>

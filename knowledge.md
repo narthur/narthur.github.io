@@ -229,8 +229,8 @@ leftover scaffolding, and it never reaches the build. Keep its script
 component renders.
 
 `@astrojs/sitemap` writes `sitemap-index.xml` at build time, and
-`public/robots.txt` points crawlers at it. The sitemap leaves out `/404` and
-`/band-render` (see `astro.config.mjs`). A new page that should not be indexed
+`public/robots.txt` points crawlers at it. The sitemap leaves out `/404`,
+`/band-render` and `/card-render` (see `astro.config.mjs`). A new page that should not be indexed
 needs adding to that filter. Cloudflare prepends its managed content-signals
 block to the served `robots.txt`, so the file in `public/` holds only our lines.
 
@@ -239,6 +239,16 @@ preview an `og:type` article with `article:published_time`. Every other page is
 `website`. Newsletter posts also pass `author`, which LinkedIn reads from
 `<meta name="author">`. Slop posts leave it off: they are AI-written, and an
 author tag would credit the writing to Nathan.
+
+Every post also passes `preview`, its Preview image: a 1200x630 PNG at the
+post's URL plus `.png`, shown as `summary_large_image`. Other pages share
+`public/og.png` as a `summary` square. `scripts/cards.mjs` renders the images
+after the Bands, since a card shows its post's Band: `src/pages/cards.json.ts`
+lists them from the same collections the pages use, and
+`src/pages/card-render.astro` draws one. The script deletes both from `dist/`.
+There is no cache: all cards re-render in about 7 seconds. A retitled post keeps
+its image URL, so a network that cached the old card needs a manual re-scrape
+(LinkedIn Post Inspector, Facebook Sharing Debugger).
 
 The favicon is self-hosted: `public/favicon.svg` is the source and
 `public/favicon.png` is rendered from it as the fallback for browsers that don't
