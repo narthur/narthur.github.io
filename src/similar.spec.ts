@@ -21,6 +21,22 @@ describe('similarity', () => {
 		expect(similarity(digest, [[1, 0]])).toBe(0.5);
 		expect(similarity([[1, 0]], [[1, 0]])).toBe(1);
 	});
+
+	it('averages only the three best of many pairs', () => {
+		// Pairs score 1, 0.6, 0, 0, 0.8, 1: the best three are 1, 1 and 0.8.
+		const score = similarity(
+			[
+				[1, 0],
+				[0, 1]
+			],
+			[
+				[1, 0],
+				[0.6, 0.8],
+				[0, 1]
+			]
+		);
+		expect(score).toBeCloseTo((1 + 1 + 0.8) / 3);
+	});
 });
 
 describe('nearest', () => {
@@ -28,5 +44,9 @@ describe('nearest', () => {
 		const t = [[[1, 0]], [[0.9, 0.44]], [[0, 1]], [[0.6, 0.8]]];
 		expect(nearest(t, 0, 2)).toEqual([1, 3]);
 		expect(nearest(t, 2, 3)).toEqual([3, 1, 0]);
+	});
+
+	it('returns fewer than n rather than the text itself', () => {
+		expect(nearest([[[1, 0]], [[0, 1]]], 0, 3)).toEqual([1]);
 	});
 });

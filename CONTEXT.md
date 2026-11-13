@@ -123,4 +123,5 @@ next", chosen because its content is the most similar to the post being read.
 Picked by comparing the posts' text, never by hand and never by tag, so a new
 post gets recommendations without anyone choosing them. Slop posts neither
 show nor receive them.
-_Avoid_: related post, suggested post, read next
+_Avoid_: related post, suggested post. ("Read next" is only the heading over
+them.)

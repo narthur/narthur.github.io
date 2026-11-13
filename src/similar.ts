@@ -40,7 +40,13 @@ let model: ReturnType<typeof pipeline<'feature-extraction'>> | undefined;
 
 /** Per text, one unit vector per passage. */
 export function embed(texts: string[]): Promise<number[][][]> {
-	model ??= pipeline('feature-extraction', MODEL, { revision: REVISION, dtype: 'q8' });
+	// A failed load or embed is forgotten, so `pnpm dev` retries it rather than failing until restart.
+	model ??= pipeline('feature-extraction', MODEL, { revision: REVISION, dtype: 'q8' }).catch(
+		(error) => {
+			model = undefined;
+			throw error;
+		}
+	);
 	return Promise.all(
 		texts.map((text) => {
 			let passages = memo.get(text);
@@ -52,6 +58,7 @@ export function embed(texts: string[]): Promise<number[][][]> {
 					return (await extract(pieces, { pooling: 'mean', normalize: true })).tolist();
 				})();
 				memo.set(text, passages);
+				passages.catch(() => memo.delete(text));
 			}
 			return passages;
 		})
@@ -70,7 +77,8 @@ export function similarity(a: number[][], b: number[][]): number {
 /** The indices of the `n` texts most like `texts[i]`, most alike first, never `i` itself. */
 export function nearest(texts: number[][][], i: number, n: number): number[] {
 	return texts
-		.map((t, j) => ({ j, score: j === i ? -Infinity : similarity(texts[i], t) }))
+		.map((t, j) => ({ j, score: similarity(texts[i], t) }))
+		.filter(({ j }) => j !== i)
 		.sort((a, b) => b.score - a.score)
 		.slice(0, n)
 		.map(({ j }) => j);

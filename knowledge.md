@@ -77,14 +77,14 @@ src/
 ├── layouts/
 │   ├── Layout.astro            # <head>, column, footer links, global styles
 │   ├── Subscribe.astro         # newsletter form + Turnstile, on /writing and its posts
-│   ├── PostList.astro          # a titled list of posts: Featured, archive, Read next
+│   ├── PostList.astro          # post lists: Featured, archive, Read next
 │   └── AccentPicker.astro      # dev-only accent picker
 ├── pages/
 │   ├── index.astro             # home: avatar, positioning, contact, signposts, latest post
 │   ├── 404.astro               # emitted as dist/404.html
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
-│   ├── writing.astro           # Featured posts, newsletter post list, links elsewhere
+│   ├── writing.astro           # Featured, newsletter list, links elsewhere
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   ├── slop.astro              # Slop index
@@ -100,7 +100,7 @@ src/
 ├── slop.ts                     # published-only query, feed and disclosure constants
 ├── post.css                    # post body styles, shared by /writing and /slop
 ├── describe.ts                 # meta description from a post's opening paragraph
-├── similar.ts                  # Recommended posts: embeddings and ranking, with its spec
+├── similar.ts                  # Recommended posts: embeddings, ranking
 ├── slop-date.ts                # the Slop publish rule, with its spec
 ├── uses/
 │   ├── filter.ts               # tag/category logic
