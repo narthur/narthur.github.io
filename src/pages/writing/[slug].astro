@@ -20,11 +20,13 @@ export async function getStaticPaths() {
 	if (empty) throw new Error(`similar: ${empty.id} has no body to recommend from`);
 	const start = performance.now();
 	const vectors = await embed(posts.map((post) => `${post.data.title}. ${post.body}`));
-	// ponytail: every post is scored against every other, so this grows with posts squared;
-	// compute each pair once if the time in the log line below starts to climb.
+	const embedded = performance.now();
+	// ponytail: every post is scored against every other, so ranking grows with posts squared;
+	// compute each pair once if its time in the log line below starts to climb.
 	const recommended = posts.map((_, i) => nearest(vectors, i, 3).map((j) => posts[j]));
+	const ms = (from: number, to: number) => Math.round(to - from);
 	console.log(
-		`similar: ${posts.length} posts embedded and ranked in ${Math.round(performance.now() - start)}ms`
+		`similar: ${posts.length} posts embedded in ${ms(start, embedded)}ms, ranked in ${ms(embedded, performance.now())}ms`
 	);
 	return posts.map((post, i) => ({
 		params: { slug: post.id },
