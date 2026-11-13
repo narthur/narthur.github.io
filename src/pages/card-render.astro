@@ -1,0 +1,137 @@
+---
+// The render target for Preview images: one 1200x630 card per post, screenshotted at build time.
+// Bare like band-render.astro, and deleted from dist the same way, so it never ships.
+// Query: title, kind (writing|slop), band (path to the post's built Band, optional).
+// scripts/cards.mjs drives it; the list of cards comes from cards.json.ts.
+import '@fontsource/instrument-sans/500.css';
+import { ACCENT } from '../theme';
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>card render target</title>
+		<meta name="robots" content="noindex" />
+		<style is:inline set:html={`:root{--accent:${ACCENT}}`}></style>
+		<style>
+			html,
+			body {
+				margin: 0;
+				background: #0a0c10;
+			}
+			#card {
+				box-sizing: border-box;
+				width: 1200px;
+				height: 630px;
+				display: flex;
+				flex-direction: column;
+				font-family: 'Instrument Sans', sans-serif;
+				color: #e8e9ec;
+				overflow: hidden;
+			}
+			#band {
+				height: 180px;
+				flex: none;
+				background-size: auto 180px;
+				background-repeat: repeat-x;
+				background-position: center;
+			}
+			#band.plain {
+				height: 0;
+			}
+			#body {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				padding: 56px 80px;
+				min-height: 0;
+			}
+			#band.plain + #body {
+				border-top: 6px solid var(--accent);
+				padding-top: 96px;
+			}
+			#label {
+				font-size: 26px;
+				color: #e6b455;
+				margin-bottom: 16px;
+			}
+			#title {
+				font-weight: 500;
+				line-height: 1.12;
+				letter-spacing: -0.01em;
+				margin: 0;
+			}
+			#foot {
+				margin-top: auto;
+				display: flex;
+				align-items: center;
+				gap: 20px;
+				font-size: 28px;
+				color: #8a919e;
+			}
+			#foot img {
+				width: 64px;
+				height: auto;
+				image-rendering: pixelated;
+				border-radius: 6px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="card">
+			<div id="band"></div>
+			<div id="body">
+				<div id="label" hidden>
+					Slop · AI-written
+				</div>
+				<h1 id="title"></h1>
+				<div id="foot">
+					<img src="/og.png" alt="" />
+					<span>Nathan Arthur · nathanarthur.com</span>
+				</div>
+			</div>
+		</div>
+		<script is:inline>
+			(async () => {
+				const q = new URLSearchParams(location.search);
+				const band = document.getElementById('band');
+				const title = document.getElementById('title');
+				if (q.get('band')) band.style.backgroundImage = `url("${q.get('band')}")`;
+				else band.className = 'plain';
+				document.getElementById('label').hidden = q.get('kind') !== 'slop';
+				title.textContent = q.get('title') ?? '';
+				// Explicit, so a font that failed to load fails the card instead of falling back silently.
+				if (!(await document.fonts.load('500 76px "Instrument Sans"', title.textContent)).length)
+					throw new Error('Instrument Sans failed to load');
+				// Decode the avatar before measuring: until it loads the footer is ~30px short, so a title
+				// could pass the fit check below and then be clipped. A broken avatar fails the card.
+				const avatar = document.querySelector('#foot img');
+				await avatar.decode().catch(() => {
+					throw new Error('avatar failed to load');
+				});
+				// Step the size down until the title fits in three lines. Never truncate: a title that
+				// still does not fit at the floor fails the build rather than shipping clipped.
+				const body = document.getElementById('body');
+				const fits = (size) => {
+					title.style.fontSize = `${size}px`;
+					return (
+						title.getBoundingClientRect().height <= size * 1.12 * 3.05 &&
+						title.scrollWidth <= title.clientWidth &&
+						body.scrollHeight <= body.clientHeight
+					);
+				};
+				let size = 76;
+				while (!fits(size)) if ((size -= 4) < 24) throw new Error('title does not fit at 24px');
+				// A missing Band would otherwise render as an empty strip with nothing in the build log.
+				if (q.get('band'))
+					await new Promise((resolve, reject) => {
+						const img = new Image();
+						img.onload = resolve;
+						img.onerror = () => reject(new Error(`band failed to load: ${q.get('band')}`));
+						img.src = q.get('band');
+					});
+				window.__cardReady = true;
+			})().catch((e) => (window.__cardError = String(e)));
+		</script>
+	</body>
+</html>
