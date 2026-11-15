@@ -12,13 +12,15 @@ Reading settings from extension storage before hiding the page fails: storage re
 const root = document.documentElement;
 root.style.setProperty('visibility', 'hidden', 'important');
 const show = () => root.style.removeProperty('visibility');
-getWaitTime(window.location.href).then(waitTime => {
-  if (waitTime) {
-    showCountdown(waitTime, show);
-  } else {
-    show();
-  }
-}).catch(show); // any error must still un-hide the page
+getWaitTime(window.location.href)
+	.then((waitTime) => {
+		if (waitTime) {
+			showCountdown(waitTime, show);
+		} else {
+			show();
+		}
+	})
+	.catch(show); // any error must still un-hide the page
 ```
 
 On a match, the countdown calls `window.stop()`, which halts the site's own loading so nothing runs or plays audio during the countdown. When it ends, set a `sessionStorage` bypass flag and call `location.reload()`. Set the flag only then, or a manual reload mid-countdown skips the delay.
