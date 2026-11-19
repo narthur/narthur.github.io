@@ -13,7 +13,7 @@ import { chain, contour, rng, simplify, toPathData, type Field } from './vector.
  * the agent's falls, and that it keeps moving; the seam is that line.
  *
  * The terrain is a sum of sines with whole-number cycles across the width, the seam is too, and
- * the grid snap wraps x back to 0 at the seam, so the Band tiles.
+ * the grid snap wraps x back to 0 at the right edge, so the Band tiles.
  */
 export const PARAMS = {
 	TERMS: 6,
