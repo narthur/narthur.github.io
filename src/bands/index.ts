@@ -3,6 +3,7 @@
 // specifiers TypeScript allows. Dropping one typechecks and builds, and breaks only the build-time
 // renderer — which is to say every Band — with a module-not-found at the very end of `pnpm build`.
 import type { Sketch, VectorSketch } from './types.ts';
+import { geometry as digitised } from './digitised.ts';
 import { geometry as hopfield } from './hopfield.ts';
 import { geometry as rings } from './rings.ts';
 import { geometry as subdivide } from './subdivide.ts';
@@ -29,7 +30,7 @@ import trails from './trails.ts';
  */
 export const sketches: Record<string, Sketch> = { kuramoto, trails };
 
-export const vectors: Record<string, VectorSketch> = { hopfield, rings, subdivide };
+export const vectors: Record<string, VectorSketch> = { digitised, hopfield, rings, subdivide };
 
 /** A resolved Sketch: which track it is on, and the thing that draws it. */
 export type Resolved = { track: 'vector'; draw: VectorSketch } | { track: 'raster'; draw: Sketch };

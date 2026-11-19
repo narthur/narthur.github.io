@@ -196,7 +196,8 @@ page in the same folder, written in the Markdown as that figure pattern with the
 image wrapped in `<a href="<page>" data-embed>`. The feed and the email strip
 iframes, so they get the still image linking to the live page; on the site, a
 script in `writing/[slug].astro` swaps each `a[data-embed]` for an iframe, plus a
-caption link back to the standalone page so the way out survives the swap. The
+caption link back to the standalone page so the way out survives the swap;
+`data-embed="bare"` drops that caption, for a static piece like a chart. The
 still is PNG rather than WebP because it is what the email shows, and Outlook
 does not render WebP. The other post images are WebP and have the same problem;
 the still gets the workaround because it is the only thing an email reader sees
