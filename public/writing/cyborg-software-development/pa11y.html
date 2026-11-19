@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>nart / pa11y errors</title>
+		<style>
+			html,
+			body {
+				margin: 0;
+				height: 100%;
+				background: #0a0c10;
+			}
+			svg {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Also the source of pa11y.png, the still the feed and email get. Regenerate it after editing:
+		     sed -n '/^[[:space:]]*<svg /,/<\/svg>/p' pa11y.html | node -e "require('sharp')(require('fs').readFileSync(0), { density: 144 }).resize(1200).png().toFile('pa11y.png')" -->
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="t">
+			<title id="t">
+				pa11y errors: 592 when pa11y-ratchet was adopted on 2024-05-22, 201 at my last commit on
+				2025-03-27, 925 in a production scan on 2026-08-30
+			</title>
+			<rect width="1200" height="675" fill="#0a0c10" />
+			<g
+				font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+				fill="#8a919e"
+				font-size="22"
+				letter-spacing="3"
+			>
+				<text x="60" y="70">ACCESSIBILITY ERRORS</text>
+			</g>
+			<g fill="#8ded51">
+				<rect x="160" y="284" width="180" height="256" />
+				<rect x="510" y="453" width="180" height="87" />
+				<rect x="860" y="140" width="180" height="400" />
+			</g>
+			<line x1="60" y1="540" x2="1140" y2="540" stroke="#1c212a" stroke-width="2" />
+			<g
+				font-family="'Instrument Sans', system-ui, sans-serif"
+				fill="#e8e9ec"
+				font-size="40"
+				text-anchor="middle"
+			>
+				<text x="250" y="266">592</text>
+				<text x="600" y="435">201</text>
+				<text x="950" y="122">925</text>
+			</g>
+			<g
+				font-family="'Instrument Sans', system-ui, sans-serif"
+				fill="#e8e9ec"
+				font-size="28"
+				text-anchor="middle"
+			>
+				<text x="250" y="625">pa11y-ratchet adopted</text>
+				<text x="600" y="625">My last commit</text>
+				<text x="950" y="625">Production scan</text>
+			</g>
+			<g
+				font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+				fill="#8a919e"
+				font-size="22"
+				text-anchor="middle"
+			>
+				<text x="250" y="584">2024-05-22</text>
+				<text x="600" y="584">2025-03-27</text>
+				<text x="950" y="584">2026-08-30</text>
+			</g>
+		</svg>
+	</body>
+</html>

@@ -188,7 +188,9 @@ const description = describe(post.body, title, subtitle);
 		link.textContent = 'Open it full screen →';
 		caption.append(link);
 
-		a.replaceWith(frame, caption);
+		// A static chart gains nothing full screen, so `data-embed="bare"` drops the caption.
+		if (a.dataset.embed === 'bare') a.replaceWith(frame);
+		else a.replaceWith(frame, caption);
 	}
 </script>
 

@@ -83,7 +83,8 @@ Pure logic modules are tested; markup is not, and there is deliberately no
 component-test or e2e harness. Currently that means `src/uses/filter.ts`
 (tag/category functions), `src/work/*` (chart, commits, taskratchet),
 `src/bands/hopfield.ts` (the Band simulation and its geometry),
-`src/bands/rings.ts` (that the ring field tiles) and `src/bands/vector.ts`
+`src/bands/rings.ts` (that the ring field tiles), `src/bands/digitised.ts`
+(that the survey tiles) and `src/bands/vector.ts`
 (contour tracing and SVG). Use `pnpm test` (single run) rather than watch mode.
 
 A Band Sketch is worth testing despite being a picture: its failures are silent —
