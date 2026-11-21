@@ -4,6 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import Band from '../../layouts/Band.astro';
 import PostList from '../../layouts/PostList.astro';
 import Subscribe from '../../layouts/Subscribe.astro';
+import { Image } from 'astro:assets';
+import avatar from '../../images/avatar.jpg';
+import { POSITIONING } from '../../site';
 import { bandExtension } from '../../bands';
 import '../../post.css';
 import { describe } from '../../describe';
@@ -104,7 +107,23 @@ const description = describe(post.body, title, subtitle);
 
 	<PostList heading="Read next" posts={recommended} />
 
-	<section aria-label="Subscribe" class="mt-20 border-t border-rule pt-8">
+	{/* The bio is the home page's avatar and POSITIONING line, reused rather than rewritten. */}
+	<section
+		aria-label="About the author and subscribe"
+		class="mt-20 grid gap-x-8 gap-y-8 border-t border-rule pt-8 sm:grid-cols-2"
+	>
+		<div class="flex items-start gap-4">
+			<Image
+				src={avatar}
+				alt="Pixel-art portrait of Nathan Arthur"
+				width={64}
+				class="shrink-0 [image-rendering:pixelated]"
+			/>
+			<div>
+				<p class="text-ink">Nathan Arthur</p>
+				<p class="mt-1 text-sm leading-relaxed text-mute">{POSITIONING}</p>
+			</div>
+		</div>
 		<Subscribe />
 	</section>
 

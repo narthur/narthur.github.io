@@ -85,7 +85,7 @@ src/
 │   ├── [project].astro         # a project page per src/content/projects/*.mdx
 │   ├── work.astro              # every project, the stack over time, GitHub activity
 │   ├── writing.astro           # Featured, newsletter list, links elsewhere
-│   ├── writing/[slug].astro    # one newsletter post
+│   ├── writing/[slug].astro    # one newsletter post, ending in an author box (avatar, name, POSITIONING) beside Subscribe
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
 │   ├── slop.astro              # Slop index
 │   ├── slop/[slug].astro       # one Slop post
