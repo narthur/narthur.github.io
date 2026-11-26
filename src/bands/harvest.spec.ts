@@ -9,13 +9,24 @@ const starts = (d: string) =>
 	[...d.matchAll(/M(-?[\d.]+) (-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
 
 describe('harvest', () => {
-	it('repeats every stalk near one edge at the other, so the Band tiles', () => {
-		const W = 3440;
-		const stalks = starts(at(57826).paths[0].d);
-		const near = stalks.filter(([x]) => x >= 0 && x < 40);
+	const W = 3440;
+	/** Every polyline starting near either edge has a twin a Band-width away. */
+	const tiles = (d: string) => {
+		const points = starts(d);
+		const near = points.filter(([x]) => (x >= 0 && x < 40) || (x > W - 40 && x <= W));
 		expect(near.length).toBeGreaterThan(0);
-		for (const [x, y] of near)
-			expect(stalks.some(([x2, y2]) => Math.abs(x2 - (x + W)) < 0.2 && y2 === y)).toBe(true);
+		for (const [x, y] of near) {
+			const twin = x < W / 2 ? x + W : x - W;
+			expect(points.some(([x2, y2]) => Math.abs(x2 - twin) < 0.2 && y2 === y)).toBe(true);
+		}
+	};
+
+	it('repeats every stalk near one edge at the other, so the Band tiles', () => {
+		tiles(at(57826).paths[0].d);
+	});
+
+	it('draws grain, and the grain tiles too', () => {
+		tiles(at(57826).paths[1].d);
 	});
 
 	it('is a pure function of the seed', () => {
@@ -24,7 +35,7 @@ describe('harvest', () => {
 		expect(g(3)).not.toBe(g(4));
 	});
 
-	it('plants the same number of stalks at any height', () => {
+	it('scales with the Band size', () => {
 		const count = (w: number, h: number) => starts(at(57826, w, h).paths[0].d).length;
 		expect(count(1720, 120)).toBe(count(3440, 240));
 	});

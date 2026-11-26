@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
 import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
 ---
 
-<Layout title="Band options">
+<Layout title="Band options" description="Dev only: candidate Bands side by side.">
 	<p class="mb-10 font-mono text-xs text-faint">
 		?title=…&amp;sketches=a,b&amp;seeds=4 · reload for new seeds · click a line to copy it
 	</p>
@@ -36,15 +36,22 @@ import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
 
 		const q = new URLSearchParams(location.search);
 		const title = q.get('title') ?? 'Post title';
-		const names = q.get('sketches')?.split(',').filter(Boolean) ?? sketchNames();
-		const seeds = Number(q.get('seeds')) || 4;
+		const asked = (q.get('sketches') ?? '')
+			.split(',')
+			.map((n) => n.trim())
+			.filter(Boolean);
+		const names = asked.length ? asked : sketchNames();
+		const seeds = Math.min(12, Math.max(1, Math.floor(Number(q.get('seeds'))) || 4));
 		const list = document.getElementById('options')!;
 		const template = document.getElementById('option') as HTMLTemplateElement;
 
 		for (const name of names) {
 			const resolved = resolveSketch(name);
 			if (!resolved) {
-				console.error(`band-options: no Sketch named ${JSON.stringify(name)}`);
+				const notice = document.createElement('p');
+				notice.className = 'mb-10 font-mono text-xs text-red-400';
+				notice.textContent = `No Sketch named ${JSON.stringify(name)}.`;
+				list.append(notice);
 				continue;
 			}
 			for (let s = 0; s < seeds; s++) {
@@ -54,7 +61,13 @@ import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
 				const copy = node.querySelector<HTMLButtonElement>('[data-copy]')!;
 				node.querySelector('h1')!.textContent = title;
 				copy.textContent = `band: { sketch: '${name}', seed: ${seed} }`;
-				copy.addEventListener('click', () => navigator.clipboard.writeText(copy.textContent!));
+				const line = copy.textContent;
+				copy.addEventListener('click', () =>
+					navigator.clipboard.writeText(line).then(
+						() => (copy.textContent = `${line}  ✓ copied`),
+						() => (copy.textContent = `${line}  (copy failed: select it by hand)`)
+					)
+				);
 				list.append(node);
 				if (resolved.track === 'vector') {
 					const svg = toSvg(resolved.draw({ width: 3440, height: 240, seed, accent: ACCENT }));

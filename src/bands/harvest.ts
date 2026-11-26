@@ -29,7 +29,8 @@ export const geometry: VectorSketch = ({ width: W, height: H, seed, accent }) =>
 			if (base + dx < -80 * k || base + dx > W + 80 * k) continue;
 			const shift = ([x, y]: Point): Point => [x + dx, y];
 			stalks.push(Array.from({ length: 11 }, (_, s) => shift(at(s / 10))));
-			// Grain: paired barbs up the last quarter of the stalk, angled back from its tip.
+			// Grain: paired barbs up the last quarter of the stalk, splayed ±0.5 rad either
+			// side of the stalk's heading toward its tip.
 			for (let g = 0; g < 7; g++) {
 				const t = 0.76 + g * 0.035;
 				const [x, y] = at(t);
