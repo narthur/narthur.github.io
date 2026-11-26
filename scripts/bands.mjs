@@ -230,6 +230,9 @@ async function renderVector(post, vector) {
 async function removeRenderTarget() {
 	await rm(join(DIST, 'band-render'), { recursive: true, force: true });
 	await rm(join(DIST, 'band-render.html'), { force: true });
+	// The dev-only comparison page has no build-time use at all; it rides along here.
+	await rm(join(DIST, 'band-options'), { recursive: true, force: true });
+	await rm(join(DIST, 'band-options.html'), { force: true });
 }
 
 async function main() {

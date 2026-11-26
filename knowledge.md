@@ -87,6 +87,7 @@ src/
 │   ├── writing.astro           # Featured, newsletter list, links elsewhere
 │   ├── writing/[slug].astro    # one newsletter post
 │   ├── rss.xml.ts              # RSS feed of the newsletter, full content
+│   ├── band-options.astro      # dev only: candidate Sketches side by side, deleted from dist
 │   ├── slop.astro              # Slop index
 │   ├── slop/[slug].astro       # one Slop post
 │   ├── slop/about.astro        # how Slop is made

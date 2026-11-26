@@ -1,0 +1,70 @@
+---
+// Dev tool: several Sketches at several Seeds, side by side under a post's title, for choosing a
+// post's Band. The in-page picker on a post shows one Sketch at a time; this shows candidates.
+//
+//   /band-options?title=Happy%20Thanksgiving!&sketches=harvest,tablecloth&seeds=4
+//
+// Everything is drawn client-side from the query, because the page is static. scripts/bands.mjs
+// deletes it from dist and the sitemap filter skips it, as for band-render.
+import Layout from '../layouts/Layout.astro';
+import { P5_SRC, P5_INTEGRITY } from '../bands/cdn';
+---
+
+<Layout title="Band options">
+	<p class="mb-10 font-mono text-xs text-faint">
+		?title=…&amp;sketches=a,b&amp;seeds=4 · reload for new seeds · click a line to copy it
+	</p>
+	<div id="options"></div>
+	<template id="option">
+		<section class="relative mb-16 flex min-h-[15rem] flex-col justify-end">
+			<div
+				data-host
+				class="absolute bottom-0 left-1/2 z-0 h-60 w-screen -translate-x-1/2 overflow-hidden bg-center bg-repeat-x"
+			></div>
+			<div class="relative z-10 w-fit bg-bg pr-4 pt-2">
+				<h1 class="text-4xl font-medium tracking-tight"></h1>
+				<button data-copy class="mt-4 font-mono text-xs text-faint hover:text-ink"></button>
+			</div>
+		</section>
+	</template>
+	<script is:inline src={P5_SRC} integrity={P5_INTEGRITY} crossorigin="anonymous"></script>
+	<script>
+		import { mountBand } from '../bands/harness';
+		import { resolveSketch, sketchNames } from '../bands';
+		import { toSvg } from '../bands/vector';
+		import { ACCENT, BACKGROUND } from '../theme';
+
+		const q = new URLSearchParams(location.search);
+		const title = q.get('title') ?? 'Post title';
+		const names = q.get('sketches')?.split(',').filter(Boolean) ?? sketchNames();
+		const seeds = Number(q.get('seeds')) || 4;
+		const list = document.getElementById('options')!;
+		const template = document.getElementById('option') as HTMLTemplateElement;
+
+		for (const name of names) {
+			const resolved = resolveSketch(name);
+			if (!resolved) {
+				console.error(`band-options: no Sketch named ${JSON.stringify(name)}`);
+				continue;
+			}
+			for (let s = 0; s < seeds; s++) {
+				const seed = Math.floor(Math.random() * 100000);
+				const node = template.content.cloneNode(true) as DocumentFragment;
+				const host = node.querySelector<HTMLElement>('[data-host]')!;
+				const copy = node.querySelector<HTMLButtonElement>('[data-copy]')!;
+				node.querySelector('h1')!.textContent = title;
+				copy.textContent = `band: { sketch: '${name}', seed: ${seed} }`;
+				copy.addEventListener('click', () => navigator.clipboard.writeText(copy.textContent!));
+				list.append(node);
+				if (resolved.track === 'vector') {
+					const svg = toSvg(resolved.draw({ width: 3440, height: 240, seed, accent: ACCENT }));
+					host.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+					host.style.backgroundSize = 'auto 240px';
+					host.style.backgroundColor = BACKGROUND;
+				} else {
+					mountBand(resolved.draw, { host, height: 240, seed });
+				}
+			}
+		}
+	</script>
+</Layout>
